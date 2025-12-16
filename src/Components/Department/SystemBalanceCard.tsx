@@ -18,7 +18,7 @@ const SystemBalanceCard = ({ system }: SystemBalanceCardProps) => {
         </h3>
         <div className="flex items-start flex-col">
           <span className="text-base font-roboto text-text-secondary text-start w-full">
-            Un-Accountable Water
+            Un-Accounted Water
           </span>
           <span
             className={`text-lg font-roboto font-normal w-full text-start cursor-pointer ${

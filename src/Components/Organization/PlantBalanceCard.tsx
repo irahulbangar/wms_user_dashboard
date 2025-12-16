@@ -110,7 +110,7 @@ export const PlantBalanceCard = ({
                       </span>
                     </span>
                     <span className="text-base font-roboto text-text-secondary text-start w-full">
-                      Un-Accountable Water
+                      Un-Accounted Water
                     </span>
                     <span
                       className={`text-lg font-roboto font-normal w-full text-start ${

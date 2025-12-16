@@ -138,7 +138,7 @@ const WaterBalanceTable: React.FC<WaterBalanceTableProps> = ({
                     : "whitespace-nowrap"
                 }`}
               >
-                Un-Accountable Water
+                Un-Accounted Water
               </td>
               <td className="text-text-primary text-base font-roboto font-normal text-right p-2">
                 {totalNetBalance}{" "}

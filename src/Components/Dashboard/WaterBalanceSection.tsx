@@ -120,7 +120,7 @@ export const WaterBalanceSection = ({
                 ))}
                 <tr className="border-b border-border-primary last:border-b-0 bg-secondary/30">
                   <td className="text-text-primary text-base font-roboto font-normal text-start p-2 whitespace-nowrap">
-                    Un-Accountable Water
+                    Un-Accounted Water
                   </td>
                   <td className="text-text-primary text-base font-roboto font-normal text-right p-2">
                     {totalNetBalance}{" "}
