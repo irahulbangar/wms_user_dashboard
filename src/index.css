@@ -1,0 +1,470 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+@import "@xyflow/react/dist/style.css";
+
+html, body {
+  touch-action: manipulation;
+}
+
+/* Leaflet Map Customizations */
+.leaflet-container {
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.leaflet-popup-tip {
+  background: white;
+}
+
+.leaflet-control-zoom {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.leaflet-control-zoom a {
+  background: white !important;
+  color: #475569 !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+}
+
+@theme {
+  /* Background Colors */
+  --color-primary: var(--bg-primary);
+  --color-secondary: var(--bg-secondary);
+  --color-tertiary: var(--bg-tertiary);
+  --color-card: var(--bg-card);
+  --color-overlay: var(--bg-overlay);
+  --color-gradient-start: var(--bg-gradient-start);
+  --color-gradient-middle: var(--bg-gradient-middle);
+  --color-gradient-end: var(--bg-gradient-end);
+
+  /* Text Colors */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-edge: var(--text-edge);
+
+  /* Border Colors */
+  --color-border-primary: var(--border-primary);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-accent: var(--border-accent);
+  --color-border-focus: var(--border-focus);
+
+  /* Accent Colors */
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-success: var(--accent-success);
+  --color-accent-warning: var(--accent-warning);
+  --color-accent-error: var(--accent-error);
+  --color-accent-info: var(--accent-info);
+
+  /* Input Colors */
+  --color-input-bg: var(--input-bg);
+  --color-input-border: var(--input-border);
+  --color-input-text: var(--input-text);
+  --color-input-placeholder: var(--input-placeholder);
+  --color-input-focus-border: var(--input-focus-border);
+  --color-input-focus-ring: var(--input-focus-ring);
+
+  /* Status Colors */
+  --color-status-success: var(--status-success);
+  --color-status-danger: var(--status-danger);
+  --color-status-warning: var(--status-warning);
+  --color-status-info: var(--status-info);
+
+  /* Shadow Colors */
+  --color-shadow-sm: var(--shadow-sm);
+  --color-shadow-md: var(--shadow-md);
+  --color-shadow-lg: var(--shadow-lg);
+  --color-shadow-xl: var(--shadow-xl);
+
+  /* Hover States */
+  --color-hover-bg-primary: var(--hover-bg-primary);
+  --color-hover-bg-secondary: var(--hover-bg-secondary);
+  --color-hover-text-primary: var(--hover-text-primary);
+  --color-hover-border-primary: var(--hover-border-primary);
+}
+
+/* Light Theme CSS Variables */
+:root {
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --bg-gradient-start: #f8fafc;
+  --bg-gradient-middle: #e0f2fe;
+  --bg-gradient-end: #e0e7ff;
+
+  /* Text Colors */
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-muted: #94a3b8;
+  --text-inverse: #ffffff;
+  --text-edge: #6366f1;
+
+  /* Border Colors */
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e1;
+  --border-accent: #3b82f6;
+  --border-focus: #3b82f6;
+
+  /* Accent Colors */
+  --accent-primary: #3b82f6;
+  --accent-secondary: #1d4ed8;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-error: #ef4444;
+  --accent-info: #06b6d4;
+
+  /* Input Colors */
+  --input-bg: #eef1f4;
+  --input-border: #d1d5db;
+  --input-text: #111827;
+  --input-placeholder: #9ca3af;
+  --input-focus-border: #3b82f6;
+  --input-focus-ring: rgba(59, 130, 246, 0.5);
+
+  /* Shadow Colors */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* Status Colors */
+  --status-success: #0BF01F;
+  --status-danger: #ff0000;
+  --status-warning: #f59e0b;
+  --status-info: #23a9e1;
+
+  /* Hover States */
+  --hover-bg-primary: #f1f5f9;
+  --hover-bg-secondary: #e2e8f0;
+  --hover-text-primary: #1e293b;
+  --hover-border-primary: #cbd5e1;
+}
+
+/* Dark Theme CSS Variables - Matching Screenshot */
+.dark {
+  /* Background Colors - Lighter dark like screenshot */
+  --bg-primary: #374151;
+  --bg-secondary: #4b5563;
+  --bg-tertiary: #6b7280;
+  --bg-card: #374151;
+  --bg-overlay: rgba(0, 0, 0, 0.7);
+  --bg-gradient-start: #374151;
+  --bg-gradient-middle: #4b5563;
+  --bg-gradient-end: #6b7280;
+
+  /* Text Colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #d1d5db;
+  --text-tertiary: #9ca3af;
+  --text-muted: #6b7280;
+  --text-inverse: #111827;
+  --text-edge: #d1d5db;
+
+  /* Border Colors */
+  --border-primary: #4b5563;
+  --border-secondary: #6b7280;
+  --border-accent: #3b82f6;
+  --border-focus: #60a5fa;
+
+  /* Accent Colors */
+  --accent-primary: #3b82f6;
+  --accent-secondary: #60a5fa;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-error: #ef4444;
+  --accent-info: #06b6d4;
+
+  /* Input Colors */
+  --input-bg: #4b5563;
+  --input-border: #6b7280;
+  --input-text: #f9fafb;
+  --input-placeholder: #9ca3af;
+  --input-focus-border: #60a5fa;
+  --input-focus-ring: rgba(96, 165, 250, 0.3);
+
+  /* Shadow Colors */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+
+  /* Status Colors */
+  --status-success: #0BF01F;
+  --status-danger: #ff0000;
+  --status-warning: #f59e0b;
+  --status-info: #23a9e1;
+
+  /* Hover States */
+  --hover-bg-primary: #4b5563;
+  --hover-bg-secondary: #6b7280;
+  --hover-text-primary: #f3f4f6;
+  --hover-border-primary: #9ca3af;
+}
+
+.bg-theme-tertiary {
+  background-color: var(--bg-tertiary);
+}
+
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.theme-changing *,
+.theme-changing {
+  transition: none !important;
+}
+
+html {
+  transition: background-color 0.3s ease;
+}
+
+body {
+  transition: background-color 0.3s ease;
+}
+
+.loader {
+  border: 0 solid transparent;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.loader::before,
+.loader::after {
+  content: "";
+  border: 7px solid #1d4ed8;
+  border-radius: 50%;
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  animation: loader 2s linear infinite;
+  opacity: 0;
+}
+
+.loader::before {
+  animation-delay: 1s;
+}
+
+@keyframes loader {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes panBackground {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 100% center;
+  }
+}
+
+.animate-pan-background {
+  animation: panBackground 30s linear infinite;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-secondary);
+  border-radius: 4px;
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+.table-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-secondary) var(--bg-secondary);
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/Fonts/Roboto/Roboto-Regular.ttf")
+    format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+
+
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/Fonts/Inter/Inter-Regular.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
+
+.font-roboto {
+  font-family: "Roboto", sans-serif;
+}
+
+.font-inter {
+  font-family: "Inter", sans-serif;
+}
+
+.react-flow .react-flow__edges {
+  z-index: 2 !important;
+}
+
+.react-flow__node {
+  z-index: 1 !important;
+}
+
+/* Diagram Zoom Controls Styles */
+.diagram-zoom-controls {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  padding: 0 4px;
+  display: flex;
+  gap: 2px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoom-control-btn {
+  padding: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  box-shadow: none;
+}
+
+.zoom-control-btn:hover {
+  background: var(--bg-overlay);
+  color: var(--text-primary);
+  transform: scale(1.05);
+  outline: none;
+  box-shadow: none;
+}
+
+.zoom-control-btn:active {
+  transform: scale(0.95);
+  outline: none;
+  box-shadow: none;
+}
+
+.zoom-control-btn:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  outline: none;
+  box-shadow: none;
+}
+
+/* ReactFlow Diagram Styles */
+.react-flow {
+  background-color: var(--bg-primary);
+}
+
+.react-flow__viewport {
+  transition: transform 0.3s ease;
+}
+
+.react-flow__controls {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.react-flow__controls-button {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  transition: background-color 0.2s ease;
+}
+
+.react-flow__controls-button:hover {
+  background: var(--bg-overlay);
+}
+
+.react-flow__minimap {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+}
+
+/* Ensure diagram nodes are properly sized and responsive */
+.react-flow__node {
+  transition: all 0.2s ease;
+}
+
+.react-flow__node:hover {
+  transform: scale(1.02);
+}
+
+/* Gradient Background Utility Classes */
+.bg-linear-to-r {
+  background: linear-gradient(to right, #9cbd46, #6b8615);
+}
+
+.bg-linear-to-b {
+  background: linear-gradient(to bottom, #9cbd46, #6b8615);
+}
+
+.bg-linear-to-l {
+  background: linear-gradient(to left, #9cbd46, #6b8615);
+}
+
+.bg-linear-to-t {
+  background: linear-gradient(to top, #9cbd46, #6b8615);
+}

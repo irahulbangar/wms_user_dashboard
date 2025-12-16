@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        background: #f9fafc;
+        margin: 0;
+        padding: 25px;
+        padding-bottom: 4cm;
+        color: #222;
+        width: 21cm;
+        margin: 0 auto;
+        position: relative;
+        min-height: 29.7cm;
+      }
+      header {
+        text-align: center;
+      }
+      h1 {
+        color: #007acc;
+        margin: 0;
+      }
+      .date-text {
+        margin: 0;
+        text-align: right;
+        margin-right: 10px;
+        padding-top: 10px;
+      }
+      .report-title {
+        color: #333;
+        padding-bottom: 4px;
+        margin: 0;
+      }
+      .plant-text {
+        margin: 0;
+        text-align: center;
+        color: #007acc;
+        font-weight: normal;
+        font-size: 18px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+        background: #fff;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ccc;
+      }
+      th {
+        background: #007acc;
+        color: #fff;
+        text-align: left;
+        padding: 8px;
+      }
+      td {
+        padding: 8px;
+        text-align: left;
+      }
+      .section {
+        margin-top: 20px;
+      }
+      .section-title {
+        color: #007acc;
+        margin: 0;
+      }
+      .section p {
+        text-align: justify;
+        margin: 20px 0;
+      }
+      .section ul {
+        margin: 20px 0;
+      }
+      .highlight {
+        background: #e7f3ff;
+        padding: 10px;
+        border-left: 4px solid #007acc;
+      }
+      .piechart {
+        width: auto;
+        min-width: 250px;
+        height: 250px;
+        position: relative;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .piechart canvas {
+        max-width: 250px;
+        max-height: 250px;
+      }
+      .piechart-water-balance {
+        width: auto;
+        min-width: 250px;
+        height: 250px;
+        position: relative;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .piechart-water-balance canvas {
+        max-width: 250px;
+        max-height: 250px;
+      }
+      .piechart-section {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+        gap: 10px;
+      }
+      .piechart-section-storage {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .piechart-section-storage h2 {
+        color: #007acc;
+        margin: 20px 0;
+      }
+      .piechart-section h2 {
+        color: #007acc;
+        margin: 20px 0;
+      }
+      .piechart-flow {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 24px;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .piechart-flow table {
+        width: 40%;
+        min-width: 300px;
+        flex-shrink: 0;
+      }
+      .piechart-flow .piechart {
+        flex: 0 0 auto;
+      }
+      .piechart-storage {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 24px;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .piechart-storage table {
+        width: 40%;
+        min-width: 300px;
+        flex-shrink: 0;
+      }
+      .piechart-storage .piechart {
+        flex: 0 0 auto;
+      }
+      .piechart-balance {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 24px;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .piechart-balance table {
+        width: 40%;
+        min-width: 300px;
+        flex-shrink: 0;
+      }
+      .piechart-balance .piechart-water-balance {
+        flex: 0 0 auto;
+      }
+      .detailed-report-section {
+        margin-top: 50px;
+      }
+      .detailed-report-section h2 {
+        color: #007acc;
+        margin: 20px 0;
+      }
+      .detailed-report-section p {
+        text-align: justify;
+        margin: 0;
+      }
+      .detailed-report-table {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+        gap: 10px;
+      }
+      .detailed-report-table h3 {
+        margin: 0;
+      }
+      .detailed-report-table table {
+        width: 50%;
+      }
+      .dashboard {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 17cm;
+        margin-left: auto;
+        margin-right: auto;
+        page-break-inside: avoid;
+      }
+      .dashboard h2 {
+        color: #007acc;
+        margin: 20px 0;
+      }
+      .dashboard-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+        width: 100%;
+        max-width: 17cm;
+        margin-left: auto;
+        margin-right: auto;
+        page-break-inside: avoid;
+      }
+      .dashboard-image {
+        width: 100%;
+        max-width: 17cm;
+        max-height: 20cm;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+        page-break-inside: avoid;
+      }
+      .daigram-section {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 17cm;
+        margin-left: auto;
+        margin-right: auto;
+        page-break-inside: avoid;
+      }
+      .daigram-section h2 {
+        color: #007acc;
+        margin: 20px 0;
+      }
+      .daigram-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 0px;
+        width: 100%;
+        max-width: 17cm;
+        margin-left: auto;
+        margin-right: auto;
+        page-break-inside: avoid;
+      }
+      .daigram-image {
+        width: 100%;
+        max-width: 17cm;
+        max-height: 20cm;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+        page-break-inside: avoid;
+      }
+      .department-section {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 17cm;
+        margin-left: auto;
+        margin-right: auto;
+        page-break-inside: avoid;
+      }
+      .department-title {
+        color: #007acc;
+        margin: 20px 0;
+      }
+      .department-section h2 {
+        color: #007acc;
+        margin: 0;
+      }
+      .department-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+        width: 100%;
+        max-width: 17cm;
+        margin-left: auto;
+        margin-right: auto;
+        page-break-inside: avoid;
+      }
+      .department-image {
+        width: 100%;
+        max-width: 17cm;
+        max-height: 20cm;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+        page-break-inside: avoid;
+      }
+      .system-section {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 17cm;
+        margin-left: auto;
+        margin-right: auto;
+        page-break-inside: avoid;
+      }
+      .system-title {
+        color: #007acc;
+        margin: 20px 0;
+      }
+      .system-section h2 {
+        color: #007acc;
+        margin: 0;
+      }
+      .system-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+        width: 100%;
+        max-width: 17cm;
+        margin-left: auto;
+        margin-right: auto;
+        page-break-inside: avoid;
+      }
+      .system-image {
+        width: 100%;
+        max-width: 17cm;
+        max-height: 20cm;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+        page-break-inside: avoid;
+      }
+      .header {
+        text-align: center;
+      }
+      @page {
+        size: A4;
+        margin: 2cm;
+        margin-bottom: 3.5cm;
+      }
+      .sustain-text {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        max-width: 21cm;
+        text-align: right;
+        padding-right: 2cm;
+        padding-bottom: 1cm;
+        font-size: 12px;
+        font-weight: 500;
+        color: #007acc;
+        font-style: italic;
+        background: #f9fafc;
+        z-index: 1000;
+        page-break-inside: avoid;
+      }
+      @media print {
+        @page {
+          size: A4;
+          margin: 2cm;
+          margin-bottom: 3.5cm;
+        }
+        body {
+          margin-bottom: 3.5cm;
+          padding-bottom: 4cm;
+          width: 21cm;
+        }
+        .sustain-text {
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          width: 100%;
+          max-width: 21cm;
+          text-align: right;
+          padding-right: 2cm;
+          padding-bottom: 1cm;
+          font-size: 12px;
+          font-weight: 500;
+          color: #007acc;
+          font-style: italic;
+          background: #f9fafc;
+        }
+        .dashboard-image,
+        .daigram-image,
+        .department-image,
+        .system-image {
+          max-width: 17cm;
+          max-height: 20cm;
+        }
+        .dashboard,
+        .daigram-section,
+        .department-section,
+        .system-section {
+          max-width: 17cm;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+      .water-balance-section {
+        margin-top: 100px;
+      }
+      .header-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        border-bottom: 2px solid #007acc;
+      }
+      .logo {
+        width: 100px;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <h1></h1>
+        <img src="" alt="logo" class="logo" />
+      </div>
+      <p class="date-text"><strong>Date:</strong></p>
+      <h2 class="report-title">Water Balance Report</h2>
+      <p class="plant-text"></p>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">Introduction</h2>
+      <p></p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Environmental & Governance</h2>
+      <ul>
+        <li></li>
+      </ul>
+    </section>
+    <div class="dashboard">
+      <h2>Dashboard</h2>
+      <div class="dashboard-content">
+        <img
+          src="images/dashboard.png"
+          alt="dashboard"
+          class="dashboard-image"
+        />
+      </div>
+    </div>
+    <div class="daigram-section">
+      <h2>Plant Report</h2>
+      <div class="daigram-content">
+        <img
+          src="images/daigram.png"
+          alt="plant diagram"
+          class="daigram-image"
+        />
+      </div>
+    </div>
+    <div class="department-section">
+      <h1 class="department-title"></h1>
+      <h2></h2>
+      <div class="department-content">
+        <img
+          src="images/department.png"
+          alt="department"
+          class="department-image"
+        />
+      </div>
+    </div>
+
+    <div class="system-section">
+      <h1 class="system-title"></h1>
+      <h2></h2>
+      <div class="system-content">
+        <img src="" alt="system" class="system-image" />
+      </div>
+    </div>
+
+    <section class="piechart-section">
+      <h2>Water Neutrality Index</h2>
+      <div class="piechart-flow">
+        <table>
+          <tr>
+            <th class="header">Category</th>
+            <th class="header">Value</th>
+            <th class="header">Unit</th>
+          </tr>
+          <tr>
+            <td>Percolation</td>
+            <td>0.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Wastage</td>
+            <td>0.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Consumption</td>
+            <td>0.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Regeneration</td>
+            <td>0.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Evaporation</td>
+            <td>0.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Re-use</td>
+            <td>0.0</td>
+            <td>Ltr.</td>
+          </tr>
+        </table>
+
+        <div
+          class="piechart"
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <canvas id="neutralityPieChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="piechart-section-storage">
+      <h2>Water Storage Analysis</h2>
+      <div class="piechart-storage">
+        <table>
+          <tr>
+            <th class="header">Category</th>
+            <th class="header">Value</th>
+            <th class="header">Unit</th>
+          </tr>
+          <tr>
+            <td>Total Stock</td>
+            <td>1800.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Available Capacity</td>
+            <td>3200.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Total Capacity</td>
+            <td>5000.0</td>
+            <td>Ltr.</td>
+          </tr>
+        </table>
+
+        <div
+          class="piechart"
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <canvas id="storagePieChart"></canvas>
+        </div>
+      </div>
+    </section>
+    <section class="piechart-section water-balance-section">
+      <h2>Water Balance Analysis</h2>
+      <div class="piechart-balance">
+        <table>
+          <tr>
+            <th>Report Type</th>
+            <th>Value</th>
+            <th>Unit</th>
+          </tr>
+          <tr>
+            <td>Flow In</td>
+            <td>150000.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Flow Out</td>
+            <td>32000.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Percolation</td>
+            <td>64300.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Evaporation</td>
+            <td>101200.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Consumption</td>
+            <td>35555.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Wastage</td>
+            <td>29450.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Regeneration</td>
+            <td>103500.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Re-use</td>
+            <td>95000.0</td>
+            <td>Ltr.</td>
+          </tr>
+          <tr>
+            <td>Net Balance</td>
+            <td>-21405.0</td>
+            <td>Ltr.</td>
+          </tr>
+        </table>
+
+        <div
+          class="piechart-water-balance"
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <canvas id="balancePieChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="detailed-report-section">
+      <h2>Detailed Report</h2>
+      <p>As per our requirement, the data will be downloaded.</p>
+      <div class="detailed-report-table">
+        <h3>Water Storage</h3>
+        <table>
+          <tr>
+            <td>Total Balance</td>
+            <td>793000.0 Ltr</td>
+          </tr>
+        </table>
+      </div>
+      <div class="detailed-report-table">
+        <h3>Water Balance</h3>
+        <table>
+          <tr>
+            <td>Total Balance</td>
+            <td>818236.0 Ltr</td>
+          </tr>
+        </table>
+      </div>
+      <div class="detailed-report-table">
+        <h3>Water Neutrality Index</h3>
+        <table>
+          <tr>
+            <td>Neutrality Index</td>
+            <td>0.0</td>
+          </tr>
+        </table>
+        <p class="neutrality-status-text"></p>
+      </div>
+    </section>
+
+    <footer class="sustain-text"></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const createPieChart = (id, labels, values) => {
+        new Chart(document.getElementById(id), {
+          type: "pie",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: values,
+                backgroundColor: [
+                  "#3B82F6",
+                  "#10B981",
+                  "#0ca9df",
+                  "#505472",
+                  "#EF4444",
+                  "#8B5CF6",
+                  "#fe994e",
+                  "#84CC16",
+                ],
+                borderWidth: 0,
+                hoverOffset: 8,
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  title: (context) => {
+                    return context[0].label;
+                  },
+                  label: (context) => {
+                    const label = context.label || "";
+                    const rawValue = context.raw || 0;
+                    return `${label}: ${rawValue} Ltr`;
+                  },
+                  labelColor: (context) => {
+                    return {
+                      borderColor: "#007acc",
+                      backgroundColor:
+                        context.dataset.backgroundColor[context.dataIndex],
+                      borderWidth: 0,
+                      borderRadius: 2,
+                    };
+                  },
+                },
+              },
+            },
+          },
+        });
+      };
+
+      createPieChart(
+        "neutralityPieChart",
+        [
+          "Percolation",
+          "Wastage",
+          "Consumption",
+          "Regeneration",
+          "Evaporation",
+          "Re-use",
+        ],
+        [0, 0, 0, 0, 0, 0]
+      );
+      createPieChart(
+        "storagePieChart",
+        ["Total Stock", "Available Capacity"],
+        [1800, 3200]
+      );
+      createPieChart(
+        "balancePieChart",
+        [
+          "Flow In",
+          "Flow Out",
+          "Percolation",
+          "Evaporation",
+          "Consumption",
+          "Wastage",
+          "Regeneration",
+          "Re-use",
+        ],
+        [150000, 32000, 64300, 101200, 35555, 29450, 103500, 95000]
+      );
+    </script>
+  </body>
+</html>

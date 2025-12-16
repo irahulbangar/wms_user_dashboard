@@ -1,0 +1,200 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Error, Success } from "../utils/toast";
+import { Eye, EyeOff, Loader2, Moon, Sun } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { loginUser } from "../../store/usersSlice";
+import Loader from "./Loader";
+import BackgroundImage from "../assets/images/background.jpg";
+import { ApiError } from "../utils/errorHandler";
+
+const Login: React.FC = () => {
+  const [client_email, setClientEmail] = useState("");
+  const [client_password, setClientPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { isLoading, isAuthenticated, user } = useAppSelector(
+    (state) => state.user
+  );
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const userRole = user.role || user.plantsList?.[0]?.role;
+      const organizationId = user.organization_id;
+
+      if (userRole === "org_admin") {
+        navigate(`/organization/${organizationId}`);
+      } else if (
+        userRole === "org_user" &&
+        user.plantsList &&
+        user.plantsList.length > 0
+      ) {
+        const firstPlantId = user.plantsList[0].plant_id;
+        navigate(`/plant/${firstPlantId}`);
+      } else {
+        if (user.plantsList && user.plantsList.length > 0) {
+          const firstPlantId = user.plantsList[0].plant_id;
+          navigate(`/plant/${firstPlantId}`);
+        }
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
+
+  if (isAuthenticated || isLoading) {
+    return <Loader />;
+  }
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    localStorage.clear();
+
+    try {
+      await dispatch(loginUser({ client_email, client_password }))
+        .unwrap()
+        .then((res) => {
+          if (res.success || res.status === 200) {
+            Success(res.message || "You are logged in successfully..!!");
+          } else {
+            Error(res.message || "Login failed. Please try again.");
+          }
+        })
+        .catch((err) => {
+          Error(err || "Login failed. Please try again.");
+        });
+    } catch (error) {
+      Error(
+        error instanceof ApiError
+          ? error.message
+          : "Login failed. Please try again."
+      );
+    }
+  };
+
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden animate-pan-background"
+      style={{
+        backgroundImage: `url(${BackgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="absolute inset-0 bg-black/50 bg-opacity-40"></div>
+      <div className="max-w-md w-full relative z-10 bg-primary rounded-lg shadow-xl p-8">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col mb-6">
+            <h2 className="text-3xl font-normal text-text-primary mb-1 font-roboto">
+              Welcome Back
+            </h2>
+            <p className="text-text-secondary font-roboto">
+              Sign in to your WMS Dashboard
+            </p>
+          </div>
+          <button
+            className="p-2.5 rounded-xl text-text-primary bg-secondary hover:bg-hover-bg-primary transition-colors cursor-pointer absolute top-4 right-4"
+            onClick={toggleTheme}
+            title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+          >
+            {theme === "light" ? (
+              <Moon className="w-5 h-5" />
+            ) : (
+              <Sun className="w-5 h-5" />
+            )}
+          </button>
+        </div>
+
+        <form className="space-y-4" onSubmit={handleLogin}>
+          <label
+            htmlFor="client_email"
+            className="block text-sm font-normal text-text-secondary mb-2 font-roboto"
+          >
+            Email
+          </label>
+          <input
+            name="client_email"
+            type="email"
+            value={client_email}
+            onChange={(e) => setClientEmail(e.target.value)}
+            className="w-full px-3 py-1.5 border border-border-primary text-text-primary rounded-md placeholder-text-text-secondary focus:outline-none focus:ring-1 focus:ring-status-success focus:border-status-success/50 transition-colors font-roboto"
+            placeholder="Enter your email"
+          />
+
+          <label
+            htmlFor="client_password"
+            className="block text-sm font-normal text-text-secondary mb-2 font-roboto"
+          >
+            Password
+          </label>
+          <div className="relative">
+            <input
+              name="client_password"
+              type={showPassword ? "text" : "password"}
+              value={client_password}
+              onChange={(e) => setClientPassword(e.target.value)}
+              className="w-full px-3 py-1.5 pr-10 border border-border-primary text-text-primary rounded-md placeholder-text-text-secondary focus:outline-none focus:ring-1 focus:ring-status-success focus:border-status-success/50 transition-colors font-roboto"
+              placeholder="Enter your password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <Eye className="w-5 h-5" />
+              ) : (
+                <EyeOff className="w-5 h-5" />
+              )}
+            </button>
+          </div>
+
+          <div className="flex items-center justify-end">
+            {/* <div className="flex items-center">
+              <input
+                name="remember-me"
+                value="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-status-info focus:ring-status-info border-border-primary rounded cursor-pointer font-roboto"
+              />
+              <label className="ml-2 block text-sm text-text-secondary font-roboto">
+                Remember me
+              </label>
+            </div> */}
+
+            <div className="text-sm">
+              <a
+                href="#"
+                className="font-normal text-status-info hover:text-status-info/80 font-roboto"
+              >
+                Forgot your password?
+              </a>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="relative w-full flex justify-center py-1.5 px-4 text-sm font-normal rounded-md bg-linear-to-r text-white hover:shadow-lg transition-all duration-200 cursor-pointer font-roboto"
+          >
+            {isLoading ? (
+              <div className="flex items-center justify-center gap-2 font-roboto">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Signing in...
+              </div>
+            ) : (
+              "Sign in"
+            )}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
