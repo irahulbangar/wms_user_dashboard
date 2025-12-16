@@ -67,18 +67,18 @@ const AnalysisPieChartCard = ({
           </div>
           <div className="flex items-center gap-1 flex-wrap">
             <div className="flex flex-col gap-1">
-              {neutralityIndexValue !== null && (
-                <span className="text-sm font-roboto text-text-primary whitespace-nowrap truncate">
-                  Water Neutrality Index :{" "}
-                  {neutralityIndexValue !== null
-                    ? (neutralityIndexValue > 120
-                        ? 120
-                        : neutralityIndexValue
-                      ).toFixed(0)
-                    : 0}
-                  %
-                </span>
-              )}
+              {/* {neutralityIndexValue !== null && ( */}
+              <span className="text-sm font-roboto text-text-primary whitespace-nowrap truncate">
+                Water Neutrality Index :{" "}
+                {neutralityIndexValue !== null
+                  ? (neutralityIndexValue > 120
+                      ? 120
+                      : neutralityIndexValue
+                    ).toFixed(0)
+                  : 0}
+                %
+              </span>
+              {/* )} */}
               <div className="flex items-center gap-1 flex-wrap">
                 {data.map((item) => (
                   <div key={item.name} className="flex items-center gap-1">
@@ -107,7 +107,7 @@ const AnalysisPieChartCard = ({
 
                 if (isCapped) {
                   // Value is > 120%, capped at 120% - status not applicable
-                  statusText = "Status not applicable (value exceeds 120%).";
+                  statusText = "Not applicable (value exceeds 120%).";
                   statusColor = "text-status-warning";
                 } else if (displayedValue >= 100) {
                   // WNI >= 100% and <= 120%

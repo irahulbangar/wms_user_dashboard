@@ -262,20 +262,27 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
               />
 
               {hasWaterNeutralityDataArray ? (
-                <AnalysisPieChartCard
+                <CollapsibleSection
                   title={`${getGroupTypeLabel()} Water Neutrality Index`}
-                  data={waterNeutralityIndexData}
-                  colors={waterNeutralityIndexData.map((item) => item.color)}
-                  isLoading={isLoadingReport}
-                  neutralityIndexValue={waterNeutralityIndexValue}
-                  context={
-                    isPlantGroup
-                      ? undefined
-                      : isDepartmentGroup
-                      ? "department"
-                      : "system"
-                  }
-                />
+                  defaultExpanded={true}
+                >
+                  <div className="flex flex-col gap-4">
+                    <AnalysisPieChartCard
+                      title={`${getGroupTypeLabel()} Water Neutrality Index`}
+                      data={waterNeutralityIndexData}
+                      colors={waterNeutralityIndexData.map((item) => item.color)}
+                      isLoading={isLoadingReport}
+                      neutralityIndexValue={waterNeutralityIndexValue}
+                      context={
+                        isPlantGroup
+                          ? undefined
+                          : isDepartmentGroup
+                          ? "department"
+                          : "system"
+                      }
+                    />
+                  </div>
+                </CollapsibleSection>
               ) : isLoadingReport ? (
                 <div className="flex items-center justify-center py-8">
                   <div className="text-text-secondary font-roboto text-sm">

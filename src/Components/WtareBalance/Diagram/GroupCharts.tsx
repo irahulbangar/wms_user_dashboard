@@ -219,7 +219,7 @@ export const StorageChart: React.FC<GroupChartsProps> = ({
   return (
     <CollapsibleSection
       title={`${getGroupTypeLabel()} Storage Analysis`}
-      defaultExpanded={false}
+      defaultExpanded={true}
     >
       <div className="space-y-6">
         {chartData.length > 0 ? (
