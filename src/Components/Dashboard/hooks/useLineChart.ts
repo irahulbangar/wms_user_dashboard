@@ -95,11 +95,58 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
       if (daywiseData && Object.keys(daywiseData).length > 0) {
         const sortedDates = Object.keys(daywiseData).sort();
 
+        const firstDateKey = sortedDates[0];
+        let dateFormat: "min" | "hour" | "day" | "month" = "day";
+
+        if (
+          firstDateKey.includes(":") &&
+          firstDateKey.split(" ").length === 2
+        ) {
+          const timePart = firstDateKey.split(" ")[1];
+          if (timePart.split(":")[1] !== "00") {
+            dateFormat = "min";
+          } else {
+            dateFormat = "hour";
+          }
+        } else if (firstDateKey.split("-").length === 2) {
+          dateFormat = "month";
+        } else {
+          dateFormat = "day";
+        }
+
         dates = sortedDates.map((dateStr) => {
-          const date = new Date(dateStr);
-          const month = date.toLocaleDateString("en-US", { month: "short" });
-          const day = date.getDate();
-          return `${month} ${day}`;
+          if (dateFormat === "min" || dateFormat === "hour") {
+            const [datePart, timePart] = dateStr.split(" ");
+            const [year, month, day] = datePart.split("-").map(Number);
+            const [hour, minutes] = timePart.split(":").map(Number);
+            const date = new Date(year, month - 1, day, hour, minutes || 0);
+            const monthName = date.toLocaleDateString("en-US", {
+              month: "short",
+            });
+
+            if (dateFormat === "min") {
+              return `${monthName} ${day} ${String(hour).padStart(
+                2,
+                "0"
+              )}:${String(minutes || 0).padStart(2, "0")}`;
+            } else {
+              return `${monthName} ${day} ${String(hour).padStart(2, "0")}:00`;
+            }
+          } else if (dateFormat === "month") {
+            const [year, month] = dateStr.split("-").map(Number);
+            const date = new Date(year, month - 1, 1);
+            const monthName = date.toLocaleDateString("en-US", {
+              month: "short",
+            });
+            return `${monthName} ${year}`;
+          } else {
+            const [year, month, day] = dateStr.split("-").map(Number);
+            const date = new Date(year, month - 1, day);
+            const monthName = date.toLocaleDateString("en-US", {
+              month: "short",
+            });
+            return `${monthName} ${day}`;
+          }
         });
 
         sortedDates.forEach((dateStr) => {
