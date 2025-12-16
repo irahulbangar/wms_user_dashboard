@@ -781,7 +781,7 @@ const Organization = () => {
           setIsLoading(false);
         }
       });
-  }, [dispatch, user, isAuthenticated, plants]);
+  }, [dispatch, user, isAuthenticated]);
 
   const fetchDevices = useCallback(() => {
     if (!isAuthenticated) {
@@ -823,7 +823,7 @@ const Organization = () => {
         fetchDevices();
       }
     }
-  }, [organizationId, plantId, fetchPlants, fetchDevices]);
+  }, [organizationId, plantId, fetchDevices, fetchPlants]);
 
   const hasWaterBalanceDataArray = useMemo(() => {
     return (
