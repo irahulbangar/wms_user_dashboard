@@ -101,11 +101,16 @@ const AnalysisPieChartCard = ({
                 const displayedValue =
                   neutralityIndexValue > 120 ? 120 : neutralityIndexValue;
                 const isCapped = neutralityIndexValue > 120;
+                const isZero = neutralityIndexValue === 0;
 
                 let statusText = "";
                 let statusColor = "";
 
-                if (isCapped) {
+                if (isZero) {
+                  // Value is 0 - status not applicable
+                  statusText = "Not applicable (value is 0).";
+                  statusColor = "text-status-warning";
+                } else if (isCapped) {
                   // Value is > 120%, capped at 120% - status not applicable
                   statusText = "Not applicable (value exceeds 120%).";
                   statusColor = "text-status-warning";
