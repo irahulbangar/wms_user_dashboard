@@ -32,7 +32,7 @@ const AnalysisPieChartCard = ({
   return (
     <div
       className={`bg-card rounded-lg px-4 py-1 shadow-md flex flex-col items-center ${
-        hasData ? "h-full" : "h-[365px]"
+        hasData ? "h-full" : "h-full"
       }`}
     >
       <h3 className="text-text-primary text-base font-normal font-roboto whitespace-nowrap">
