@@ -281,6 +281,33 @@ const DepartmentDevices = () => {
 
     const daywiseData: Record<string, Record<string, number>> = {};
 
+    const getDateKey = (date: Date): string => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hour = String(date.getHours()).padStart(2, "0");
+      const minutes = date.getMinutes();
+
+      switch (durationType) {
+        case "min": {
+          const roundedMinutes = Math.floor(minutes / 15) * 15;
+          const roundedMins = String(roundedMinutes).padStart(2, "0");
+          return `${year}-${month}-${day} ${hour}:${roundedMins}`;
+        }
+        case "hour": {
+          return `${year}-${month}-${day} ${hour}:00`;
+        }
+        case "day": {
+          return `${year}-${month}-${day}`;
+        }
+        case "month": {
+          return `${year}-${month}`;
+        }
+        default:
+          return `${year}-${month}-${day}`;
+      }
+    };
+
     Object.entries(plantReport).forEach(([dateKey, data]) => {
       try {
         const entryDate = new Date(dateKey);
@@ -316,12 +343,10 @@ const DepartmentDevices = () => {
         }
 
         if (shouldInclude && data && typeof data === "object") {
-          const dateKey = `${entryDate.getFullYear()}-${String(
-            entryDate.getMonth() + 1
-          ).padStart(2, "0")}-${String(entryDate.getDate()).padStart(2, "0")}`;
+          const groupKey = getDateKey(entryDate);
 
-          if (!daywiseData[dateKey]) {
-            daywiseData[dateKey] = {
+          if (!daywiseData[groupKey]) {
+            daywiseData[groupKey] = {
               flow_in: 0,
               flow_out: 0,
               percolation: 0,
@@ -357,7 +382,7 @@ const DepartmentDevices = () => {
 
               const mappedKey = keyMap[key];
               if (mappedKey) {
-                daywiseData[dateKey][mappedKey] += value;
+                daywiseData[groupKey][mappedKey] += value;
               }
             }
           });
@@ -381,6 +406,7 @@ const DepartmentDevices = () => {
   }, [
     plantReport,
     dateSelectionType,
+    durationType,
     dailyDate,
     monthYear,
     yearlyDate,
