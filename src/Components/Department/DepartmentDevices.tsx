@@ -75,17 +75,36 @@ const DepartmentDevices = () => {
       | "custom";
     switch (defaultDateType) {
       case "daily":
-        return "min";
-      case "monthly":
         return "hour";
-      case "yearly":
+      case "monthly":
         return "day";
+      case "yearly":
+        return "month";
       case "custom":
         return "day";
       default:
-        return "min";
+        return "hour";
     }
   });
+
+  useEffect(() => {
+    switch (dateSelectionType) {
+      case "daily":
+        setDurationType("hour");
+        break;
+      case "monthly":
+        setDurationType("day");
+        break;
+      case "yearly":
+        setDurationType("month");
+        break;
+      case "custom":
+        setDurationType("day");
+        break;
+      default:
+        setDurationType("hour");
+    }
+  }, [dateSelectionType]);
   const [dailyDate, setDailyDate] = useState(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
