@@ -182,7 +182,7 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
 
             // Calculate neutrality percentage, handle division by zero
             if (denominator > 0) {
-              neutralityValue = (numerator / denominator) * 100;
+              neutralityValue = ((numerator === 0 ? 0.00001 : numerator) / denominator) * 100;
             } else if (numerator > 0) {
               // If denominator is 0 but numerator > 0, set to a high value (e.g., 1000%)
               neutralityValue = 1000;
