@@ -34,7 +34,7 @@ import LineChartSkeleton from "../Dashboard/LineChartSkeleton";
 import DateSelection from "../Dashboard/DateSelection";
 import type { PlantReportData } from "../../../model/plant-report.interface";
 import { getPlantReport } from "../../../store/plantSlice";
-import { getDateRange } from "../../utils/utils";
+import { getDateRange, isRecordTimeOld } from "../../utils/utils";
 
 declare global {
   interface Window {
@@ -716,15 +716,20 @@ const SystemDevices = () => {
 
   const deviceStatusCounts = useMemo(() => {
     const active = filteredDevices.filter(
-      (d) => d.device_status?.toLowerCase() === "active"
+      (d) =>
+        d.device_status?.toLowerCase() === "active" &&
+        !isRecordTimeOld(d?.last_record?.time)
     ).length;
     const inactive = filteredDevices.filter(
-      (d) => d.device_status?.toLowerCase() === "inactive"
+      (d) =>
+        d.device_status?.toLowerCase() === "inactive" ||
+        isRecordTimeOld(d?.last_record?.time)
     ).length;
     const other = filteredDevices.filter(
       (d) =>
         d.device_status?.toLowerCase() !== "active" &&
-        d.device_status?.toLowerCase() !== "inactive"
+        d.device_status?.toLowerCase() !== "inactive" &&
+        !isRecordTimeOld(d?.last_record?.time)
     ).length;
     return { active, inactive, other };
   }, [filteredDevices]);

@@ -17,11 +17,11 @@ import NoDataFound from "../NoDataFound";
 import { Error } from "../../utils/toast";
 import domtoimage from "dom-to-image";
 import DeviceCard from "../System/DeviceCard";
+import { isRecordTimeOld } from "../../utils/utils";
 
 const Devices = () => {
   const navigate = useNavigate();
   const devicesRef = useRef<HTMLDivElement>(null);
-
   const [devices, setDevices] = useState<DevicesResult[]>([]);
   const [filteredDevices, setFilteredDevices] = useState<DevicesResult[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -521,7 +521,9 @@ const Devices = () => {
                               <span className="text-xs text-text-secondary font-roboto">
                                 {systemDevices?.filter(
                                   (d) =>
-                                    d.device_status?.toLowerCase() === "active"
+                                    d.device_status?.toLowerCase() ===
+                                      "active" &&
+                                    !isRecordTimeOld(d?.last_record?.time)
                                 ).length || 0}{" "}
                                 Active
                               </span>
@@ -532,7 +534,8 @@ const Devices = () => {
                                 {systemDevices?.filter(
                                   (d) =>
                                     d.device_status?.toLowerCase() ===
-                                    "inactive"
+                                      "inactive" ||
+                                    isRecordTimeOld(d?.last_record?.time)
                                 ).length || 0}{" "}
                                 Inactive
                               </span>
