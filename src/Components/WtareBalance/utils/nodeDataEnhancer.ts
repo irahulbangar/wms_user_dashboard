@@ -236,13 +236,22 @@ export const enhanceNodeData = ({
     );
 
     if (matchingDevice) {
+      // Ensure report_value is always a number
+      const reportValue = matchingDevice.device_reporting?.report_value;
+      const numericReportValue = 
+        typeof reportValue === "number" 
+          ? reportValue 
+          : typeof reportValue === "string" 
+          ? parseFloat(reportValue) || 0 
+          : reportValue ?? 0;
+      
       enhancedData = {
         ...enhancedData,
         unit: matchingDevice.unit || "",
         isActive: matchingDevice.device_status === "active",
         deviceId: matchingDevice.device_id,
         label: matchingDevice.device_name,
-        report_value: matchingDevice.device_reporting?.report_value ?? 0,
+        report_value: isNaN(numericReportValue) ? 0 : numericReportValue,
         reportType: matchingDevice.report_type || "N/A",
       };
     } else {
