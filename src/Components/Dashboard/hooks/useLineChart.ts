@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as echarts from "echarts";
+import { ensureNonNegative } from "../../../utils/utils";
 
 interface ExtendedECharts extends echarts.ECharts {
   _resizeObserver?: ResizeObserver;
@@ -48,14 +49,6 @@ const getReportTypeColor = (reportType: string): string => {
   return colors[reportType] || "#6B7280";
 };
 
-// Helper function to ensure negative values are treated as 0
-// const ensureNonNegative = (value: number | undefined | null): number => {
-//   if (value === undefined || value === null || isNaN(Number(value))) {
-//     return 0;
-//   }
-//   const numValue = Number(value);
-//   return numValue < 0 ? 0 : numValue;
-// };
 
 export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
   const lineChartRef = useRef<HTMLDivElement>(null);
@@ -151,15 +144,17 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
 
         sortedDates.forEach((dateStr) => {
           const dayData = daywiseData[dateStr];
-          dataSeries.flowIn.push(dayData?.flow_in || 0);
-          dataSeries.flowOut.push(dayData?.flow_out || 0);
-          dataSeries.percolation.push(dayData?.percolation || 0);
-          dataSeries.evaporation.push(dayData?.evaporation || 0);
-          dataSeries.consumption.push(dayData?.consumption || 0);
-          dataSeries.wastage.push(dayData?.wastage || 0);
-          dataSeries.regeneration.push(dayData?.regeneration || 0);
-          dataSeries.reuse.push(dayData?.reuse || 0);
-          dataSeries.rainfall.push(dayData?.rainfall || 0);
+          dataSeries.flowIn.push(ensureNonNegative(dayData?.flow_in));
+          dataSeries.flowOut.push(ensureNonNegative(dayData?.flow_out));
+          dataSeries.percolation.push(ensureNonNegative(dayData?.percolation));
+          dataSeries.evaporation.push(ensureNonNegative(dayData?.evaporation));
+          dataSeries.consumption.push(ensureNonNegative(dayData?.consumption));
+          dataSeries.wastage.push(ensureNonNegative(dayData?.wastage));
+          dataSeries.regeneration.push(
+            ensureNonNegative(dayData?.regeneration)
+          );
+          dataSeries.reuse.push(ensureNonNegative(dayData?.reuse));
+          dataSeries.rainfall.push(ensureNonNegative(dayData?.rainfall));
 
           let neutralityValue = 0;
 
@@ -168,16 +163,16 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
             dayData.neutrality !== null &&
             !isNaN(Number(dayData.neutrality))
           ) {
-            const neutrality = Number(dayData.neutrality);
+            const neutrality = ensureNonNegative(dayData.neutrality);
             neutralityValue = neutrality > 1 ? neutrality : neutrality * 100;
           } else {
             // Calculate neutrality from the formula using the same day's data
-            const regeneration = Number(dayData?.regeneration || 0);
-            const reuse = Number(dayData?.reuse || 0);
-            const percolation = Number(dayData?.percolation || 0);
-            const consumption = Number(dayData?.consumption || 0);
-            const evaporation = Number(dayData?.evaporation || 0);
-            const wastage = Number(dayData?.wastage || 0);
+            const regeneration = ensureNonNegative(dayData?.regeneration);
+            const reuse = ensureNonNegative(dayData?.reuse);
+            const percolation = ensureNonNegative(dayData?.percolation);
+            const consumption = ensureNonNegative(dayData?.consumption);
+            const evaporation = ensureNonNegative(dayData?.evaporation);
+            const wastage = ensureNonNegative(dayData?.wastage);
 
             // Calculate numerator: Regeneration + Reuse + Percolation
             const numerator = regeneration + reuse + percolation;

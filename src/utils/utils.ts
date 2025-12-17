@@ -238,3 +238,12 @@ export const flowUnit = (
   }
   return unit === "M^3" ? "m³" : "Ltr";
 };
+
+// Helper function to ensure negative values are treated as 0
+export const ensureNonNegative = (value: number | undefined | null): number => {
+  if (value === undefined || value === null || isNaN(Number(value))) {
+    return 0;
+  }
+  const numValue = Number(value);
+  return numValue < 0 ? 0 : numValue;
+};
