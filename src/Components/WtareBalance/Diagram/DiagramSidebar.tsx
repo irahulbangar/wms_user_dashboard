@@ -171,7 +171,9 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
 
   const waterNeutralityIndexValue = useMemo(() => {
     if (!aggregatedWaterBalanceData) return null;
-    return aggregatedWaterBalanceData.neutrality || null;
+    return aggregatedWaterBalanceData.neutrality === 0
+      ? 0.00001
+      : aggregatedWaterBalanceData.neutrality;
   }, [aggregatedWaterBalanceData]);
 
   const hasWaterBalanceDataArray = useMemo(() => {
@@ -270,7 +272,9 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
                     <AnalysisPieChartCard
                       title={`${getGroupTypeLabel()} Water Neutrality Index`}
                       data={waterNeutralityIndexData}
-                      colors={waterNeutralityIndexData.map((item) => item.color)}
+                      colors={waterNeutralityIndexData.map(
+                        (item) => item.color
+                      )}
                       isLoading={isLoadingReport}
                       neutralityIndexValue={waterNeutralityIndexValue}
                       context={
