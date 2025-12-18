@@ -242,7 +242,7 @@ const Notifications = () => {
                       <div className="flex flex-col gap-2 text-xs text-text-secondary font-roboto pt-3 border-t border-border-primary">
                         {alert.created_at && (
                           <div className="flex items-center gap-1">
-                            <span>Created :</span>
+                            <span className="whitespace-nowrap">Created :</span>
                             <span className="truncate">
                               {formatDateWithTime(alert.created_at)}
                             </span>
@@ -251,7 +251,7 @@ const Notifications = () => {
                         {alert.updated_at &&
                           alert.updated_at !== alert.created_at && (
                             <div className="flex items-center gap-1">
-                              <span>Updated :</span>
+                              <span className="whitespace-nowrap">Updated :</span>
                               <span className="truncate">
                                 {formatDateWithTime(alert.updated_at)}
                               </span>

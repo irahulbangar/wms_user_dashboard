@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({
       getPlantAlerts({
         plant_id: Number(getCurrentPlantId()),
         page_no: 1,
-        page_size: 3,
+        page_size: 50,
         yyyy: new Date().getFullYear(),
         mm: new Date().getMonth() + 1,
       })
