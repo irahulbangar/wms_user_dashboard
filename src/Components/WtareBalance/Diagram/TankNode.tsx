@@ -43,11 +43,11 @@ const TankNode = ({ data }: TankNodeProps) => {
     `System Name : ${systemName}`,
     `Device Name : ${data.label}`,
     organizationConnection
-      ? `Organization Connection : ${organizationConnection}`
+      ? `Org Connn. : ${organizationConnection}`
       : null,
-    plantConnection ? `Plant Connection : ${plantConnection}` : null,
-    departmentConnection ? `Dept Connection : ${departmentConnection}` : null,
-    systemConnection ? `System Connection : ${systemConnection}` : null,
+    plantConnection ? `Plant Conn. : ${plantConnection}` : null,
+    departmentConnection ? `Dept Conn. : ${departmentConnection}` : null,
+    systemConnection ? `System Conn. : ${systemConnection}` : null,
     `Current Level : ${currentLevel} ${unit}`,
     `Capacity : ${capacity} ${unit}`,
   ]

@@ -52,7 +52,7 @@ const PHMCNode = ({ data }: PHMCNodeProps) => {
     `System Name : ${systemName}`,
     `Device Name : ${data.label}`,
     organizationConnection
-      ? `Organization Conn. : ${organizationConnection}`
+      ? `Org Conn. : ${organizationConnection}`
       : null,
     plantConnection ? `Plant Conn. : ${plantConnection}` : null,
     departmentConnection ? `Dept Conn. : ${departmentConnection}` : null,
