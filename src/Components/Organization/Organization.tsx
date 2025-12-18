@@ -989,6 +989,7 @@ const Organization = () => {
                 isLoading={true}
               />
             </div>
+            
           ) : (
             <div className="flex gap-4 md:flex-row flex-col md:items-stretch">
               <div className="h-[300px] md:h-auto md:min-h-[300px] w-full bg-card rounded-lg p-2">
