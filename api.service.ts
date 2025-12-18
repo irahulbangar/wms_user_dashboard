@@ -11,7 +11,7 @@ export const HOST =
 
 const requestInterceptor = (config: InternalAxiosRequestConfig) => {
   config.params = {
-    ...config.params
+    ...config.params,
     // _t: Date.now(),
   };
 

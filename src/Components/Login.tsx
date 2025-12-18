@@ -1,13 +1,48 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Error, Success } from "../utils/toast";
 import { Eye, EyeOff, Loader2, Moon, Sun } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { loginUser } from "../../store/usersSlice";
+import {
+  loginUser,
+  setUser,
+  setToken,
+  setLoading,
+  logout,
+} from "../../store/usersSlice";
 import Loader from "./Loader";
 import BackgroundImage from "../assets/images/background.jpg";
 import { ApiError } from "../utils/errorHandler";
+import { jwtDecode } from "jwt-decode";
+import type { PlantsList } from "../../model/users.interface";
+
+interface TokenPayload {
+  client_id?: number;
+  client_name?: string;
+  client_email?: string;
+  client_phone?: string;
+  status?: string;
+  organization_id?: number;
+  created_at?: string;
+  updated_at?: string;
+  plantsList?: PlantsList[];
+  exp?: number;
+  iat?: number;
+}
+
+interface UserPayload {
+  id: string;
+  client_email: string;
+  client_name: string;
+  client_phone: string;
+  role: string;
+  status: string;
+  organization_id: number;
+  created_at: string;
+  updated_at: string;
+  plantsList: PlantsList[];
+}
 
 const Login: React.FC = () => {
   const [client_email, setClientEmail] = useState("");
@@ -16,10 +51,132 @@ const Login: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const { isLoading, isAuthenticated, user } = useAppSelector(
     (state) => state.user
   );
+
+  const handleTokenLogin = useCallback(
+    async (token: string) => {
+      try {
+        dispatch(setLoading(true));
+
+        const tokenFromUrl = token.trim();
+
+        if (!tokenFromUrl || tokenFromUrl.split(".").length !== 3) {
+          Error("Invalid token format. Please login again.");
+          searchParams.delete("token");
+          setSearchParams(searchParams);
+          dispatch(setLoading(false));
+          return;
+        }
+
+        localStorage.clear();
+
+        let decodedToken: TokenPayload;
+        try {
+          decodedToken = jwtDecode<TokenPayload>(tokenFromUrl);
+        } catch (decodeError) {
+          console.error("Token decode error:", decodeError);
+          Error("Invalid token format. Please login again.");
+          searchParams.delete("token");
+          setSearchParams(searchParams);
+          dispatch(setLoading(false));
+          return;
+        }
+
+        if (
+          decodedToken.status === "Inactive" ||
+          decodedToken.status === "inactive"
+        ) {
+          Error(
+            "Access denied. Your account is inactive. Please contact your administrator."
+          );
+          searchParams.delete("token");
+          setSearchParams(searchParams);
+          dispatch(setLoading(false));
+          return;
+        }
+
+        if (!decodedToken.plantsList || decodedToken.plantsList.length === 0) {
+          Error("Access denied. Please contact your administrator.");
+          searchParams.delete("token");
+          setSearchParams(searchParams);
+          dispatch(setLoading(false));
+          return;
+        }
+
+        const userPayload: UserPayload = {
+          id: decodedToken.client_id?.toString() || "",
+          client_email: decodedToken.client_email || "",
+          client_name: decodedToken.client_name || "",
+          client_phone: decodedToken.client_phone || "",
+          role: decodedToken.plantsList[0]?.role || "",
+          status: decodedToken.status || "active",
+          organization_id: decodedToken.organization_id || 0,
+          created_at: decodedToken.created_at || "",
+          updated_at: decodedToken.updated_at || "",
+          plantsList: decodedToken.plantsList || [],
+        };
+
+        localStorage.setItem("LAST_LOGIN", new Date().toLocaleString());
+        localStorage.setItem("accessToken", tokenFromUrl);
+        localStorage.setItem("user", JSON.stringify(userPayload));
+
+        const savedToken = localStorage.getItem("accessToken");
+        if (savedToken !== tokenFromUrl) {
+          localStorage.setItem("accessToken", tokenFromUrl);
+        }
+
+        if (userPayload.organization_id) {
+          localStorage.setItem(
+            "organizationId",
+            userPayload.organization_id.toString()
+          );
+        }
+
+        dispatch(setUser(userPayload));
+        dispatch(setToken(tokenFromUrl));
+
+        searchParams.delete("token");
+        setSearchParams(searchParams);
+
+        Success("You are logged in successfully..!!");
+      } catch (error) {
+        console.error("Error processing token login:", error);
+        Error("Invalid token. Please login again.");
+        searchParams.delete("token");
+        setSearchParams(searchParams);
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+    [dispatch, searchParams, setSearchParams]
+  );
+
+  useEffect(() => {
+    const token = searchParams.get("token");
+
+    if (token) {
+      localStorage.clear();
+      dispatch(logout());
+
+      const tokenFromUrl = token.trim();
+
+      if (tokenFromUrl && tokenFromUrl.split(".").length === 3) {
+        handleTokenLogin(tokenFromUrl);
+      } else {
+        console.error(
+          "Invalid token format from URL. Token parts:",
+          tokenFromUrl?.split(".").length
+        );
+        Error("Invalid token format. Please login again.");
+        searchParams.delete("token");
+        setSearchParams(searchParams);
+      }
+    }
+  }, [searchParams, handleTokenLogin, setSearchParams, dispatch]);
 
   useEffect(() => {
     if (isAuthenticated && user) {
