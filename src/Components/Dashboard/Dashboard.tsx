@@ -1901,11 +1901,6 @@ const Dashboard = () => {
               <span className="text-sm font-roboto font-normal text-text-secondary flex-1">
                 {reportProgress.status}
               </span>
-              {/* {reportProgress.timeRemaining > 0 && (
-                <span className="text-sm font-roboto font-normal text-status-info">
-                  {reportProgress.timeRemaining}s left
-                </span>
-              )} */}
             </div>
             <div className="w-full h-2 bg-status-info/20 rounded-full overflow-hidden">
               <div
