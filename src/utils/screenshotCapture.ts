@@ -79,11 +79,10 @@ export const captureRouteScreenshot = async (
         }
 
         const currentPath = iframeWindow.location?.pathname || "";
-        const currentHash = iframeWindow.location?.hash?.replace("#", "") || "";
         const expectedRoute = route.startsWith("/") ? route : `/${route}`;
         const routeParts = expectedRoute.split("/").filter(Boolean);
 
-        const actualPath = currentPath || currentHash;
+        const actualPath = currentPath;
         const isCorrectRoute =
           routeParts.length > 0 &&
           (actualPath.includes(routeParts[0]) ||
@@ -91,13 +90,10 @@ export const captureRouteScreenshot = async (
             actualPath.endsWith(expectedRoute));
 
         console.log(
-          `[${functionName}] Route check - current pathname: ${currentPath}, hash: ${currentHash}, expected: ${expectedRoute}, match: ${isCorrectRoute}`
+          `[${functionName}] Route check - current pathname: ${currentPath}, expected: ${expectedRoute}, match: ${isCorrectRoute}`
         );
 
         if (actualPath && !isCorrectRoute) {
-          console.warn(
-            `[${functionName}] Route mismatch - current: ${actualPath}, expected: ${expectedRoute}`
-          );
           const orgComponent = iframeDoc.querySelector(
             '[class*="Organization"], [id*="organization"]'
           );

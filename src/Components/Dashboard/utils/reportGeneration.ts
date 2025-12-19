@@ -547,9 +547,12 @@ export const setupScreenshotSections = (
             h2Element.textContent = systemsWithScreenshots[0].systemName;
           }
           const img = document.createElement("img");
-          img.setAttribute("src", systemsWithScreenshots[0].screenshot!);
+          const screenshotSrc = systemsWithScreenshots[0].screenshot!;
+          img.setAttribute("src", screenshotSrc);
           img.setAttribute("alt", systemsWithScreenshots[0].systemName);
           img.className = "system-image";
+          img.style.maxWidth = "100%";
+          img.style.height = "auto";
           systemContent.appendChild(img);
         } else {
           let lastInsertedNode: Node = systemSection;
@@ -561,9 +564,12 @@ export const setupScreenshotSections = (
                 h2Element.textContent = sys.systemName;
               }
               const img = document.createElement("img");
-              img.setAttribute("src", sys.screenshot!);
+              const screenshotSrc = sys.screenshot!;
+              img.setAttribute("src", screenshotSrc);
               img.setAttribute("alt", sys.systemName);
               img.className = "system-image";
+              img.style.maxWidth = "100%";
+              img.style.height = "auto";
               systemContent.appendChild(img);
             } else if (lastInsertedNode.parentNode) {
               const newSection = systemSection.cloneNode(true) as HTMLElement;
@@ -584,9 +590,12 @@ export const setupScreenshotSections = (
               if (newContent) {
                 newContent.innerHTML = "";
                 const img = document.createElement("img");
-                img.setAttribute("src", sys.screenshot!);
+                const screenshotSrc = sys.screenshot!;
+                img.setAttribute("src", screenshotSrc);
                 img.setAttribute("alt", sys.systemName);
                 img.className = "system-image";
+                img.style.maxWidth = "100%";
+                img.style.height = "auto";
                 newContent.appendChild(img);
               }
               if (
@@ -676,9 +685,12 @@ export const setupScreenshotSections = (
               departmentsWithScreenshots[0].departmentName;
           }
           const img = document.createElement("img");
-          img.setAttribute("src", departmentsWithScreenshots[0].screenshot!);
+          const screenshotSrc = departmentsWithScreenshots[0].screenshot!;
+          img.setAttribute("src", screenshotSrc);
           img.setAttribute("alt", departmentsWithScreenshots[0].departmentName);
           img.className = "department-image";
+          img.style.maxWidth = "100%";
+          img.style.height = "auto";
           departmentContent.appendChild(img);
         } else {
           let lastInsertedNode: Node = departmentSection;
@@ -690,9 +702,12 @@ export const setupScreenshotSections = (
                 h2Element.textContent = dept.departmentName;
               }
               const img = document.createElement("img");
-              img.setAttribute("src", dept.screenshot!);
+              const screenshotSrc = dept.screenshot!;
+              img.setAttribute("src", screenshotSrc);
               img.setAttribute("alt", dept.departmentName);
               img.className = "department-image";
+              img.style.maxWidth = "100%";
+              img.style.height = "auto";
               departmentContent.appendChild(img);
             } else if (lastInsertedNode.parentNode) {
               const newSection = departmentSection.cloneNode(
@@ -717,9 +732,12 @@ export const setupScreenshotSections = (
               if (newContent) {
                 newContent.innerHTML = "";
                 const img = document.createElement("img");
-                img.setAttribute("src", dept.screenshot!);
+                const screenshotSrc = dept.screenshot!;
+                img.setAttribute("src", screenshotSrc);
                 img.setAttribute("alt", dept.departmentName);
                 img.className = "department-image";
+                img.style.maxWidth = "100%";
+                img.style.height = "auto";
                 newContent.appendChild(img);
               }
               if (
@@ -779,16 +797,12 @@ export const setupScreenshotSections = (
         ? screenshots.dashboard
         : defaultImages.dashboard;
     dashboardImg.src = screenshotSrc;
-    console.log(
-      "Dashboard image set:",
-      selectedSections.dashboard
-        ? screenshots.dashboard
-          ? "Using captured screenshot"
-          : "Using default (screenshot was null)"
-        : "Section not selected"
-    );
+    dashboardImg.style.maxWidth = "100%";
+    dashboardImg.style.height = "auto";
   } else {
-    console.warn("Dashboard image element not found in report template");
+    console.warn(
+      "[Report] Dashboard image element not found in report template"
+    );
   }
 
   const plantDiagramImg = wrapper.querySelector(
@@ -800,8 +814,12 @@ export const setupScreenshotSections = (
         ? screenshots.plantDiagram
         : defaultImages.plantDiagram;
     plantDiagramImg.src = screenshotSrc;
+    plantDiagramImg.style.maxWidth = "100%";
+    plantDiagramImg.style.height = "auto";
   } else {
-    console.warn("Plant diagram image element not found in report template");
+    console.warn(
+      "[Report] Plant diagram image element not found in report template"
+    );
   }
 
   const footer = wrapper.querySelector("footer.sustain-text");
