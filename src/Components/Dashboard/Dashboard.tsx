@@ -1300,12 +1300,23 @@ const Dashboard = () => {
     const allSystems =
       fetchedSystems.length > 0 ? fetchedSystems : systems || [];
 
-    const departmentsToCapture = allDepartments.filter(
+    let departmentsToCapture = allDepartments.filter(
       (d: DepartmentResult) => Number(d.plant_id) === plantIdNum
     );
-    const systemsToCapture = allSystems.filter(
+    let systemsToCapture = allSystems.filter(
       (s: SystemResult) => Number(s.plant_id) === plantIdNum
     );
+
+    if (selectedSections.department && selectedDepartmentIds.size > 0) {
+      departmentsToCapture = departmentsToCapture.filter((d) =>
+        selectedDepartmentIds.has(Number(d.department_id))
+      );
+    }
+    if (selectedSections.system && selectedSystemIds.size > 0) {
+      systemsToCapture = systemsToCapture.filter((s) =>
+        selectedSystemIds.has(Number(s.system_id))
+      );
+    }
 
     try {
       const departmentCount = selectedSections.department
