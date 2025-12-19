@@ -110,6 +110,41 @@ export const captureRouteScreenshot = async (
               `[${functionName}] Login page detected in iframe! Authentication may be required.`
             );
           }
+
+          if (
+            functionName === "__captureSystemDevicesScreenshot" ||
+            functionName === "__captureDepartmentDevicesScreenshot"
+          ) {
+            const componentContainer = iframeDoc.querySelector(
+              "div.flex.flex-col.w-full.h-full"
+            );
+            if (componentContainer) {
+              console.log(
+                `[${functionName}] Component container found but route check failed. Current path: ${actualPath}, Expected: ${expectedRoute}. Will continue anyway.`
+              );
+            } else {
+              console.warn(
+                `[${functionName}] Component container not found in iframe. Route may be incorrect or component not mounted yet.`
+              );
+            }
+
+            if (functionName === "__captureSystemDevicesScreenshot") {
+              const systemHeader = iframeDoc.querySelector(
+                '[class*="SystemHeader"]'
+              );
+              const deviceCards = iframeDoc.querySelectorAll(
+                '[class*="DeviceCard"]'
+              );
+              const analysisCards = iframeDoc.querySelectorAll(
+                '[class*="AnalysisPieChartCard"]'
+              );
+              console.log(
+                `[${functionName}] SystemDevices elements check - SystemHeader: ${!!systemHeader}, DeviceCards: ${
+                  deviceCards.length
+                }, AnalysisCards: ${analysisCards.length}`
+              );
+            }
+          }
         }
 
         if (functionName === "__capturePlantDiagramScreenshot") {
@@ -146,7 +181,7 @@ export const captureRouteScreenshot = async (
           functionName === "__captureSystemDevicesScreenshot"
         ) {
           let functionWaitAttempts = 0;
-          const maxFunctionWaitAttempts = 15;
+          const maxFunctionWaitAttempts = 30;
 
           while (
             iframeWindow[functionName] === undefined &&
@@ -154,13 +189,32 @@ export const captureRouteScreenshot = async (
           ) {
             await new Promise((resolve) => setTimeout(resolve, 500));
             functionWaitAttempts++;
+
+            if (functionWaitAttempts % 5 === 0) {
+              console.log(
+                `[${functionName}] Waiting for capture function... attempt ${functionWaitAttempts}/${maxFunctionWaitAttempts}`
+              );
+
+              const componentContainer = iframeDoc.querySelector(
+                "div.flex.flex-col.w-full.h-full"
+              );
+              if (componentContainer) {
+                console.log(
+                  `[${functionName}] Component container found but capture function not registered yet`
+                );
+              }
+            }
           }
 
           const hasCaptureFunction = iframeWindow[functionName] !== undefined;
 
           if (!hasCaptureFunction) {
             console.warn(
-              `[${functionName}] Capture function not found after ${maxFunctionWaitAttempts} attempts! Component may not be mounting.`
+              `[${functionName}] Capture function not found after ${maxFunctionWaitAttempts} attempts! Component may not be mounting. Will try fallback capture.`
+            );
+          } else {
+            console.log(
+              `[${functionName}] Capture function found after ${functionWaitAttempts} attempts`
             );
           }
         }
@@ -170,7 +224,7 @@ export const captureRouteScreenshot = async (
             ? 3000
             : functionName === "__captureDepartmentDevicesScreenshot" ||
               functionName === "__captureSystemDevicesScreenshot"
-            ? 4000
+            ? 5000
             : 2000;
         await new Promise((resolve) => setTimeout(resolve, initialWait));
 
@@ -179,7 +233,6 @@ export const captureRouteScreenshot = async (
         let hasCalledCaptureFunction = false;
 
         while (attempts < maxAttempts) {
-          // Check if component is ready with content
           let componentReady = false;
 
           if (functionName === "__capturePlantDiagramScreenshot") {
@@ -214,23 +267,38 @@ export const captureRouteScreenshot = async (
                 : iframeWindow.__captureSystemDevicesScreenshot !== undefined;
 
             const mainElement = iframeDoc.querySelector("main");
+            const componentContainer = iframeDoc.querySelector(
+              "div.flex.flex-col.w-full.h-full"
+            );
+            const bodyElement = iframeDoc.body;
+
+            const searchRoot = componentContainer || mainElement || bodyElement;
+
             const hasSkeletons =
-              mainElement?.querySelectorAll(
+              (searchRoot?.querySelectorAll(
                 '[class*="animate-pulse"]:not([style*="display: none"])'
-              ).length > 0;
+              ).length || 0) > 0;
             const hasCharts =
-              mainElement?.querySelectorAll("canvas").length > 0;
+              (searchRoot?.querySelectorAll("canvas").length || 0) > 0;
             const hasTables =
-              mainElement?.querySelectorAll(
+              (searchRoot?.querySelectorAll(
                 "table tbody tr:not([class*='animate-pulse'])"
-              ).length > 0;
+              ).length || 0) > 0;
+
+            const hasUIElements =
+              (searchRoot?.querySelectorAll(
+                ".bg-card, [class*='card'], [class*='chart'], table"
+              ).length || 0) > 0;
 
             componentReady =
-              hasCaptureFunction && mainElement !== null && !hasSkeletons;
+              hasCaptureFunction &&
+              (mainElement !== null || componentContainer !== null) &&
+              !hasSkeletons &&
+              (hasCharts || hasTables || hasUIElements || attempts >= 10);
 
             if (attempts % 5 === 0) {
               console.log(
-                `[${functionName}] Component ready check - hasFunction: ${hasCaptureFunction}, hasSkeletons: ${hasSkeletons}, hasCharts: ${hasCharts}, hasTables: ${hasTables}, ready: ${componentReady}`
+                `[${functionName}] Component ready check - hasFunction: ${hasCaptureFunction}, hasMain: ${!!mainElement}, hasContainer: ${!!componentContainer}, hasSkeletons: ${hasSkeletons}, hasCharts: ${hasCharts}, hasTables: ${hasTables}, hasUIElements: ${hasUIElements}, ready: ${componentReady}`
               );
             }
           } else {
@@ -249,7 +317,8 @@ export const captureRouteScreenshot = async (
                 : functionName === "__captureDepartmentDevicesScreenshot" ||
                   functionName === "__captureSystemDevicesScreenshot"
                 ? (componentReady && attempts >= 10) ||
-                  (iframeWindow[functionName] && attempts >= 20)
+                  (iframeWindow[functionName] && attempts >= 20) ||
+                  attempts >= 40
                 : (componentReady && attempts >= 10) || attempts >= 30;
 
             if (shouldTryCapture) {
@@ -260,7 +329,7 @@ export const captureRouteScreenshot = async (
                     ? 3000
                     : functionName === "__captureDepartmentDevicesScreenshot" ||
                       functionName === "__captureSystemDevicesScreenshot"
-                    ? 2000
+                    ? 3000
                     : 1000;
                 await new Promise((resolve) =>
                   setTimeout(resolve, preCallWait)
@@ -281,15 +350,32 @@ export const captureRouteScreenshot = async (
                   `[${functionName}] Failed to call capture function:`,
                   funcError
                 );
-                hasCalledCaptureFunction = false;
+                if (attempts < maxAttempts - 1) {
+                  hasCalledCaptureFunction = false;
+                } else {
+                  console.warn(
+                    `[${functionName}] Max attempts reached after error, will use fallback capture`
+                  );
+                }
               }
             }
           }
 
           attempts++;
-          if (attempts < maxAttempts && !hasCalledCaptureFunction) {
+
+          if (hasCalledCaptureFunction && attempts < maxAttempts - 1) {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            hasCalledCaptureFunction = false;
+            continue;
+          }
+
+          if (attempts >= maxAttempts) {
+            break;
+          }
+
+          if (!hasCalledCaptureFunction) {
             await new Promise((resolve) => setTimeout(resolve, 500));
-          } else if (hasCalledCaptureFunction) {
+          } else {
             await new Promise((resolve) => setTimeout(resolve, 2000));
             break;
           }
@@ -419,12 +505,33 @@ export const captureRouteScreenshot = async (
             (rootElement.innerText || rootElement.textContent || "").trim()
               .length > 50);
 
-        if (!hasReactContent) {
+        let hasComponentContainer = false;
+        if (
+          functionName === "__captureSystemDevicesScreenshot" ||
+          functionName === "__captureDepartmentDevicesScreenshot"
+        ) {
+          const componentContainer = rootElement.querySelector(
+            "div.flex.flex-col.w-full.h-full"
+          );
+          hasComponentContainer = componentContainer !== null;
+          if (hasComponentContainer) {
+            console.log(
+              `[${functionName}] Component container found, considering React content available`
+            );
+          }
+        }
+
+        const hasContent = hasReactContent || hasComponentContainer;
+
+        if (!hasContent) {
           if (Date.now() - startTime < maxWaitTime) {
             setTimeout(checkContent, 100);
             return;
           }
           if (!resolved) {
+            console.error(
+              `[${functionName}] No React content or component container found after ${maxWaitTime}ms timeout`
+            );
             resolved = true;
             cleanup();
             resolve(null);
@@ -433,13 +540,21 @@ export const captureRouteScreenshot = async (
         }
 
         let functionCheckAttempts = 0;
-        const maxAttempts = Math.floor(maxWaitTime / 500);
+        const adjustedMaxWaitTime =
+          functionName === "__captureSystemDevicesScreenshot"
+            ? maxWaitTime * 1.5 // 50% more time for SystemDevices
+            : maxWaitTime;
+        const maxAttempts = Math.floor(adjustedMaxWaitTime / 500);
 
         const functionCheck = async () => {
           functionCheckAttempts++;
 
           const screenshot = await tryCaptureViaFunction();
-          if (screenshot) {
+          if (
+            screenshot &&
+            screenshot.trim() !== "" &&
+            screenshot.startsWith("data:")
+          ) {
             if (!resolved) {
               resolved = true;
               cleanup();
@@ -448,8 +563,9 @@ export const captureRouteScreenshot = async (
             return;
           }
 
+          const currentElapsed = Date.now() - startTime;
           if (
-            Date.now() - startTime < maxWaitTime &&
+            currentElapsed < adjustedMaxWaitTime &&
             functionCheckAttempts < maxAttempts
           ) {
             setTimeout(functionCheck, 300);
@@ -482,12 +598,43 @@ export const captureRouteScreenshot = async (
               const rootElement = (bodyElement.querySelector("#root") ||
                 bodyElement) as HTMLElement;
 
-              let mainContent =
-                rootElement.querySelector("main.overflow-y-auto") ||
-                rootElement.querySelector("main") ||
-                rootElement.querySelector("div.min-h-full") ||
-                rootElement.querySelector("body") ||
-                rootElement;
+              let mainContent: HTMLElement | null = null;
+
+              if (
+                functionName === "__captureSystemDevicesScreenshot" ||
+                functionName === "__captureDepartmentDevicesScreenshot"
+              ) {
+                const containerDiv = rootElement.querySelector(
+                  "div.flex.flex-col.w-full.h-full"
+                ) as HTMLElement;
+                if (containerDiv && containerDiv.offsetHeight > 0) {
+                  mainContent = containerDiv;
+                } else {
+                  const selectors = [
+                    "div.flex.flex-col",
+                    "[class*='flex'][class*='flex-col']",
+                  ];
+                  for (const selector of selectors) {
+                    const div = rootElement.querySelector(
+                      selector
+                    ) as HTMLElement;
+                    if (div && div.offsetHeight > 100) {
+                      mainContent = div;
+                      break;
+                    }
+                  }
+                }
+              }
+
+              if (!mainContent) {
+                mainContent = (rootElement.querySelector(
+                  "main.overflow-y-auto"
+                ) ||
+                  rootElement.querySelector("main") ||
+                  rootElement.querySelector("div.min-h-full") ||
+                  rootElement.querySelector("body") ||
+                  rootElement) as HTMLElement;
+              }
 
               if (
                 mainContent &&
@@ -542,7 +689,10 @@ export const captureRouteScreenshot = async (
                 cleanup();
                 resolve(jpegDataUrl);
               } catch (jpegError) {
-                console.error("JPEG capture failed:", jpegError);
+                console.error(
+                  `[${functionName}] Fallback JPEG capture failed:`,
+                  jpegError
+                );
                 cleanup();
                 resolve(null);
               }

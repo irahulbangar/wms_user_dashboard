@@ -439,14 +439,42 @@ export const captureSystemScreenshot = async (
   const plantId = localStorage.getItem("plantId");
 
   if (!organizationId || !plantId || !systemId) {
-    console.warn("Missing required IDs for system route");
+    console.warn(
+      `[captureSystemScreenshot] Missing required IDs - organizationId: ${organizationId}, plantId: ${plantId}, systemId: ${systemId}`
+    );
     return null;
   }
 
-  return captureRouteScreenshot({
-    route: `/system/device/${organizationId}/${plantId}/${systemId}`,
-    functionName: "__captureSystemDevicesScreenshot",
-  });
+  const route = `/system/device/${organizationId}/${plantId}/${systemId}`;
+  console.log(
+    `[captureSystemScreenshot] Starting capture for system ${systemId} at route: ${route}`
+  );
+
+  try {
+    const result = await captureRouteScreenshot({
+      route,
+      functionName: "__captureSystemDevicesScreenshot",
+      maxWaitTime: 45000,
+    });
+
+    if (result) {
+      console.log(
+        `[captureSystemScreenshot] ✅ Successfully captured screenshot for system ${systemId}, length: ${result.length}`
+      );
+    } else {
+      console.error(
+        `[captureSystemScreenshot] ❌ Failed to capture screenshot for system ${systemId} - returned null. This could be due to:`
+      );
+    }
+
+    return result;
+  } catch (error) {
+    console.error(
+      `[captureSystemScreenshot] ❌ Error capturing screenshot for system ${systemId}:`,
+      error
+    );
+    return null;
+  }
 };
 
 export const capturePlantDiagramScreenshot = async (): Promise<
