@@ -5,6 +5,7 @@ import brwhms from "../assets/images/brwhms-logo.png";
 import arg from "../assets/images/arg-logo.png";
 import phmc from "../assets/images/phmc-logo.png";
 import virtual from "../assets/images/virtual.png";
+import dwlr from "../assets/images/dwlr-logo.png";
 
 export const getReportTypeColor = (reportType: string): string => {
   const colors: Record<string, string> = {
@@ -45,6 +46,8 @@ export const getDeviceLogo = (device: DevicesResult): string => {
     return phmc;
   } else if (device?.device_family_type === "virtual") {
     return virtual;
+  } else if (device?.device_family_type === "dwlr") {
+    return dwlr;
   }
   return "";
 };
@@ -68,6 +71,9 @@ export const getDeviceValue = (device: DevicesResult): number => {
       break;
     case "arg":
       value = Number(device.last_record?.max_mm) || 0;
+      break;
+    case "dwlr":
+      value = Number(device.last_record?.max) || 0;
       break;
     default:
       value = 0;
@@ -242,6 +248,8 @@ export const getDeviceRoute = (
     return `${pathPrefix}/arg-device/${device?.device_id}`;
   } else if (deviceType.includes("phmc") || deviceType.includes("Phmc")) {
     return `${pathPrefix}/phmc-device/${device?.device_id}`;
+  } else if (deviceType.includes("dwlr") || deviceType.includes("Dwlr")) {
+    return `${pathPrefix}/dwlr-device/${device?.device_id}`;
   } else {
     return `${pathPrefix}/fm-device/${device?.device_id}`;
   }

@@ -52,6 +52,9 @@ export const useDiagramInteractions = ({
           case "arg":
             navigate(`/device-details/arg-device/${deviceId}`);
             break;
+          case "dwlr":
+            navigate(`/device-details/dwlr-device/${deviceId}`);
+            break;
           case "virtual":
           case "resultant":
             // Virtual devices don't have detail pages, just show in sidebar

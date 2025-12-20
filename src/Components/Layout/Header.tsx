@@ -38,7 +38,6 @@ const Header: React.FC<HeaderProps> = ({
   const { departments } = useAppSelector((state) => state.department);
   const { systems } = useAppSelector((state) => state.system);
 
-
   const organizationName = useMemo(() => {
     if (!organizationId) return "";
 
@@ -152,34 +151,34 @@ const Header: React.FC<HeaderProps> = ({
 
     if (
       path.startsWith("/device-details/fm-device/") ||
-      path.startsWith("/department/device/fm-device/") ||
       path.startsWith("/system/device/fm-device/")
     )
       return "FM Device";
     if (
       path.startsWith("/device-details/tank-device/") ||
-      path.startsWith("/department/device/tank-device/") ||
       path.startsWith("/system/device/tank-device/")
     )
       return "Tank Device";
     if (
       path.startsWith("/device-details/brwhms-device/") ||
-      path.startsWith("/department/device/brwhms-device/") ||
       path.startsWith("/system/device/brwhms-device/")
     )
       return "BRWHMS Device";
     if (
       path.startsWith("/device-details/arg-device/") ||
-      path.startsWith("/department/device/arg-device/") ||
       path.startsWith("/system/device/arg-device/")
     )
       return "Rain Gauge Device";
     if (
       path.startsWith("/device-details/phmc-device/") ||
-      path.startsWith("/department/device/phmc-device/") ||
       path.startsWith("/system/device/phmc-device/")
     )
       return "PHMC Device";
+    if (
+      path.startsWith("/device-details/dwlr-device/") ||
+      path.startsWith("/system/device/dwlr-device/")
+    )
+      return "DWLR Device";
   };
 
   const handleViewAllNotifications = () => {

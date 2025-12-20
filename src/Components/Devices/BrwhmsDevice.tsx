@@ -40,7 +40,6 @@ const BrwhmsDevice = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const organizationId = localStorage.getItem("organizationId");
-  const departmentId = localStorage.getItem("departmentId");
   const systemId = localStorage.getItem("systemId");
   const location = useLocation();
   const { user } = useAppSelector((state) => state.user);
@@ -107,13 +106,7 @@ const BrwhmsDevice = () => {
       currentPage * rowsPerPage
     );
     return paginatedData.length;
-  }, [
-    runTimeData,
-    selectedReport,
-    currentPage,
-    rowsPerPage,
-    customReportData,
-  ]);
+  }, [runTimeData, selectedReport, currentPage, rowsPerPage, customReportData]);
 
   const totalPages = useMemo(() => {
     return Math.ceil(totalItems / rowsPerPage);
@@ -366,9 +359,7 @@ const BrwhmsDevice = () => {
           <button
             onClick={() =>
               navigate(
-                location.pathname.startsWith("/department/device/")
-                  ? `/department/device/${organizationId}/${getCurrentPlantId()}/${departmentId}`
-                  : location.pathname.startsWith("/system/device/")
+                location.pathname.startsWith("/system/device/")
                   ? `/system/device/${organizationId}/${getCurrentPlantId()}/${systemId}`
                   : "/devices"
               )
@@ -376,9 +367,7 @@ const BrwhmsDevice = () => {
             className="text-text-secondary hover:text-text-primary hover:bg-overlay/20 px-2 py-1 rounded transition-all duration-200 cursor-pointer font-roboto"
           >
             <span className="text-text-primary font-normal font-roboto">
-              {location.pathname.startsWith("/department/device/")
-                ? "Department"
-                : location.pathname.startsWith("/system/device/")
+              {location.pathname.startsWith("/system/device/")
                 ? "System"
                 : "Devices"}{" "}
             </span>

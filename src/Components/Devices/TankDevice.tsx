@@ -41,7 +41,6 @@ const TankDevice = () => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const organizationId = localStorage.getItem("organizationId");
-  const departmentId = localStorage.getItem("departmentId");
   const systemId = localStorage.getItem("systemId");
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -378,9 +377,7 @@ const TankDevice = () => {
           <button
             onClick={() =>
               navigate(
-                location.pathname.startsWith("/department/device/")
-                  ? `/department/device/${organizationId}/${getCurrentPlantId()}/${departmentId}`
-                  : location.pathname.startsWith("/system/device/")
+                location.pathname.startsWith("/system/device/")
                   ? `/system/device/${organizationId}/${getCurrentPlantId()}/${systemId}`
                   : "/devices"
               )
@@ -389,9 +386,7 @@ const TankDevice = () => {
           >
             <span className="text-text-primary font-normal font-roboto">
               {" "}
-              {location.pathname.startsWith("/department/device/")
-                ? "Department"
-                : location.pathname.startsWith("/system/device/")
+              {location.pathname.startsWith("/system/device/")
                 ? "System"
                 : "Devices"}{" "}
             </span>

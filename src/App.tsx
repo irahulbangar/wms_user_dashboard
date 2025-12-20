@@ -27,6 +27,7 @@ import Notifications from "./Components/Notifications";
 import Setting from "./Components/Setting";
 import Reports from "./Components/Report/Reports";
 import HomeRedirect from "./Components/HomeRedirect";
+import DwlrDevice from "./Components/Devices/DwlrDevice";
 
 function ThemedToast() {
   const { theme } = useTheme();
@@ -62,19 +63,11 @@ const router = createBrowserRouter([
       { path: "/devices", element: <Devices /> },
       { path: "/device-details/fm-device/:device_id", element: <FmDevice /> },
       {
-        path: "/department/device/fm-device/:device_id",
-        element: <FmDevice />,
-      },
-      {
         path: "/system/device/fm-device/:device_id",
         element: <FmDevice />,
       },
       {
         path: "/device-details/tank-device/:device_id",
-        element: <TankDevice />,
-      },
-      {
-        path: "/department/device/tank-device/:device_id",
         element: <TankDevice />,
       },
       {
@@ -86,18 +79,10 @@ const router = createBrowserRouter([
         element: <BrwhmsDevice />,
       },
       {
-        path: "/department/device/brwhms-device/:device_id",
-        element: <BrwhmsDevice />,
-      },
-      {
         path: "/system/device/brwhms-device/:device_id",
         element: <BrwhmsDevice />,
       },
       { path: "/device-details/arg-device/:device_id", element: <ArgDevice /> },
-      {
-        path: "/department/device/arg-device/:device_id",
-        element: <ArgDevice />,
-      },
       {
         path: "/system/device/arg-device/:device_id",
         element: <ArgDevice />,
@@ -107,12 +92,16 @@ const router = createBrowserRouter([
         element: <PhmcDevice />,
       },
       {
-        path: "/department/device/phmc-device/:device_id",
+        path: "/system/device/phmc-device/:device_id",
         element: <PhmcDevice />,
       },
       {
-        path: "/system/device/phmc-device/:device_id",
-        element: <PhmcDevice />,
+        path: "/device-details/dwlr-device/:device_id",
+        element: <DwlrDevice />,
+      },
+      {
+        path: "/system/device/dwlr-device/:device_id",
+        element: <DwlrDevice />,
       },
       { path: "/users", element: <Users /> },
       { path: "/notifications", element: <Notifications /> },
