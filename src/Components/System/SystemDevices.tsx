@@ -621,8 +621,6 @@ const SystemDevices = () => {
     ];
   }, []);
 
-  // Static water quality data - always show UI with all 5 metrics
-  // Using small values (0.01) so the UI always displays (hasData check passes)
   const waterQualityData = useMemo(() => {
     return [
       {

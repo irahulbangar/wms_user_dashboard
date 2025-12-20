@@ -901,8 +901,6 @@ const Dashboard = () => {
     ];
   }, []);
 
-  // Static water quality data - always show UI with all 5 metrics
-  // Using small values (0.01) so the UI always displays (hasData check passes)
   const waterQualityData = useMemo(() => {
     return [
       {
@@ -1227,7 +1225,6 @@ const Dashboard = () => {
       status: "Preparing report...",
     });
 
-    // Fetch departments and systems if not loaded, and use the response directly
     let fetchedDepartments = departments || [];
     let fetchedSystems = systems || [];
 
@@ -1614,7 +1611,6 @@ const Dashboard = () => {
         department: reportDepartmentImg,
       });
 
-      // Prepare report data from Dashboard component data
       const reportData: ReportData = {
         totalIn: 0,
         totalOut: 0,
@@ -1641,7 +1637,6 @@ const Dashboard = () => {
         netBalance: totalNetBalance,
       };
 
-      // Setup pie charts with data
       setupCharts(
         wrapper,
         reportData,
@@ -1649,10 +1644,8 @@ const Dashboard = () => {
         selectedSections
       );
 
-      // Setup water balance section (table)
       setupWaterBalanceSection(wrapper, reportData, selectedSections);
 
-      // Setup water neutrality index section (table)
       setupWaterNeutralityIndexSection(
         wrapper,
         waterNeutralityIndexData || [],
@@ -1661,10 +1654,8 @@ const Dashboard = () => {
         devices?.[0]?.unit || "Ltr."
       );
 
-      // Setup storage section (table)
       setupStorageSection(wrapper, reportData, selectedSections);
 
-      // Setup detailed report section
       setupDetailedReportSection(
         wrapper,
         reportData,
@@ -1805,7 +1796,7 @@ const Dashboard = () => {
   }, [storageBalanceData, devices]);
 
   return (
-    <div ref={dashboardRef} className="flex flex-col w-full h-full">
+    <div ref={dashboardRef} className="flex flex-col w-full h-full gap-3">
       <div className="flex items-start md:items-center justify-between gap-3 flex-col md:flex-row w-full sticky top-0 z-10 bg-input-bg flex-wrap">
         <div className="flex items-center justify-between flex-col md:flex-row gap-3">
           {userRole === "org_admin" && (
@@ -1837,69 +1828,7 @@ const Dashboard = () => {
             </div>
           )}
         </div>
-        <div className="flex items-center gap-3 flex-col md:flex-row">
-          <DateSelection
-            dateSelectionType={dateSelectionType}
-            setDateSelectionType={setDateSelectionType}
-            dailyDate={dailyDate}
-            setDailyDate={setDailyDate}
-            monthYear={monthYear}
-            setMonthYear={setMonthYear}
-            yearlyDate={yearlyDate}
-            setYearlyDate={setYearlyDate}
-            customStartDate={customStartDate}
-            setCustomStartDate={setCustomStartDate}
-            customEndDate={customEndDate}
-            setCustomEndDate={setCustomEndDate}
-            durationType={durationType}
-            setDurationType={setDurationType}
-          />
-          <div className="flex flex-col gap-2">
-            <button
-              onClick={() => {
-                if (!plantId) {
-                  Warning("Please select a plant to fetch data");
-                  return;
-                }
-                fetchPlantReport();
-                fetchDepartmentReports();
-              }}
-              className="flex items-center gap-2 px-4 py-1.5 bg-linear-to-r from-status-info to-status-info text-white rounded-lg hover:shadow-lg transition-all duration-200 cursor-pointer font-roboto font-normal whitespace-nowrap"
-              title="Get Data"
-            >
-              <FileTextIcon className="w-5 h-5" />
-              Get Data
-            </button>
-          </div>
-          <DownloadReportDropdown
-            isDownloadingReport={isDownloadingReport}
-            isDownloadDropdownOpen={isDownloadDropdownOpen}
-            setIsDownloadDropdownOpen={setIsDownloadDropdownOpen}
-            reportProgress={reportProgress}
-            selectedSections={selectedSections}
-            setSelectedSections={setSelectedSections}
-            selectedDepartmentIds={selectedDepartmentIds}
-            setSelectedDepartmentIds={setSelectedDepartmentIds}
-            selectedSystemIds={selectedSystemIds}
-            setSelectedSystemIds={setSelectedSystemIds}
-            isDepartmentDropdownOpen={isDepartmentDropdownOpen}
-            setIsDepartmentDropdownOpen={setIsDepartmentDropdownOpen}
-            isSystemDropdownOpen={isSystemDropdownOpen}
-            setIsSystemDropdownOpen={setIsSystemDropdownOpen}
-            departments={plantDepartments}
-            systems={plantSystems}
-            plantIdNum={plantIdNum}
-            downloadDropdownRef={downloadDropdownRef}
-            departmentDropdownRef={departmentDropdownRef}
-            systemDropdownRef={systemDropdownRef}
-            departmentChevronRef={departmentChevronRef}
-            systemChevronRef={systemChevronRef}
-            handleDownloadReport={handleDownloadReport}
-          />
-        </div>
-      </div>
 
-      <div className="flex flex-col gap-3 overflow-y-auto mt-3">
         {isDownloadingReport && (
           <div
             data-exclude-from-screenshot="true"
@@ -1921,7 +1850,70 @@ const Dashboard = () => {
             </div>
           </div>
         )}
+      </div>
 
+      <div className="flex items-center gap-3 flex-col md:flex-row">
+        <DateSelection
+          dateSelectionType={dateSelectionType}
+          setDateSelectionType={setDateSelectionType}
+          dailyDate={dailyDate}
+          setDailyDate={setDailyDate}
+          monthYear={monthYear}
+          setMonthYear={setMonthYear}
+          yearlyDate={yearlyDate}
+          setYearlyDate={setYearlyDate}
+          customStartDate={customStartDate}
+          setCustomStartDate={setCustomStartDate}
+          customEndDate={customEndDate}
+          setCustomEndDate={setCustomEndDate}
+          durationType={durationType}
+          setDurationType={setDurationType}
+        />
+        <div className="flex flex-col gap-2">
+          <button
+            onClick={() => {
+              if (!plantId) {
+                Warning("Please select a plant to fetch data");
+                return;
+              }
+              fetchPlantReport();
+              fetchDepartmentReports();
+            }}
+            className="flex items-center gap-2 px-4 py-1.5 bg-linear-to-r from-status-info to-status-info text-white rounded-lg hover:shadow-lg transition-all duration-200 cursor-pointer font-roboto font-normal whitespace-nowrap"
+            title="Get Data"
+          >
+            <FileTextIcon className="w-5 h-5" />
+            Get Data
+          </button>
+        </div>
+        <DownloadReportDropdown
+          isDownloadingReport={isDownloadingReport}
+          isDownloadDropdownOpen={isDownloadDropdownOpen}
+          setIsDownloadDropdownOpen={setIsDownloadDropdownOpen}
+          reportProgress={reportProgress}
+          selectedSections={selectedSections}
+          setSelectedSections={setSelectedSections}
+          selectedDepartmentIds={selectedDepartmentIds}
+          setSelectedDepartmentIds={setSelectedDepartmentIds}
+          selectedSystemIds={selectedSystemIds}
+          setSelectedSystemIds={setSelectedSystemIds}
+          isDepartmentDropdownOpen={isDepartmentDropdownOpen}
+          setIsDepartmentDropdownOpen={setIsDepartmentDropdownOpen}
+          isSystemDropdownOpen={isSystemDropdownOpen}
+          setIsSystemDropdownOpen={setIsSystemDropdownOpen}
+          departments={plantDepartments}
+          systems={plantSystems}
+          plantIdNum={plantIdNum}
+          downloadDropdownRef={downloadDropdownRef}
+          departmentDropdownRef={departmentDropdownRef}
+          systemDropdownRef={systemDropdownRef}
+          departmentChevronRef={departmentChevronRef}
+          systemChevronRef={systemChevronRef}
+          handleDownloadReport={handleDownloadReport}
+        />
+      </div>
+
+      <div className="flex flex-col gap-3 overflow-y-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <AnalysisPieChartCard
             title="Water Balance"

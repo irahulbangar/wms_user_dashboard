@@ -28,7 +28,6 @@ import type { PlantReportData } from "../../../model/plant-report.interface";
 import { getPlantReport } from "../../../store/plantSlice";
 import { getDateRange } from "../../utils/utils";
 
-// Extend Window interface to include custom screenshot capture function
 declare global {
   interface Window {
     __captureDepartmentDevicesScreenshot?: () => Promise<string | null>;
@@ -564,8 +563,6 @@ const DepartmentDevices = () => {
     ];
   }, []);
 
-  // Static water quality data - always show UI with all 5 metrics
-  // Using small values (0.01) so the UI always displays (hasData check passes)
   const waterQualityData = useMemo(() => {
     return [
       {

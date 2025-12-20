@@ -235,7 +235,6 @@ const WaterBalance = ({
           },
         });
 
-        // Restore original styles
         if (fallbackOriginalStyle) {
           captureElement.style.cssText = fallbackOriginalStyle;
         }
