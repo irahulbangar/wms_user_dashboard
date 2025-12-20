@@ -450,7 +450,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     )}
                     <span className="shrink-0">{item.icon}</span>
                     <span
-                      className="font-normal font-roboto text-left text-lg truncate flex-1 min-w-0"
+                      className="font-normal font-roboto text-left text-lg truncate flex-1 min-w-0 capitalize"
                       title={item.label}
                     >
                       {item.label}
