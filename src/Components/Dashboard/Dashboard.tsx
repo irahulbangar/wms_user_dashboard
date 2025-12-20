@@ -1798,119 +1798,120 @@ const Dashboard = () => {
   return (
     <div ref={dashboardRef} className="flex flex-col w-full h-full gap-3">
       <div className="flex items-start md:items-center justify-between gap-3 flex-col md:flex-row w-full sticky top-0 z-10 bg-input-bg flex-wrap">
-        <div className="flex items-center justify-between flex-col md:flex-row gap-3">
-          {userRole === "org_admin" && (
-            <div className="flex items-center gap-3 flex-col md:flex-row">
-              <nav className="flex items-center gap-2 text-sm text-text-secondary font-roboto bg-secondary px-2 py-1.5 rounded-lg w-fit whitespace-nowrap">
-                <button
-                  onClick={() => {
-                    const plantId = getCurrentPlantId();
-                    if (plantId) {
-                      navigate(`/organization/${organizationId}`);
-                    }
-                  }}
-                  className="flex items-center gap-1 hover:text-text-primary hover:bg-overlay/20 px-2 py-1 rounded transition-all duration-200 cursor-pointer font-roboto"
-                >
-                  <Building2 className="w-4 h-4" />
+        <div className="flex items-center gap-3 justify-between w-full">
+          <div className="flex items-center justify-between flex-col md:flex-row gap-3">
+            {userRole === "org_admin" && (
+              <div className="flex items-center gap-3 flex-col md:flex-row">
+                <nav className="flex items-center gap-2 text-sm text-text-secondary font-roboto bg-secondary px-2 py-1.5 rounded-lg w-fit whitespace-nowrap">
+                  <button
+                    onClick={() => {
+                      const plantId = getCurrentPlantId();
+                      if (plantId) {
+                        navigate(`/organization/${organizationId}`);
+                      }
+                    }}
+                    className="flex items-center gap-1 hover:text-text-primary hover:bg-overlay/20 px-2 py-1 rounded transition-all duration-200 cursor-pointer font-roboto"
+                  >
+                    <Building2 className="w-4 h-4" />
+                    <span className="text-text-primary font-normal font-roboto">
+                      Organization
+                    </span>
+                  </button>
+                  <ChevronRight className="w-4 h-4 text-text-muted" />
                   <span className="text-text-primary font-normal font-roboto">
-                    Organization
+                    Plant
                   </span>
-                </button>
-                <ChevronRight className="w-4 h-4 text-text-muted" />
-                <span className="text-text-primary font-normal font-roboto">
-                  Plant
+                  <ChevronRight className="w-4 h-4 text-text-muted" />
+                  <span className="text-text-primary font-normal font-roboto">
+                    {plantName}
+                  </span>
+                </nav>
+              </div>
+            )}
+          </div>
+
+          {isDownloadingReport && (
+            <div
+              data-exclude-from-screenshot="true"
+              className="flex flex-col gap-1 px-4 py-1 bg-primary text-text-primary border border-border-primary rounded-md shadow-md min-w-[250px] w-fit"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-sm font-roboto font-normal text-status-info">
+                  {reportProgress.percentage}%
                 </span>
-                <ChevronRight className="w-4 h-4 text-text-muted" />
-                <span className="text-text-primary font-normal font-roboto">
-                  {plantName}
+                <span className="text-sm font-roboto font-normal text-text-secondary flex-1">
+                  {reportProgress.status}
                 </span>
-              </nav>
+              </div>
+              <div className="w-full h-2 bg-status-info/20 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-linear-to-r rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${reportProgress.percentage}%` }}
+                />
+              </div>
             </div>
           )}
         </div>
-
-        {isDownloadingReport && (
-          <div
-            data-exclude-from-screenshot="true"
-            className="flex flex-col gap-1 px-4 py-1 bg-primary text-text-primary border border-border-primary rounded-md shadow-md min-w-[250px] w-fit"
-          >
-            <div className="flex items-center justify-between gap-4">
-              <span className="text-sm font-roboto font-normal text-status-info">
-                {reportProgress.percentage}%
-              </span>
-              <span className="text-sm font-roboto font-normal text-text-secondary flex-1">
-                {reportProgress.status}
-              </span>
-            </div>
-            <div className="w-full h-2 bg-status-info/20 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-linear-to-r rounded-full transition-all duration-300 ease-out"
-                style={{ width: `${reportProgress.percentage}%` }}
-              />
-            </div>
+        <div className="flex items-center gap-3 flex-col md:flex-row">
+          <DateSelection
+            dateSelectionType={dateSelectionType}
+            setDateSelectionType={setDateSelectionType}
+            dailyDate={dailyDate}
+            setDailyDate={setDailyDate}
+            monthYear={monthYear}
+            setMonthYear={setMonthYear}
+            yearlyDate={yearlyDate}
+            setYearlyDate={setYearlyDate}
+            customStartDate={customStartDate}
+            setCustomStartDate={setCustomStartDate}
+            customEndDate={customEndDate}
+            setCustomEndDate={setCustomEndDate}
+            durationType={durationType}
+            setDurationType={setDurationType}
+          />
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => {
+                if (!plantId) {
+                  Warning("Please select a plant to fetch data");
+                  return;
+                }
+                fetchPlantReport();
+                fetchDepartmentReports();
+              }}
+              className="flex items-center gap-2 px-4 py-1.5 bg-linear-to-r from-status-info to-status-info text-white rounded-lg hover:shadow-lg transition-all duration-200 cursor-pointer font-roboto font-normal whitespace-nowrap"
+              title="Get Data"
+            >
+              <FileTextIcon className="w-5 h-5" />
+              Get Data
+            </button>
           </div>
-        )}
-      </div>
-
-      <div className="flex items-center gap-3 flex-col md:flex-row">
-        <DateSelection
-          dateSelectionType={dateSelectionType}
-          setDateSelectionType={setDateSelectionType}
-          dailyDate={dailyDate}
-          setDailyDate={setDailyDate}
-          monthYear={monthYear}
-          setMonthYear={setMonthYear}
-          yearlyDate={yearlyDate}
-          setYearlyDate={setYearlyDate}
-          customStartDate={customStartDate}
-          setCustomStartDate={setCustomStartDate}
-          customEndDate={customEndDate}
-          setCustomEndDate={setCustomEndDate}
-          durationType={durationType}
-          setDurationType={setDurationType}
-        />
-        <div className="flex flex-col gap-2">
-          <button
-            onClick={() => {
-              if (!plantId) {
-                Warning("Please select a plant to fetch data");
-                return;
-              }
-              fetchPlantReport();
-              fetchDepartmentReports();
-            }}
-            className="flex items-center gap-2 px-4 py-1.5 bg-linear-to-r from-status-info to-status-info text-white rounded-lg hover:shadow-lg transition-all duration-200 cursor-pointer font-roboto font-normal whitespace-nowrap"
-            title="Get Data"
-          >
-            <FileTextIcon className="w-5 h-5" />
-            Get Data
-          </button>
+          <DownloadReportDropdown
+            isDownloadingReport={isDownloadingReport}
+            isDownloadDropdownOpen={isDownloadDropdownOpen}
+            setIsDownloadDropdownOpen={setIsDownloadDropdownOpen}
+            reportProgress={reportProgress}
+            selectedSections={selectedSections}
+            setSelectedSections={setSelectedSections}
+            selectedDepartmentIds={selectedDepartmentIds}
+            setSelectedDepartmentIds={setSelectedDepartmentIds}
+            selectedSystemIds={selectedSystemIds}
+            setSelectedSystemIds={setSelectedSystemIds}
+            isDepartmentDropdownOpen={isDepartmentDropdownOpen}
+            setIsDepartmentDropdownOpen={setIsDepartmentDropdownOpen}
+            isSystemDropdownOpen={isSystemDropdownOpen}
+            setIsSystemDropdownOpen={setIsSystemDropdownOpen}
+            departments={plantDepartments}
+            systems={plantSystems}
+            plantIdNum={plantIdNum}
+            downloadDropdownRef={downloadDropdownRef}
+            departmentDropdownRef={departmentDropdownRef}
+            systemDropdownRef={systemDropdownRef}
+            departmentChevronRef={departmentChevronRef}
+            systemChevronRef={systemChevronRef}
+            handleDownloadReport={handleDownloadReport}
+          />
         </div>
-        <DownloadReportDropdown
-          isDownloadingReport={isDownloadingReport}
-          isDownloadDropdownOpen={isDownloadDropdownOpen}
-          setIsDownloadDropdownOpen={setIsDownloadDropdownOpen}
-          reportProgress={reportProgress}
-          selectedSections={selectedSections}
-          setSelectedSections={setSelectedSections}
-          selectedDepartmentIds={selectedDepartmentIds}
-          setSelectedDepartmentIds={setSelectedDepartmentIds}
-          selectedSystemIds={selectedSystemIds}
-          setSelectedSystemIds={setSelectedSystemIds}
-          isDepartmentDropdownOpen={isDepartmentDropdownOpen}
-          setIsDepartmentDropdownOpen={setIsDepartmentDropdownOpen}
-          isSystemDropdownOpen={isSystemDropdownOpen}
-          setIsSystemDropdownOpen={setIsSystemDropdownOpen}
-          departments={plantDepartments}
-          systems={plantSystems}
-          plantIdNum={plantIdNum}
-          downloadDropdownRef={downloadDropdownRef}
-          departmentDropdownRef={departmentDropdownRef}
-          systemDropdownRef={systemDropdownRef}
-          departmentChevronRef={departmentChevronRef}
-          systemChevronRef={systemChevronRef}
-          handleDownloadReport={handleDownloadReport}
-        />
       </div>
 
       <div className="flex flex-col gap-3 overflow-y-auto">
