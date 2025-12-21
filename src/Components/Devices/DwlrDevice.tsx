@@ -24,7 +24,7 @@ import DwlrDeviceInfo from "./DwlrDeviceInfo";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { getDeviceById } from "../../../store/deviceSlice";
 import { Error } from "../../utils/toast";
-import { downloadCSV, flowUnit, formatDateForCSV } from "../../utils/utils";
+import { downloadCSV, formatDateForCSV } from "../../utils/utils";
 import NoDataFound from "../NoDataFound";
 import type { SingleDeviceResult } from "../../../model/single-device.interface";
 import Pagination from "../Pagination";
@@ -77,9 +77,6 @@ const DwlrDevice = () => {
   const [customReportData, setCustomReportData] = useState<
     DwlrDeviceResultItem[]
   >([]);
-  const [customReportDuration, setCustomReportDuration] = useState<
-    "15min" | "1hour" | "1day"
-  >("15min");
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -204,7 +201,6 @@ const DwlrDevice = () => {
         deviceId: Number(device_id) || 0,
         from_date: fromDateWithTime,
         to_date: toDateWithTime,
-        duration: customReportDuration,
       })
     )
       .unwrap()
@@ -249,7 +245,6 @@ const DwlrDevice = () => {
     runTimeDate,
     customReportFromDate,
     customReportToDate,
-    customReportDuration,
   ]);
 
   const updateActiveTab = (tab: "panel" | "reports") => {
@@ -279,7 +274,6 @@ const DwlrDevice = () => {
     setCustomReportFromDate(defaultCustomFrom);
     setCustomReportToDate(defaultCustomTo);
     setCustomReportData([]);
-    setCustomReportDuration("15min");
   };
 
   const downloadCustomReportCSV = () => {
@@ -667,28 +661,6 @@ const DwlrDevice = () => {
                   <div className="flex items-start md:items-end flex-col md:flex-row flex-wrap gap-2 md:gap-3 justify-end w-full md:w-auto">
                     <div className="flex flex-col">
                       <label
-                        htmlFor="customReportDuration"
-                        className="mb-1 text-base text-text-primary font-roboto"
-                      >
-                        Duration
-                      </label>
-                      <select
-                        id="customReportDuration"
-                        value={customReportDuration}
-                        onChange={(e) =>
-                          setCustomReportDuration(
-                            e.target.value as "15min" | "1hour" | "1day"
-                          )
-                        }
-                        className="w-42 px-3 py-1.5 border border-border-primary bg-primary text-text-primary rounded-md focus:outline-none focus:ring-1 focus:ring-status-info"
-                      >
-                        <option value="15min">15 Minutes</option>
-                        <option value="1hour">1 Hour</option>
-                        <option value="1day">Daily</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-col">
-                      <label
                         htmlFor="customReportFromDate"
                         className="mb-1 text-base text-text-primary font-roboto"
                       >
@@ -775,10 +747,12 @@ const DwlrDevice = () => {
                               <span className="uppercase">Flow </span>
                               <span className="italic">
                                 (
-                                {flowUnit(
-                                  selectedReport,
-                                  customReportDuration,
-                                  deviceData
+                                {deviceData?.unit === "M^3" ? (
+                                  <>
+                                    m<sup>3</sup>
+                                  </>
+                                ) : (
+                                  deviceData?.unit
                                 )}
                                 )
                               </span>
@@ -819,22 +793,7 @@ const DwlrDevice = () => {
                                     {formatDateForCSV(data?.log_time || "")}
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                    {(() => {
-                                      const flowValue =
-                                        flowUnit(
-                                          selectedReport,
-                                          customReportDuration,
-                                          deviceData
-                                        ) === "LPM"
-                                          ? Number(data?.water_column || 0)
-                                          : Number(
-                                              data?.water_column_from_ground ||
-                                                0
-                                            );
-                                      return deviceData?.unit === "M^3"
-                                        ? (flowValue / 1000).toFixed(2)
-                                        : flowValue;
-                                    })()}
+                                    {Number(data?.water_column || 0)}
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
                                     {deviceData?.unit === "M^3"

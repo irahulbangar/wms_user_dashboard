@@ -122,14 +122,13 @@ interface GetCustomReportPayload {
   deviceId: number;
   from_date: string;
   to_date: string;
-  duration: string;
 }
 
 // get custom report
 export const getDwlrCustomReport = createAsyncThunk(
   "dwlrDevice/getCustomReport",
   async (
-    { plantId, deviceId, from_date, to_date, duration }: GetCustomReportPayload,
+    { plantId, deviceId, from_date, to_date }: GetCustomReportPayload,
     thunkAPI
   ) => {
     try {
@@ -138,7 +137,6 @@ export const getDwlrCustomReport = createAsyncThunk(
         {
           from_date,
           to_date,
-          duration,
         },
         {
           headers: {
