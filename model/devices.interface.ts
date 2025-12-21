@@ -121,6 +121,22 @@ export interface Params {
   hmax?: number;
   hmin?: number;
   crossSectionArea?: number;
+  param_1: Param1;
+  param_2: Param2;
+  param_3: Param3;
+  param_4: Param4;
+  param_5: Param5;
+  param_6: Param6;
+  msg_time: MsgTime;
+  water_column: WaterColumn;
+  device_params: DeviceParams;
+  sensor_voltage: SensorVoltage;
+  water_pressure: WaterPressure;
+  battery_voltage: BatteryVoltage;
+  ambient_pressure: AmbientPressure;
+  water_temperature: WaterTemperature;
+  ambient_temperature: AmbientTemperature;
+  water_column_from_ground: WaterColumnFromGround;
 }
 
 export interface Node {
@@ -178,4 +194,224 @@ export interface Edge {
 export interface Style2 {
   stroke: string;
   strokeWidth: number;
+}
+
+export interface Param1 {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface Param2 {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface Param3 {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface Param4 {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface Param5 {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface Param6 {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface MsgTime {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface WaterColumn {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface DeviceParams {
+  lat: number;
+  lng: number;
+  serial: string;
+  identifier: string;
+  cable_length: number;
+  daily_msgs_count: number;
+  installation_date: string;
+}
+
+export interface SensorVoltage {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface WaterPressure {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface BatteryVoltage {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface AmbientPressure {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface WaterTemperature {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface AmbientTemperature {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
+}
+
+export interface WaterColumnFromGround {
+  max: number;
+  min: number;
+  name: string;
+  unit: string;
+  enable: boolean;
+  ref_val: number;
+  set_max: number;
+  set_min: number;
+  set_limit: number;
+  multipliers: number;
+  ref_percent: number;
 }
