@@ -24,7 +24,16 @@ export interface Plant {
 
 export interface Node {
   id: string;
-  type: "tank" | "fm" | "group";
+  type:
+    | "tank"
+    | "fm"
+    | "brwhms"
+    | "phmc"
+    | "arg"
+    | "dwlr"
+    | "virtual"
+    | "resultant"
+    | "group";
   data: {
     label: string;
     unit?: string;

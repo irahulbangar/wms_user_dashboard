@@ -227,6 +227,89 @@ export const enhanceNodeData = ({
         systemConnection: getSystemConnection(matchingDevice),
       };
     }
+  } else if (node.type === "dwlr") {
+    const matchingDevice = devices.find(
+      (device: any) =>
+        device.device_family_type === "dwlr" &&
+        device.device_name === node.data.label
+    );
+
+    if (matchingDevice) {
+      const lastRecord = matchingDevice.last_record || {};
+      const waterColumn =
+        Number(lastRecord.water_column) ||
+        Number(lastRecord.avg) ||
+        Number(matchingDevice.water_column) ||
+        0;
+
+      const waterTemperature =
+        Number(lastRecord.water_temperature) ||
+        Number(matchingDevice.water_temperature) ||
+        0;
+
+      const waterPressure =
+        Number(lastRecord.water_pressure) ||
+        Number(matchingDevice.water_pressure) ||
+        0;
+
+      const ambientTemperature =
+        Number(lastRecord.ambient_temperature) ||
+        Number(matchingDevice.ambient_temperature) ||
+        0;
+
+      const ambientPressure =
+        Number(lastRecord.ambient_pressure) ||
+        Number(matchingDevice.ambient_pressure) ||
+        0;
+
+      const waterColumnFromGround =
+        Number(lastRecord.water_column_from_ground) ||
+        Number(matchingDevice.water_column_from_ground) ||
+        0;
+
+      const sensorVoltage =
+        Number(lastRecord.sensor_voltage) ||
+        Number(matchingDevice.sensor_voltage) ||
+        0;
+
+      const batteryVoltage =
+        Number(lastRecord.battery_voltage) ||
+        Number(lastRecord.BatteryLevel) ||
+        Number(matchingDevice.battery_voltage) ||
+        0;
+
+      enhancedData = {
+        ...enhancedData,
+        waterColumn,
+        waterTemperature,
+        waterPressure,
+        ambientTemperature,
+        ambientPressure,
+        waterColumnFromGround,
+        sensorVoltage,
+        batteryVoltage,
+        isActive: matchingDevice.device_status === "active",
+        organizationConnection:
+          matchingDevice.organization_connection === "none"
+            ? ""
+            : matchingDevice.organization_connection,
+        systemName: matchingDevice.system_name,
+        unit: matchingDevice.unit,
+        deviceId: matchingDevice.device_id,
+        plantConnection: getPlantConnection(matchingDevice),
+        departmentConnection: getDepartmentConnection(matchingDevice),
+        systemConnection: getSystemConnection(matchingDevice),
+        maxThreshold: Number(matchingDevice.params?.maxThreshold) || 0,
+        lastRecordTime:
+          matchingDevice.last_record?.time ||
+          matchingDevice.last_record_time ||
+          "N/A",
+        reportType:
+          matchingDevice.report_type ||
+          matchingDevice.report_type_name ||
+          "N/A",
+      };
+    }
   } else if (node.type === "resultant") {
     const matchingDevice = devices.find(
       (device: any) =>
@@ -236,15 +319,14 @@ export const enhanceNodeData = ({
     );
 
     if (matchingDevice) {
-      // Ensure report_value is always a number
       const reportValue = matchingDevice.device_reporting?.report_value;
-      const numericReportValue = 
-        typeof reportValue === "number" 
-          ? reportValue 
-          : typeof reportValue === "string" 
-          ? parseFloat(reportValue) || 0 
+      const numericReportValue =
+        typeof reportValue === "number"
+          ? reportValue
+          : typeof reportValue === "string"
+          ? parseFloat(reportValue) || 0
           : reportValue ?? 0;
-      
+
       enhancedData = {
         ...enhancedData,
         unit: matchingDevice.unit || "",

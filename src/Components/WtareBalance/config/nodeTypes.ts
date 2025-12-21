@@ -4,6 +4,7 @@ import FMNode from "../Diagram/FMNode";
 import BRWHMSNode from "../Diagram/BRWHMSNode";
 import PHMCNode from "../Diagram/PHMCNode";
 import ARGNode from "../Diagram/ARGNode";
+import DwlrNode from "../Diagram/DwlrNode";
 import SourceNode from "../Diagram/SourceNode";
 import SinkNode from "../Diagram/SinkNode";
 import GroupNodeWrapper from "../Diagram/GroupNodeWrapper";
@@ -16,6 +17,7 @@ export const nodeTypes: NodeTypes = {
   brwhms: BRWHMSNode,
   phmc: PHMCNode,
   arg: ARGNode,
+  dwlr: DwlrNode,
   source: SourceNode,
   sink: SinkNode,
   virtual: VirtualNode,
