@@ -744,33 +744,44 @@ const DwlrDevice = () => {
                               To Time
                             </th>
                             <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                              <span className="uppercase">Flow </span>
-                              <span className="italic">
-                                (
-                                {deviceData?.unit === "M^3" ? (
-                                  <>
-                                    m<sup>3</sup>
-                                  </>
-                                ) : (
-                                  deviceData?.unit
-                                )}
-                                )
-                              </span>
+                              Water column(mWc)
                             </th>
                             <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                              <span className="uppercase">Totalizer </span>
-                              <span className="italic">
-                                (
-                                {deviceData?.unit === "M^3" ? (
-                                  <>
-                                    m<sup>3</sup>
-                                  </>
-                                ) : (
-                                  deviceData?.unit
-                                )}
-                                )
-                              </span>
+                              Water temperature(°C)
                             </th>
+                            <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
+                              Water pressure(Bar)
+                            </th>
+                            <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
+                              Water column from ground(mRL)
+                            </th>
+                            {deviceData?.params?.param_1?.enable && (
+                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
+                                {deviceData?.params?.param_1?.name}(
+                                {deviceData?.params?.param_1?.unit})
+                              </th>
+                            )}
+
+                            {deviceData?.params?.param_2?.enable && (
+                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
+                                {deviceData?.params?.param_2?.name}(
+                                {deviceData?.params?.param_2?.unit})
+                              </th>
+                            )}
+
+                            {deviceData?.params?.param_3?.enable && (
+                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
+                                {deviceData?.params?.param_3?.name}(
+                                {deviceData?.params?.param_3?.unit})
+                              </th>
+                            )}
+
+                            {deviceData?.params?.param_4?.enable && (
+                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
+                                {deviceData?.params?.param_4?.name}(
+                                {deviceData?.params?.param_4?.unit})
+                              </th>
+                            )}
                           </tr>
                         </thead>
                         <tbody>
@@ -787,25 +798,56 @@ const DwlrDevice = () => {
                                       1}
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                    {formatDateForCSV(data?.log_time || "")}
+                                    {formatDateForCSV(
+                                      data?.interval_start || ""
+                                    )}
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                    {formatDateForCSV(data?.log_time || "")}
+                                    {formatDateForCSV(data?.interval_end || "")}
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                    {Number(data?.water_column || 0)}
+                                    {Number(data?.water_column || 0)?.toFixed(
+                                      2
+                                    )}
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                    {deviceData?.unit === "M^3"
-                                      ? (
-                                          Number(
-                                            data?.water_column_from_ground || 0
-                                          ) / 1000
-                                        ).toFixed(3)
-                                      : Number(
-                                          data?.water_column_from_ground || 0
-                                        )}
+                                    {Number(
+                                      data?.water_temperature || 0
+                                    )?.toFixed(2)}
                                   </td>
+                                  <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
+                                    {Number(data?.water_pressure || 0)?.toFixed(
+                                      2
+                                    )}
+                                  </td>
+                                  <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
+                                    {Number(
+                                      data?.water_column_from_ground || 0
+                                    )?.toFixed(2)}
+                                  </td>
+                                  {deviceData?.params?.param_1?.enable && (
+                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
+                                      {Number(data?.param_1 || 0)?.toFixed(2)}
+                                    </td>
+                                  )}
+
+                                  {deviceData?.params?.param_2?.enable && (
+                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
+                                      {Number(data?.param_2 || 0)?.toFixed(2)}
+                                    </td>
+                                  )}
+
+                                  {deviceData?.params?.param_3?.enable && (
+                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
+                                      {Number(data?.param_3 || 0)?.toFixed(2)}
+                                    </td>
+                                  )}
+
+                                  {deviceData?.params?.param_4?.enable && (
+                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
+                                      {Number(data?.param_4 || 0)?.toFixed(2)}
+                                    </td>
+                                  )}
                                 </tr>
                               )
                             )}
