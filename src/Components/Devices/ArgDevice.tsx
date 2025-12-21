@@ -19,11 +19,11 @@ import WaterGauge from "./WaterGauge";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { getDeviceById } from "../../../store/deviceSlice";
 import {
-  getFmCustomReport,
-  getDeviceFmLogs,
-} from "../../../store/fmDeviceSlice";
+  getArgCustomReport,
+  getDeviceArgLogs,
+} from "../../../store/argDeviceSlice";
 import { Error } from "../../utils/toast";
-import type { FmDeviceResultItem } from "../../../model/fm-device.interface";
+import type { ArgDeviceResultItem } from "../../../model/arg-device.interface";
 import { downloadCSV, flowUnit, formatDateForCSV } from "../../utils/utils";
 import NoDataFound from "../NoDataFound";
 import type { SingleDeviceResult } from "../../../model/single-device.interface";
@@ -59,7 +59,7 @@ const ArgDevice = () => {
   const [runTimeDate, setRunTimeDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );
-  const [runTimeData, setRunTimeData] = useState<FmDeviceResultItem[]>([]);
+  const [runTimeData, setRunTimeData] = useState<ArgDeviceResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPanelLoading, setIsPanelLoading] = useState(false);
   const [customReportFromDate, setCustomReportFromDate] =
@@ -67,7 +67,7 @@ const ArgDevice = () => {
   const [customReportToDate, setCustomReportToDate] =
     useState<string>(defaultCustomTo);
   const [customReportData, setCustomReportData] = useState<
-    FmDeviceResultItem[]
+    ArgDeviceResultItem[]
   >([]);
   const [customReportDuration, setCustomReportDuration] = useState<
     "15min" | "1hour" | "1day"
@@ -90,7 +90,7 @@ const ArgDevice = () => {
   }, [runTimeData, selectedReport, customReportData]);
 
   const selectedRows = useMemo(() => {
-    let currentData: FmDeviceResultItem[] = [];
+    let currentData: ArgDeviceResultItem[] = [];
     if (selectedReport === "runTime") {
       currentData = runTimeData;
     } else if (selectedReport === "customReport") {
@@ -112,7 +112,7 @@ const ArgDevice = () => {
     setCurrentPage(1);
   }, [rowsPerPage]);
 
-  const handlePaginatedData = (data: FmDeviceResultItem[]) => {
+  const handlePaginatedData = (data: ArgDeviceResultItem[]) => {
     return data.slice(
       (currentPage - 1) * rowsPerPage,
       currentPage * rowsPerPage
@@ -161,7 +161,7 @@ const ArgDevice = () => {
 
     setIsLoading(true);
     dispatch(
-      getDeviceFmLogs({
+      getDeviceArgLogs({
         plantId: Number(deviceData?.plant_id) || 0,
         deviceId: Number(device_id) || 0,
         date: runTimeDate,
@@ -195,7 +195,7 @@ const ArgDevice = () => {
     const toDateWithTime = `${customReportToDate} 00:00:00`;
 
     dispatch(
-      getFmCustomReport({
+      getArgCustomReport({
         plantId: Number(deviceData?.plant_id) || 0,
         deviceId: Number(device_id) || 0,
         from_date: fromDateWithTime,
@@ -296,12 +296,12 @@ const ArgDevice = () => {
       "Sr No": index + 1,
       "From Time": formatDateForCSV(data.interval_start || ""),
       "To Time": formatDateForCSV(data.interval_end || ""),
-      "Flow (LPM)": data.flow,
-      "Totalizer (Ltr)": data.max,
+      "Flow (LPM)": data.last_mm,
+      "Totalizer (Ltr)": data.max_mm,
     }));
     downloadCSV(
       useArray,
-      `Fm_Custom_Report_${customReportFromDate}_to_${customReportToDate}`
+      `Arg_Custom_Report_${customReportFromDate}_to_${customReportToDate}`
     );
   };
 
@@ -315,11 +315,11 @@ const ArgDevice = () => {
       "Sr No": index + 1,
       "From Time": formatDateForCSV(data?.from_time || ""),
       "To Time": formatDateForCSV(data?.to_time || ""),
-      "Flow (LPM)": data.flow,
-      "Totalizer (Ltr)": data.max,
+      "Flow (LPM)": data.last_mm,
+      "Totalizer (Ltr)": data.max_mm,
     }));
 
-    downloadCSV(useArray, `Fm_Run_Time_Report_${runTimeDate || "data"}`);
+    downloadCSV(useArray, `Arg_Run_Time_Report_${runTimeDate || "data"}`);
   };
 
   return (
@@ -601,14 +601,14 @@ const ArgDevice = () => {
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
                                     {deviceData?.unit === "M^3"
                                       ? (
-                                          Number(data?.flow || 0) / 1000
+                                          Number(data?.last_mm || 0) / 1000
                                         ).toFixed(2)
-                                      : Number(data?.flow || 0)}
+                                      : Number(data?.last_mm || 0)}
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
                                     {deviceData?.unit === "M^3"
-                                      ? (Number(data?.max) / 1000).toFixed(2)
-                                      : Number(data?.max)}
+                                      ? (Number(data?.max_mm) / 1000).toFixed(2)
+                                      : Number(data?.max_mm)}
                                   </td>
                                 </tr>
                               )
@@ -799,8 +799,8 @@ const ArgDevice = () => {
                                           customReportDuration,
                                           deviceData
                                         ) === "LPM"
-                                          ? Number(data?.avg || 0)
-                                          : Number(data?.flow || 0);
+                                          ? Number(data?.last_mm || 0)
+                                          : Number(data?.last_mm || 0);
                                       return deviceData?.unit === "M^3"
                                         ? (flowValue / 1000).toFixed(3)
                                         : Number(flowValue);
@@ -808,8 +808,8 @@ const ArgDevice = () => {
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
                                     {deviceData?.unit === "M^3"
-                                      ? (Number(data?.max) / 1000).toFixed(3)
-                                      : Number(data?.max)}
+                                      ? (Number(data?.max_mm) / 1000).toFixed(3)
+                                      : Number(data?.max_mm)}
                                   </td>
                                 </tr>
                               )
