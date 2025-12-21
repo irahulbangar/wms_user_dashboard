@@ -222,6 +222,7 @@ const DwlrDevice = () => {
 
   useEffect(() => {
     if (!deviceData?.plant_id || !device_id) return;
+    if (selectedReport === "none") return;
 
     if (
       selectedReport === "runTime" &&
@@ -238,14 +239,7 @@ const DwlrDevice = () => {
       fetchCustomReportData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    selectedReport,
-    deviceData?.plant_id,
-    device_id,
-    runTimeDate,
-    customReportFromDate,
-    customReportToDate,
-  ]);
+  }, [selectedReport, deviceData?.plant_id, device_id]);
 
   const updateActiveTab = (tab: "panel" | "reports") => {
     setActiveTab(tab);
