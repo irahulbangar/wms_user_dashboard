@@ -33,9 +33,6 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
   const waterTemperature = Number(data.waterTemperature) || 0;
   const waterPressure = Number(data.waterPressure) || 0;
   const ambientTemperature = Number(data.ambientTemperature) || 0;
-  const ambientPressure = Number(data.ambientPressure) || 0;
-  const waterColumnFromGround = Number(data.waterColumnFromGround) || 0;
-  const sensorVoltage = Number(data.sensorVoltage) || 0;
   const batteryVoltage = Number(data.batteryVoltage) || 0;
   const departmentConnection = data.departmentConnection || "";
   const plantConnection = data.plantConnection || "";
@@ -44,7 +41,6 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
   const systemConnection = data.systemConnection || "";
   const lastRecordTime = data.lastRecordTime || "N/A";
   const reportType = data.reportType || "N/A";
-  const maxThreshold = Number(data.maxThreshold) || 0;
 
   const recordTimeOld = isRecordTimeOld(lastRecordTime);
 
@@ -57,9 +53,7 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
   const connectionInfo = [
     `System Name: ${systemName}`,
     `Device Name: ${data.label}`,
-    organizationConnection
-      ? `Org Conn. : ${organizationConnection}`
-      : null,
+    organizationConnection ? `Org Conn. : ${organizationConnection}` : null,
     plantConnection ? `Plant Conn. : ${plantConnection}` : null,
     departmentConnection ? `Dept Conn. : ${departmentConnection}` : null,
     systemConnection ? `System Conn. : ${systemConnection}` : null,
@@ -75,7 +69,7 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
 
   return (
     <div
-      className={`relative w-fit h-fit bg-primary/20 border rounded-md p-1 z-50 group ${borderColor}`}
+      className={`relative w-22 h-fit bg-primary/20 border rounded-md p-1 z-50 group ${borderColor}`}
       title={connectionInfo}
     >
       <div className="text-sm text-left mb-1 font-roboto text-text-primary text-wrap z-10 px-1 leading-4">
@@ -86,7 +80,7 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
         <img
           src={dwlrLogo}
           alt="DWLR"
-          className="w-12 h-12 object-contain flex items-center justify-center"
+          className="w-16 h-16 object-contain flex items-center justify-center"
         />
       </div>
 
@@ -100,11 +94,13 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
         }`}
       />
 
-      <div className="flex items-start justify-start absolute -bottom-16 flex-col left-1/2 transform -translate-x-1/2 w-full px-1">
+      <div className="flex items-start justify-start absolute -bottom-14 flex-col left-1/2 transform -translate-x-1/2 w-full px-1">
         <div className="flex items-center justify-center gap-1 whitespace-nowrap">
-          <div className="text-text-secondary font-roboto text-xs">Water Col:</div>
+          <div className="text-text-secondary font-roboto text-xs">
+            Water Col:
+          </div>
           <div className="text-status-info font-roboto text-xs truncate">
-            {waterColumn.toFixed(2)} {unit}
+            {waterColumn.toFixed(2)} (mWc)
           </div>
         </div>
 
@@ -116,20 +112,13 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
         </div>
 
         <div className="flex items-center justify-center gap-1 whitespace-nowrap">
-          <div className="text-text-secondary font-roboto text-xs">Pressure:</div>
+          <div className="text-text-secondary font-roboto text-xs">
+            Pressure:
+          </div>
           <div className="text-text-primary font-roboto text-xs">
-            {waterPressure.toFixed(2)} {unit}
+            {waterPressure.toFixed(2)}(Bar)
           </div>
         </div>
-
-        {maxThreshold > 0 && (
-          <div className="flex items-center justify-center gap-1 whitespace-nowrap">
-            <div className="text-text-secondary font-roboto text-xs">Max:</div>
-            <div className="text-text-primary font-roboto text-xs">
-              {maxThreshold} {unit}
-            </div>
-          </div>
-        )}
       </div>
 
       <Handle
@@ -147,4 +136,3 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
 };
 
 export default DwlrNode;
-

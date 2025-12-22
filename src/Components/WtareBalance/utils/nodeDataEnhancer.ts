@@ -300,14 +300,9 @@ export const enhanceNodeData = ({
         departmentConnection: getDepartmentConnection(matchingDevice),
         systemConnection: getSystemConnection(matchingDevice),
         maxThreshold: Number(matchingDevice.params?.maxThreshold) || 0,
-        lastRecordTime:
-          matchingDevice.last_record?.time ||
-          matchingDevice.last_record_time ||
-          "N/A",
-        reportType:
-          matchingDevice.report_type ||
-          matchingDevice.report_type_name ||
-          "N/A",
+        lastRecordTime: matchingDevice.last_record?.time,
+        reportType: matchingDevice.report_type,
+        deviceFamilyType: matchingDevice?.device_family_type,
       };
     }
   } else if (node.type === "resultant") {
