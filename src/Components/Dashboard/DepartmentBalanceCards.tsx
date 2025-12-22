@@ -33,15 +33,6 @@ export const DepartmentBalanceCards = ({
 }: DepartmentBalanceCardsProps) => {
   const navigate = useNavigate();
 
-  const hasAnyData =
-    departmentBalances.some((item) => item.totalIn > 0) ||
-    departmentBalances.some((item) => item.totalOut > 0) ||
-    departmentBalances.some((item) => item.balance > 0);
-
-  if (!hasAnyData && !isLoading) {
-    return null;
-  }
-
   return (
     <>
       <h1 className="text-text-secondary text-xl font-roboto font-normal whitespace-nowrap">
@@ -63,7 +54,7 @@ export const DepartmentBalanceCards = ({
               </div>
             </div>
           ))
-        ) : departmentBalances.length > 0 ? (
+        ) : departmentBalances.length >= 0 ? (
           departmentBalances.map((dept) => {
             const department = departments?.find(
               (d) => d.department_id === dept.id
@@ -96,7 +87,7 @@ export const DepartmentBalanceCards = ({
                     <span className="text-lg font-roboto font-normal text-text-primary w-full text-start">
                       {dept.unit === "M^3"
                         ? (Math.abs(dept.totalIn) / 1000).toFixed(3)
-                        : Math.abs(dept.totalIn)} {" "}
+                        : Math.abs(dept.totalIn)}{" "}
                       <span className="text-lg italic">
                         {dept.unit === "M^3" ? "m³" : dept.unit || ""}
                       </span>
@@ -107,7 +98,7 @@ export const DepartmentBalanceCards = ({
                     <span className="text-lg font-roboto font-normal w-full text-start text-text-primary">
                       {dept.unit === "M^3"
                         ? (Math.abs(dept.totalOut) / 1000).toFixed(3)
-                        : Math.abs(dept.totalOut)} {" "}
+                        : Math.abs(dept.totalOut)}{" "}
                       <span className="text-lg italic">
                         {dept.unit === "M^3" ? "m³" : dept.unit || ""}
                       </span>
