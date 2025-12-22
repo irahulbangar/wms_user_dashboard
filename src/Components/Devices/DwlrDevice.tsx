@@ -335,8 +335,8 @@ const DwlrDevice = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2.5 overflow-y-auto h-full">
-      <div className="flex items-center gap-4 sticky top-0 z-10 bg-input-bg">
+    <div className="flex flex-col overflow-y-auto h-full">
+      <div className="flex items-center gap-4 sticky top-0 z-10 bg-input-bg pb-3">
         <nav className="flex items-center gap-2 text-sm text-text-secondary font-roboto bg-primary/50 px-2 py-1.5 rounded-lg w-fit sticky">
           {userRole === "org_admin" && (
             <>
@@ -458,7 +458,7 @@ const DwlrDevice = () => {
                       longitude={Number(deviceData?.plant_longitude) || 0}
                       address={deviceData?.plant_address}
                       hwid={deviceData?.hwid}
-                      height="h-66"
+                      height="h-100"
                       deviceName={deviceData?.device_name}
                     />
                   )}
