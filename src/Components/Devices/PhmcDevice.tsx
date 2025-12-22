@@ -199,7 +199,7 @@ const PhmcDevice = () => {
 
     setIsLoading(true);
     const fromDateWithTime = `${customReportFromDate} 00:00:00`;
-    const toDateWithTime = `${customReportToDate} 00:00:00`;
+    const toDateWithTime = `${customReportToDate} 23:59:59`;
 
     dispatch(
       getPhmcCustomReport({

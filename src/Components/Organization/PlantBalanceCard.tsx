@@ -34,15 +34,6 @@ export const PlantBalanceCard = ({
 }: PlantBalanceCardProps) => {
   const navigate = useNavigate();
 
-  const hasAnyData =
-    plantBalances.some((item) => item.totalIn > 0) ||
-    plantBalances.some((item) => item.totalOut > 0) ||
-    plantBalances.some((item) => item.balance > 0);
-
-  if (!hasAnyData && !isLoading) {
-    return null;
-  }
-
   return (
     <>
       <h1 className="text-text-secondary text-xl font-roboto font-normal whitespace-nowrap">
@@ -64,7 +55,7 @@ export const PlantBalanceCard = ({
               </div>
             </div>
           ))
-        ) : plantBalances.length > 0 ? (
+        ) : plantBalances.length >= 0 ? (
           plantBalances.map((plant) => {
             const plantData = plants?.find((p) => p.plant_id === plant.id);
             const plantOrganizationId =
@@ -94,9 +85,9 @@ export const PlantBalanceCard = ({
                       {plant.unit === "M^3"
                         ? (Math.abs(plant.totalIn) / 1000).toFixed(3)
                         : Math.abs(plant.totalIn)}
-                      <span className="text-lg italic">
+                      {/* <span className="text-lg italic">
                         {plant.unit === "M^3" ? "m³" : plant.unit || ""}
-                      </span>
+                      </span> */}
                     </span>
                     <span className="text-base font-roboto text-text-secondary text-start w-full">
                       Total Out
@@ -105,9 +96,9 @@ export const PlantBalanceCard = ({
                       {plant.unit === "M^3"
                         ? (Math.abs(plant.totalOut) / 1000).toFixed(3)
                         : Math.abs(plant.totalOut)}
-                      <span className="text-lg italic">
+                      {/* <span className="text-lg italic">
                         {plant.unit === "M^3" ? "m³" : plant.unit || ""}
-                      </span>
+                      </span> */}
                     </span>
                     <span className="text-base font-roboto text-text-secondary text-start w-full">
                       Un-Accounted Water

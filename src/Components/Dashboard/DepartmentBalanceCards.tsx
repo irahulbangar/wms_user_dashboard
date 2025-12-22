@@ -88,9 +88,9 @@ export const DepartmentBalanceCards = ({
                       {dept.unit === "M^3"
                         ? (Math.abs(dept.totalIn) / 1000).toFixed(3)
                         : Math.abs(dept.totalIn)}{" "}
-                      <span className="text-lg italic">
+                      {/* <span className="text-lg italic">
                         {dept.unit === "M^3" ? "m³" : dept.unit || ""}
-                      </span>
+                      </span> */}
                     </span>
                     <span className="text-base font-roboto text-text-secondary text-start w-full">
                       Total Out
@@ -99,9 +99,9 @@ export const DepartmentBalanceCards = ({
                       {dept.unit === "M^3"
                         ? (Math.abs(dept.totalOut) / 1000).toFixed(3)
                         : Math.abs(dept.totalOut)}{" "}
-                      <span className="text-lg italic">
+                      {/* <span className="text-lg italic">
                         {dept.unit === "M^3" ? "m³" : dept.unit || ""}
-                      </span>
+                      </span> */}
                     </span>
                     <span className="text-base font-roboto text-text-secondary text-start w-full">
                       Un-Accounted Water
