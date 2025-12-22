@@ -61,6 +61,7 @@ export const PlantBalanceCard = ({
             const plantOrganizationId =
               plantData?.organization_id || organizationId;
             const plantPlantId = plantData?.plant_id || plantId;
+            const displayUnit = plant.unit || "";
 
             return (
               <div
@@ -122,11 +123,11 @@ export const PlantBalanceCard = ({
                       }
                     >
                       {plant.balance >= 0 ? "" : "- "}
-                      {plant.unit === "M^3"
+                      {displayUnit === "M^3"
                         ? (Math.abs(plant.balance) / 1000).toFixed(3)
                         : Math.abs(plant.balance)}{" "}
                       <span className="text-lg italic">
-                        {plant.unit === "M^3" ? "m³" : plant.unit || ""}
+                        {displayUnit === "M^3" ? "m³" : displayUnit}
                       </span>
                     </span>
                   </div>

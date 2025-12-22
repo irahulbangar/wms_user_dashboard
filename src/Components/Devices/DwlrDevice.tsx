@@ -547,10 +547,7 @@ const DwlrDevice = () => {
                               Sr No
                             </th>
                             <th className="px-4 py-2 text-text-primary uppercase text-start text-base font-roboto font-normal font-roboto">
-                              From Time
-                            </th>
-                            <th className="px-4 py-2 text-text-primary uppercase text-start text-base font-roboto font-normal font-roboto">
-                              To Time
+                              Log Time
                             </th>
                             <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
                               Water column(mWc)
@@ -602,9 +599,6 @@ const DwlrDevice = () => {
                                     {(currentPage - 1) * rowsPerPage +
                                       index +
                                       1}
-                                  </td>
-                                  <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                    {formatDateForCSV(data?.log_time || "")}
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
                                     {formatDateForCSV(data?.log_time || "")}
