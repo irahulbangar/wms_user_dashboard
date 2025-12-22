@@ -5,6 +5,7 @@ import { useEffect, useState, createContext, useContext } from "react";
 import Loader from "../Loader";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
+import { useWebSocketConnection } from "../../hooks/useWebSocketConnection";
 
 interface DiagramSidebarContextType {
   onDiagramSidebarToggle: (isOpen: boolean) => void;
@@ -26,6 +27,14 @@ export default function RootLayout() {
   const [currentPage] = useState("dashboard");
   const [isDiagramSidebarOpen, setIsDiagramSidebarOpen] = useState(false);
   const location = useLocation();
+
+  const { connectionStatus, isConnected } = useWebSocketConnection();
+
+  useEffect(() => {
+    if (isAuthenticated && isConnected) {
+      console.log("WebSocket is connected:", connectionStatus);
+    }
+  }, [isAuthenticated, isConnected, connectionStatus]);
 
   const isWaterBalanceRoute = location.pathname === "/plant-layout";
 
