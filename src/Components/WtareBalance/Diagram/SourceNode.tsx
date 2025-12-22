@@ -18,22 +18,20 @@ const SourceNode: React.FC<SourceNodeProps> = ({ data }) => {
         SOURCE
       </div>
 
-      <div className="bg-linear-to-br from-status-success to-status-success rounded-lg shadow-lg p-3 min-w-[140px] text-white relative">
+      <div className="bg-linear-to-br from-status-success to-status-success rounded-lg shadow-lg p-3 min-w-[140px] h-20 text-white relative">
         <Handle
           type="source"
           position={Position.Right}
           className="w-3 h-3 bg-secondary border-2 border-border-secondary"
         />
 
-        <div className="text-left">
+        <div className="text-left flex flex-col justify-center items-center h-full">
           <div
-            className="text-sm font-normal font-roboto mb-1 truncate"
+            className="text-sm font-normal font-roboto mb-1 flex flex-wrap"
             title={data.label}
           >
             {data.label}
           </div>
-
-          <div className="text-xs font-normal mb-1 text-center">Source</div>
         </div>
       </div>
     </div>
