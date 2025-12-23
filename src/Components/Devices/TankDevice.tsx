@@ -77,7 +77,7 @@ const TankDevice = () => {
     "15min" | "1hour" | "1day"
   >("15min");
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.user);
+  const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
     (plant) => plant.plant_id === Number(getCurrentPlantId())
   )?.role;
@@ -141,6 +141,7 @@ const TankDevice = () => {
   }, [deviceData]);
 
   const fetchDeviceData = useCallback(() => {
+    if (!isAuthenticated) return;
     setIsPanelLoading(true);
     dispatch(getDeviceById(Number(device_id)))
       .unwrap()

@@ -42,7 +42,7 @@ const BrwhmsDevice = () => {
   const organizationId = localStorage.getItem("organizationId");
   const systemId = localStorage.getItem("systemId");
   const location = useLocation();
-  const { user } = useAppSelector((state) => state.user);
+  const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
     (plant) => plant.plant_id === Number(getCurrentPlantId())
   )?.role;
@@ -132,6 +132,7 @@ const BrwhmsDevice = () => {
   };
 
   const fetchDeviceData = useCallback(() => {
+    if (!isAuthenticated) return;
     setIsPanelLoading(true);
     dispatch(getDeviceById(Number(device_id)))
       .unwrap()
@@ -149,7 +150,7 @@ const BrwhmsDevice = () => {
       .finally(() => {
         setIsPanelLoading(false);
       });
-  }, [device_id, dispatch]);
+  }, [device_id, dispatch, isAuthenticated]);
 
   useEffect(() => {
     if (device_id) {
@@ -158,6 +159,7 @@ const BrwhmsDevice = () => {
   }, [device_id, fetchDeviceData]);
 
   const fetchRunTimeData = () => {
+    if (!isAuthenticated) return;
     if (!runTimeDate) {
       Error("Please select a date");
       return;

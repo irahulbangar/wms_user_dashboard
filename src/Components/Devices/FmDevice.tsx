@@ -75,7 +75,7 @@ const FmDevice = () => {
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
-  const { user } = useAppSelector((state) => state.user);
+  const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
     (plant) => plant.plant_id === Number(getCurrentPlantId())
   )?.role;
@@ -128,6 +128,7 @@ const FmDevice = () => {
   };
 
   const fetchDeviceData = useCallback(() => {
+    if (!isAuthenticated) return;
     setIsPanelLoading(true);
     dispatch(getDeviceById(Number(device_id)))
       .unwrap()
@@ -145,7 +146,7 @@ const FmDevice = () => {
       .finally(() => {
         setIsPanelLoading(false);
       });
-  }, [device_id, dispatch]);
+  }, [device_id, dispatch, isAuthenticated]);
 
   useEffect(() => {
     if (device_id) {

@@ -49,7 +49,6 @@ const PhmcDevice = () => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const organizationId = localStorage.getItem("organizationId");
-
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const defaultCustomFrom = sevenDaysAgo.toISOString().split("T")[0];
@@ -89,13 +88,12 @@ const PhmcDevice = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
   const systemId = localStorage.getItem("systemId");
-  const { user } = useAppSelector((state) => state.user);
+  const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
     (plant) => plant.plant_id === Number(getCurrentPlantId())
   )?.role;
   const { sendMessage, isConnected, latestMessage } = useWebSocketConnection();
   const hwidAuthSentRef = useRef(false);
-  console.log("latestMessage", latestMessage);
 
   const totalItems = useMemo(() => {
     if (selectedReport === "runTime") {
@@ -145,6 +143,8 @@ const PhmcDevice = () => {
   };
 
   const fetchDeviceData = useCallback(() => {
+    if (!isAuthenticated) return;
+
     setIsPanelLoading(true);
     dispatch(getDeviceById(Number(device_id)))
       .unwrap()
@@ -162,7 +162,7 @@ const PhmcDevice = () => {
       .finally(() => {
         setIsPanelLoading(false);
       });
-  }, [device_id, dispatch]);
+  }, [device_id, dispatch, isAuthenticated]);
 
   useEffect(() => {
     if (device_id) {
