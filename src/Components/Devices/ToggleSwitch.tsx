@@ -1,4 +1,3 @@
-
 interface ToggleSwitchProps {
   isOn: boolean;
   onToggle: (value: boolean) => void;
@@ -33,7 +32,11 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
           relative inline-flex h-8 w-20 items-center rounded-full transition-colors duration-300 ease-in-out
           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary
           ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-          ${isOn ? "bg-green-500 focus:ring-green-500" : "bg-red-500 focus:ring-red-500"}
+          ${
+            isOn
+              ? "bg-status-success focus:ring-status-success"
+              : "bg-status-danger focus:ring-status-danger"
+          }
         `}
         role="switch"
         aria-checked={isOn}
@@ -67,4 +70,3 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
 };
 
 export default ToggleSwitch;
-

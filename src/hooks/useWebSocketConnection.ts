@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useAppSelector } from "../../store/store";
 
@@ -8,10 +8,14 @@ interface WebSocketMessage {
 }
 
 export const useWebSocketConnection = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.user);
+  const { isAuthenticated, token } = useAppSelector((state) => state.user);
   const [messageHistory, setMessageHistory] = useState<WebSocketMessage[]>([]);
+  const authSentRef = useRef(false);
 
-  const socketUrl = document.location.hostname === "localhost" ? "wss://test.wmsonline.in/ws/" : document.location.origin.replace("http", "ws") + "/ws/";
+  const socketUrl =
+    document.location.hostname === "localhost"
+      ? "wss://test.wmsonline.in/ws/"
+      : document.location.origin.replace("http", "ws") + "/ws/";
 
   const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
     isAuthenticated ? socketUrl : null,
@@ -33,15 +37,33 @@ export const useWebSocketConnection = () => {
       const handleMessage = (event: Event) => {
         const messageEvent = event as MessageEvent;
         console.log("WebSocket message received:", messageEvent.data);
+
+        if (!authSentRef.current) {
+          const jwtToken = token || localStorage.getItem("accessToken");
+          if (jwtToken) {
+            const authMessage = JSON.stringify({
+              type: "auth",
+              data: {
+                token: jwtToken,
+              },
+            });
+            sendMessage(authMessage);
+            authSentRef.current = true;
+            console.log("Authentication message sent:", authMessage);
+          }
+        }
       };
 
       ws.addEventListener("message", handleMessage);
 
       return () => {
         ws.removeEventListener("message", handleMessage);
+        authSentRef.current = false;
       };
+    } else {
+      authSentRef.current = false;
     }
-  }, [readyState, getWebSocket]);
+  }, [readyState, getWebSocket, sendMessage, token]);
 
   useEffect(() => {
     if (lastMessage !== null) {
