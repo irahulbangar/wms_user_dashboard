@@ -156,7 +156,7 @@ export const DownloadReportDropdown = ({
         <button
           onClick={() => setIsDownloadDropdownOpen(!isDownloadDropdownOpen)}
           disabled={isDownloadingReport}
-          className="bg-primary text-text-primary px-4 py-1.5 rounded-md flex items-center font-roboto text-base font-normal gap-2 cursor-pointer hover:bg-primary/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-primary text-text-primary px-4 py-1.5 rounded-md flex items-center font-roboto text-base font-normal gap-2 cursor-pointer hover:bg-primary/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
         >
           <Download className="w-4 h-4 text-text-primary" />
           Download Report

@@ -374,19 +374,30 @@ const DepartmentDevices = () => {
               regeneration: 0,
               reuse: 0,
               rainfall: 0,
+              neutrality: 0,
             };
+          }
+
+          if (!(daywiseData[groupKey] as any)._neutralityCount) {
+            (daywiseData[groupKey] as any)._neutralityCount = 0;
+            (daywiseData[groupKey] as any)._neutralitySum = 0;
           }
 
           Object.entries(data).forEach(([key, value]) => {
             if (
               key !== "Storage" &&
               key !== "Flow" &&
-              key !== "Neutrality-Index" &&
               typeof value === "number" &&
               !isNaN(value)
             ) {
-              const keyMap: Record<string, keyof (typeof daywiseData)[string]> =
-                {
+              if (key === "Neutrality-Index") {
+                (daywiseData[groupKey] as any)._neutralitySum += value;
+                (daywiseData[groupKey] as any)._neutralityCount += 1;
+              } else {
+                const keyMap: Record<
+                  string,
+                  keyof (typeof daywiseData)[string]
+                > = {
                   Flow_in: "flow_in",
                   Flow_out: "flow_out",
                   Percolation: "percolation",
@@ -398,9 +409,10 @@ const DepartmentDevices = () => {
                   Rainfall: "rainfall",
                 };
 
-              const mappedKey = keyMap[key];
-              if (mappedKey) {
-                daywiseData[groupKey][mappedKey] += value;
+                const mappedKey = keyMap[key];
+                if (mappedKey) {
+                  daywiseData[groupKey][mappedKey] += value;
+                }
               }
             }
           });
@@ -412,6 +424,15 @@ const DepartmentDevices = () => {
           error
         );
       }
+    });
+
+    Object.keys(daywiseData).forEach((groupKey) => {
+      const dayData = daywiseData[groupKey] as any;
+      if (dayData._neutralityCount && dayData._neutralityCount > 0) {
+        dayData.neutrality = dayData._neutralitySum / dayData._neutralityCount;
+      }
+      delete dayData._neutralityCount;
+      delete dayData._neutralitySum;
     });
 
     const hasData =

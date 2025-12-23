@@ -214,29 +214,32 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
       const option = {
         tooltip: {
           trigger: "axis",
+          triggerOn: "mousemove",
           axisPointer: { type: "cross" },
           backgroundColor: "rgba(0,0,0,0.85)",
           borderColor: "transparent",
           borderRadius: 6,
           padding: [8, 12],
           textStyle: { color: "#fff", fontSize: 12 },
-          formatter: function (params: TooltipFormatterParam[]) {
-            if (!params || !params.length) return "";
-            const date = params[0].axisValueLabel || params[0].axisValue;
-            const availableLines = params
+          formatter: function (params: TooltipFormatterParam[] | TooltipFormatterParam) {
+            const paramsArray = Array.isArray(params) ? params : [params];
+            if (!paramsArray || paramsArray.length === 0) return "";
+            
+            const date = paramsArray[0].axisValueLabel || paramsArray[0].axisValue || "";
+            const availableLines = paramsArray
               .filter((p) => {
                 if (p.seriesName === "Water Neutrality Index") {
-                  return p.data !== null && p.data !== undefined;
+                  return p.data !== null && p.data !== undefined && !isNaN(Number(p.data));
                 }
                 return p.data !== null && p.data !== undefined && p.data !== 0;
               })
               .map((p) => {
                 if (p.seriesName === "Water Neutrality Index") {
-                  return `${p.marker} ${p.seriesName}: ${p.data.toFixed(2)}%`;
+                  return `${p.marker} ${p.seriesName}: ${Number(p.data).toFixed(2)}%`;
                 }
                 return `${p.marker} ${
                   p.seriesName
-                }: ${p.data.toLocaleString()}`;
+                }: ${Number(p.data).toLocaleString()}`;
               });
 
             if (availableLines.length === 0) {
@@ -541,7 +544,12 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
             symbol: "circle",
             symbolSize: 5,
             showSymbol: true,
-            emphasis: { focus: "series" },
+            emphasis: { 
+              focus: "series",
+              lineStyle: {
+                width: 2,
+              },
+            },
             lineStyle: {
               color: getReportTypeColor("Water Neutrality Index"),
               width: 1,
