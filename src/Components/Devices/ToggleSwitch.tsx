@@ -30,7 +30,6 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         disabled={disabled}
         className={`
           relative inline-flex h-8 w-20 items-center rounded-full transition-colors duration-300 ease-in-out
-          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary
           ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
           ${
             isOn
