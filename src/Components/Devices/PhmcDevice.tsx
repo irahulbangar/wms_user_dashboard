@@ -22,6 +22,7 @@ import {
 import MapComponent from "./MapComponent";
 import VoltageGauge from "./VoltageGauge";
 import CurrentGauge from "./CurrentGauge";
+import ToggleSwitch from "./ToggleSwitch";
 // import CombinedGraph from "./CombinedGraph";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { getDeviceById } from "../../../store/deviceSlice";
@@ -78,6 +79,7 @@ const PhmcDevice = () => {
   const [customReportDuration, setCustomReportDuration] = useState<
     "15min" | "1hour" | "1day"
   >("15min");
+  const [pumpStatus, setPumpStatus] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -159,6 +161,20 @@ const PhmcDevice = () => {
       fetchDeviceData();
     }
   }, [device_id, fetchDeviceData]);
+
+  useEffect(() => {
+    if (deviceData?.last_record?.pumpstatus) {
+      const status = deviceData.last_record.pumpstatus.toLowerCase();
+      setPumpStatus(status === "on" || status === "1" || status === "true");
+    }
+  }, [deviceData?.last_record?.pumpstatus]);
+
+  const handlePumpToggle = (value: boolean) => {
+    setPumpStatus(value);
+    // TODO: Add API call to update pump status
+    // Example: dispatch(updatePumpStatus({ deviceId: device_id, status: value }));
+    console.log("Pump status toggled to:", value ? "ON" : "OFF");
+  };
 
   const fetchRunTimeData = () => {
     if (!runTimeDate) {
@@ -431,7 +447,7 @@ const PhmcDevice = () => {
                       <h2 className="text-xl font-normal text-text-primary flex items-center gap-2 font-roboto">
                         {deviceData?.device_name}
                       </h2>
-                      <span className="text-sm text-text-muted font-roboto whitespace-nowrap">
+                      <span className="text-xs text-text-muted font-roboto whitespace-nowrap">
                         Last Updated:{" "}
                         <span className="font-medium text-text-primary">
                           {formatDateForCSV(deviceData?.last_record_time || "")}
@@ -500,6 +516,13 @@ const PhmcDevice = () => {
                           maxValue={100}
                           unit="A"
                           title="B Current"
+                        />
+                      </div>
+                      <div className="mt-4 flex items-center justify-center">
+                        <ToggleSwitch
+                          isOn={pumpStatus}
+                          onToggle={handlePumpToggle}
+                          label="Pump Control"
                         />
                       </div>
                     </div>
