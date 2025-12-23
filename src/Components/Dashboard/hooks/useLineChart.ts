@@ -49,7 +49,6 @@ const getReportTypeColor = (reportType: string): string => {
   return colors[reportType] || "#6B7280";
 };
 
-
 export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
   const lineChartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
@@ -182,7 +181,8 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
 
             // Calculate neutrality percentage, handle division by zero
             if (denominator > 0) {
-              neutralityValue = ((numerator === 0 ? 0.00001 : numerator) / denominator) * 100;
+              neutralityValue =
+                ((numerator === 0 ? 0.00001 : numerator) / denominator) * 100;
             } else if (numerator > 0) {
               // If denominator is 0 but numerator > 0, set to a high value (e.g., 1000%)
               neutralityValue = 1000;
@@ -221,25 +221,34 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
           borderRadius: 6,
           padding: [8, 12],
           textStyle: { color: "#fff", fontSize: 12 },
-          formatter: function (params: TooltipFormatterParam[] | TooltipFormatterParam) {
+          formatter: function (
+            params: TooltipFormatterParam[] | TooltipFormatterParam
+          ) {
             const paramsArray = Array.isArray(params) ? params : [params];
             if (!paramsArray || paramsArray.length === 0) return "";
-            
-            const date = paramsArray[0].axisValueLabel || paramsArray[0].axisValue || "";
+
+            const date =
+              paramsArray[0].axisValueLabel || paramsArray[0].axisValue || "";
             const availableLines = paramsArray
               .filter((p) => {
                 if (p.seriesName === "Water Neutrality Index") {
-                  return p.data !== null && p.data !== undefined && !isNaN(Number(p.data));
+                  return (
+                    p.data !== null &&
+                    p.data !== undefined &&
+                    !isNaN(Number(p.data))
+                  );
                 }
                 return p.data !== null && p.data !== undefined && p.data !== 0;
               })
               .map((p) => {
                 if (p.seriesName === "Water Neutrality Index") {
-                  return `${p.marker} ${p.seriesName}: ${Number(p.data).toFixed(2)}%`;
+                  return `${p.marker} ${p.seriesName}: ${Number(p.data).toFixed(
+                    2
+                  )}%`;
                 }
-                return `${p.marker} ${
-                  p.seriesName
-                }: ${Number(p.data).toLocaleString()}`;
+                return `${p.marker} ${p.seriesName}: ${Number(
+                  p.data
+                ).toLocaleString()}`;
               });
 
             if (availableLines.length === 0) {
@@ -544,12 +553,7 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
             symbol: "circle",
             symbolSize: 5,
             showSymbol: true,
-            emphasis: { 
-              focus: "series",
-              lineStyle: {
-                width: 2,
-              },
-            },
+            emphasis: { focus: "series" },
             lineStyle: {
               color: getReportTypeColor("Water Neutrality Index"),
               width: 1,
