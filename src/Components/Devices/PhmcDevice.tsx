@@ -425,31 +425,48 @@ const PhmcDevice = () => {
           <>
             {activeTab === "panel" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:h-full h-auto">
-                <div className="bg-primary border border-border-primary rounded-lg px-4 py-2 h-full">
-                  <div className="space-y-3 h-full">
+                <div className="bg-primary border border-border-primary rounded-lg px-4 py-2 h-112">
+                  <div className="flex flex-col gap-3 h-fit">
+                    <div className="flex items-center justify-between gap-2">
+                      <h2 className="text-xl font-normal text-text-primary flex items-center gap-2 font-roboto">
+                        {deviceData?.device_name}
+                      </h2>
+                      <span className="text-sm text-text-muted font-roboto whitespace-nowrap">
+                        Last Updated:{" "}
+                        <span className="font-medium text-text-primary">
+                          {formatDateForCSV(deviceData?.last_record_time || "")}
+                        </span>
+                      </span>
+                    </div>
                     <div>
-                      <h2 className="text-xl font-normal text-text-primary mb-2 flex items-center gap-2 font-roboto">
+                      <h2 className="text-base font-normal text-text-primary mb-2 flex items-center gap-2 font-roboto">
                         <Droplets className="w-5 h-5 text-status-info" />
-                        {deviceData?.device_name} Voltage Monitoring
+                        Voltage Monitoring
                       </h2>
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <VoltageGauge
                           phase="R"
-                          value={deviceData?.last_record?.voltage_r / 10}
+                          value={
+                            Number(deviceData?.last_record?.voltage_r) / 10
+                          }
                           maxValue={500}
                           unit="V"
                           title="R Volt"
                         />
                         <VoltageGauge
                           phase="Y"
-                          value={deviceData?.last_record?.voltage_y / 10}
+                          value={
+                            Number(deviceData?.last_record?.voltage_y) / 10
+                          }
                           maxValue={500}
                           unit="V"
                           title="Y Volt"
                         />
                         <VoltageGauge
                           phase="B"
-                          value={deviceData?.last_record?.voltage_b / 10}
+                          value={
+                            Number(deviceData?.last_record?.voltage_b) / 10
+                          }
                           maxValue={500}
                           unit="V"
                           title="B Volt"
@@ -458,9 +475,9 @@ const PhmcDevice = () => {
                     </div>
 
                     <div>
-                      <h2 className="text-xl font-normal text-text-primary mb-2 flex items-center gap-2 font-roboto">
+                      <h2 className="text-base font-normal text-text-primary mb-2 flex items-center gap-2 font-roboto">
                         <Droplets className="w-5 h-5 text-status-success" />
-                        {deviceData?.device_name} Current Monitoring
+                        Current Monitoring
                       </h2>
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <CurrentGauge
@@ -489,7 +506,7 @@ const PhmcDevice = () => {
                   </div>
                 </div>
 
-                <div className="bg-primary border border-border-primary rounded-lg overflow-hidden h-full">
+                <div className="bg-primary border border-border-primary rounded-lg overflow-hidden h-fit">
                   <h2 className="text-text-primary px-4 py-2 flex items-center gap-2 font-roboto text-xl font-normal">
                     <span className="text-status-danger text-xs">
                       <MapPinIcon className="w-5 h-5" />

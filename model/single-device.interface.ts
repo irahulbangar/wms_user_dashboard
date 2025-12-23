@@ -78,14 +78,18 @@ export interface LastRecord {
   Current_y: string;
   Fault_Bit: string;
   Frequency: string;
+  Pressure1: string;
+  Pressure2: string;
   totalizer: string;
-  voltage_b: number;
-  voltage_r: number;
-  voltage_y: number;
+  voltage_b: string;
+  voltage_r: string;
+  voltage_y: string;
   pumpstatus: string;
   String_Type: string;
   Active_Power: string;
   BatteryLevel: string;
+  Temperature1: string;
+  Temperature2: string;
   power_factor: string;
   Apparent_Power: string;
   Reactive_Power: string;
@@ -118,6 +122,9 @@ export interface Params {
   water_temperature: WaterTemperature;
   ambient_temperature: AmbientTemperature;
   water_column_from_ground: WaterColumnFromGround;
+  overWrite: number;
+  refValue: number;
+  refPercent: number;
 }
 
 export interface Param1 {

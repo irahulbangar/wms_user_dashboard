@@ -79,7 +79,7 @@ const CurrentGauge: React.FC<CurrentGaugeProps> = ({
             },
             detail: {
               show: true,
-              offsetCenter: ["0%", "0%"],
+              offsetCenter: ["0%", "-8%"],
               formatter: "{value}",
               fontSize: 14,
               display: "block",
@@ -98,7 +98,7 @@ const CurrentGauge: React.FC<CurrentGaugeProps> = ({
           {
             type: "text",
             left: "center",
-            top: "55%",
+            top: "62%",
             style: {
               text: unit,
               fontSize: 14,

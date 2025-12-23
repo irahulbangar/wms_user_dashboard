@@ -79,7 +79,7 @@ const VoltageGauge: React.FC<VoltageGaugeProps> = ({
             },
             detail: {
               show: true,
-              offsetCenter: ["0%", "0%"],
+              offsetCenter: ["0%", "-8%"],
               formatter: "{value}",
               fontSize: 14,
               fontWeight: "semibold",
@@ -99,7 +99,7 @@ const VoltageGauge: React.FC<VoltageGaugeProps> = ({
           {
             type: "text",
             left: "center",
-            top: "55%",
+            top: "62%",
             style: {
               text: unit,
               fontSize: 14,
