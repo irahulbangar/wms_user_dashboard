@@ -27,7 +27,11 @@ import ToggleSwitch from "./ToggleSwitch";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { getDeviceById } from "../../../store/deviceSlice";
 import { Error } from "../../utils/toast";
-import { downloadCSV, formatDateForCSV } from "../../utils/utils";
+import {
+  downloadCSV,
+  formatDateForCSV,
+  convertDeviceDateTime,
+} from "../../utils/utils";
 import NoDataFound from "../NoDataFound";
 import type { SingleDeviceResult } from "../../../model/single-device.interface";
 import Pagination from "../Pagination";
@@ -89,8 +93,9 @@ const PhmcDevice = () => {
   const userRole = user?.plantsList.find(
     (plant) => plant.plant_id === Number(getCurrentPlantId())
   )?.role;
-  const { sendMessage, isConnected } = useWebSocketConnection();
+  const { sendMessage, isConnected, latestMessage } = useWebSocketConnection();
   const hwidAuthSentRef = useRef(false);
+  console.log("latestMessage", latestMessage);
 
   const totalItems = useMemo(() => {
     if (selectedReport === "runTime") {
@@ -189,6 +194,17 @@ const PhmcDevice = () => {
   useEffect(() => {
     hwidAuthSentRef.current = false;
   }, [device_id]);
+
+  // useEffect(() => {
+  //   if (latestMessage && latestMessage?.message?.data) {
+  //   }
+  // }, [latestMessage]);
+
+  const currentMonitoringData = useMemo(() => {
+    if (latestMessage && latestMessage?.message?.data) {
+      return latestMessage?.message?.data;
+    }
+  }, [latestMessage]);
 
   const handlePumpToggle = (value: boolean) => {
     setPumpStatus(value);
@@ -471,7 +487,16 @@ const PhmcDevice = () => {
                       <span className="text-xs text-text-muted font-roboto whitespace-nowrap">
                         Last Updated:{" "}
                         <span className="font-medium text-text-primary">
-                          {formatDateForCSV(deviceData?.last_record_time || "")}
+                          {latestMessage &&
+                          latestMessage?.message?.data?.Time &&
+                          latestMessage?.message?.data?.date
+                            ? convertDeviceDateTime(
+                                latestMessage.message.data.date,
+                                latestMessage.message.data.Time
+                              )
+                            : formatDateForCSV(
+                                deviceData?.last_record_time || ""
+                              )}
                         </span>
                       </span>
                     </div>
@@ -484,7 +509,7 @@ const PhmcDevice = () => {
                         <VoltageGauge
                           phase="R"
                           value={
-                            Number(deviceData?.last_record?.voltage_r) / 10
+                            Number(currentMonitoringData?.voltage_r || 0) / 10
                           }
                           maxValue={500}
                           unit="V"
@@ -493,7 +518,7 @@ const PhmcDevice = () => {
                         <VoltageGauge
                           phase="Y"
                           value={
-                            Number(deviceData?.last_record?.voltage_y) / 10
+                            Number(currentMonitoringData?.voltage_y || 0) / 10
                           }
                           maxValue={500}
                           unit="V"
@@ -502,7 +527,7 @@ const PhmcDevice = () => {
                         <VoltageGauge
                           phase="B"
                           value={
-                            Number(deviceData?.last_record?.voltage_b) / 10
+                            Number(currentMonitoringData?.voltage_b || 0) / 10
                           }
                           maxValue={500}
                           unit="V"
@@ -520,7 +545,7 @@ const PhmcDevice = () => {
                         <CurrentGauge
                           phase="R"
                           value={(
-                            Number(deviceData?.last_record?.Current_r) / 10
+                            Number(currentMonitoringData?.Current_r || 0) / 10
                           ).toString()}
                           maxValue={100}
                           unit="A"
@@ -529,7 +554,7 @@ const PhmcDevice = () => {
                         <CurrentGauge
                           phase="Y"
                           value={(
-                            Number(deviceData?.last_record?.Current_y) / 10
+                            Number(currentMonitoringData?.Current_y || 0) / 10
                           ).toString()}
                           maxValue={100}
                           unit="A"
@@ -538,20 +563,22 @@ const PhmcDevice = () => {
                         <CurrentGauge
                           phase="B"
                           value={(
-                            Number(deviceData?.last_record?.Current_b) / 10
+                            Number(currentMonitoringData?.Current_b || 0) / 10
                           ).toString()}
                           maxValue={100}
                           unit="A"
                           title="B Current"
                         />
                       </div>
-                      <div className="mt-4 flex items-center justify-center">
-                        <ToggleSwitch
-                          isOn={pumpStatus}
-                          onToggle={handlePumpToggle}
-                          label="Pump Control"
-                        />
-                      </div>
+                      {latestMessage && latestMessage?.message?.data && (
+                        <div className="mt-4 flex items-center justify-center">
+                          <ToggleSwitch
+                            isOn={pumpStatus}
+                            onToggle={handlePumpToggle}
+                            label="Pump Control"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -45,6 +45,56 @@ export const formatDateForCSV = (dateString: string): string => {
   }
 };
 
+/**
+ * Converts device date and time format to formatted string
+ * @param dateString - Date in DDMMYY format (e.g., "231225" for 23/12/2025)
+ * @param timeString - Time in HHMMSS format (e.g., "181550" for 18:15:50)
+ * @returns Formatted date string in DD/MM/YYYY HH:mm format (e.g., "23/12/2025 18:15")
+ */
+export const convertDeviceDateTime = (
+  dateString: string,
+  timeString: string
+): string => {
+  try {
+    if (!dateString || !timeString) {
+      return "";
+    }
+
+    // Parse date: DDMMYY format (e.g., "231225" -> day=23, month=12, year=2025)
+    const day = dateString.substring(0, 2);
+    const month = dateString.substring(2, 4);
+    const year = `20${dateString.substring(4, 6)}`;
+
+    // Parse time: HHMMSS format (e.g., "181550" -> hours=18, minutes=15)
+    const hours = timeString.substring(0, 2);
+    const minutes = timeString.substring(2, 4);
+
+    // Validate the date components
+    const dayNum = parseInt(day, 10);
+    const monthNum = parseInt(month, 10);
+    const yearNum = parseInt(year, 10);
+
+    if (
+      isNaN(dayNum) ||
+      isNaN(monthNum) ||
+      isNaN(yearNum) ||
+      dayNum < 1 ||
+      dayNum > 31 ||
+      monthNum < 1 ||
+      monthNum > 12
+    ) {
+      console.error("Invalid date/time format:", dateString, timeString);
+      return "";
+    }
+
+    // Return formatted string: DD/MM/YYYY HH:mm
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  } catch (error) {
+    console.error("Error converting device date/time:", error);
+    return "";
+  }
+};
+
 export const handleStatus = (status: string) => {
   if (status === "Active" || status === "active") {
     return "bg-green-100 text-status-success";

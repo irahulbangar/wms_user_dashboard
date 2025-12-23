@@ -10,6 +10,7 @@ interface WebSocketMessage {
 export const useWebSocketConnection = () => {
   const { isAuthenticated, token } = useAppSelector((state) => state.user);
   const [messageHistory, setMessageHistory] = useState<WebSocketMessage[]>([]);
+  const [latestMessage, setLatestMessage] = useState<any>(null);
   const authSentRef = useRef(false);
 
   const socketUrl =
@@ -36,7 +37,7 @@ export const useWebSocketConnection = () => {
     if (ws && readyState === ReadyState.OPEN) {
       const handleMessage = (event: Event) => {
         const messageEvent = event as MessageEvent;
-        console.log("WebSocket message received:", messageEvent.data);
+        console.log("WebSocket message received:", JSON.parse(messageEvent.data));
 
         if (!authSentRef.current) {
           const jwtToken = token || localStorage.getItem("accessToken");
@@ -67,8 +68,15 @@ export const useWebSocketConnection = () => {
 
   useEffect(() => {
     if (lastMessage !== null) {
-      console.log("WebSocket message (via hook):", lastMessage.data);
-      setMessageHistory((prev) => [...prev, lastMessage]);
+      try {
+        const parsedMessage = JSON.parse(lastMessage.data);
+        console.log("WebSocket message (via hook):", parsedMessage);
+        setLatestMessage(parsedMessage);
+        setMessageHistory((prev) => [...prev, parsedMessage]);
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+        setLatestMessage(null);
+      }
     }
   }, [lastMessage]);
 
@@ -89,6 +97,7 @@ export const useWebSocketConnection = () => {
   return {
     sendMessage: handleSendMessage,
     messageHistory,
+    latestMessage,
     connectionStatus,
     readyState,
     isConnected: readyState === ReadyState.OPEN,
