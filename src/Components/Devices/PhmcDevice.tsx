@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   useParams,
   useNavigate,
@@ -37,6 +37,7 @@ import {
   getPhmcCustomReport,
 } from "../../../store/phmcDeviceSlice";
 import { getCurrentPlantId } from "../../utils/plantUtils";
+import { useWebSocketConnection } from "../../hooks/useWebSocketConnection";
 
 const PhmcDevice = () => {
   const { device_id } = useParams<{ device_id: string }>();
@@ -88,6 +89,8 @@ const PhmcDevice = () => {
   const userRole = user?.plantsList.find(
     (plant) => plant.plant_id === Number(getCurrentPlantId())
   )?.role;
+  const { sendMessage, isConnected } = useWebSocketConnection();
+  const hwidAuthSentRef = useRef(false);
 
   const totalItems = useMemo(() => {
     if (selectedReport === "runTime") {
@@ -168,6 +171,24 @@ const PhmcDevice = () => {
       setPumpStatus(status === "on" || status === "1" || status === "true");
     }
   }, [deviceData?.last_record?.pumpstatus]);
+
+  useEffect(() => {
+    if (isConnected && deviceData?.hwid && !hwidAuthSentRef.current) {
+      const authMessage = JSON.stringify({
+        type: "subscribe",
+        data: {
+          hwid: deviceData.hwid,
+        },
+      });
+      sendMessage(authMessage);
+      hwidAuthSentRef.current = true;
+      console.log("WebSocket auth message sent with hwid:", authMessage);
+    }
+  }, [isConnected, deviceData?.hwid, sendMessage]);
+
+  useEffect(() => {
+    hwidAuthSentRef.current = false;
+  }, [device_id]);
 
   const handlePumpToggle = (value: boolean) => {
     setPumpStatus(value);
@@ -314,9 +335,9 @@ const PhmcDevice = () => {
       "Voltage (R)": data.last_record?.voltage_r / 10,
       "Voltage (Y)": data.last_record?.voltage_y / 10,
       "Voltage (B)": data.last_record?.voltage_b / 10,
-      "Current (R)": data.last_record?.Current_r,
-      "Current (Y)": data.last_record?.Current_y,
-      "Current (B)": data.last_record?.Current_b,
+      "Current (R)": Number(data.last_record?.Current_r) / 10,
+      "Current (Y)": Number(data.last_record?.Current_y) / 10,
+      "Current (B)": Number(data.last_record?.Current_b) / 10,
     }));
     downloadCSV(
       useArray,
@@ -337,9 +358,9 @@ const PhmcDevice = () => {
       "Voltage (R)": data.last_record?.voltage_r / 10,
       "Voltage (Y)": data.last_record?.voltage_y / 10,
       "Voltage (B)": data.last_record?.voltage_b / 10,
-      "Current (R)": data.last_record?.Current_r,
-      "Current (Y)": data.last_record?.Current_y,
-      "Current (B)": data.last_record?.Current_b,
+      "Current (R)": Number(data.last_record?.Current_r) / 10,
+      "Current (Y)": Number(data.last_record?.Current_y) / 10,
+      "Current (B)": Number(data.last_record?.Current_b) / 10,
     }));
 
     downloadCSV(useArray, `Fm_Run_Time_Report_${runTimeDate || "data"}`);
@@ -498,21 +519,27 @@ const PhmcDevice = () => {
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <CurrentGauge
                           phase="R"
-                          value={deviceData?.last_record?.Current_r}
+                          value={(
+                            Number(deviceData?.last_record?.Current_r) / 10
+                          ).toString()}
                           maxValue={100}
                           unit="A"
                           title="R Current"
                         />
                         <CurrentGauge
                           phase="Y"
-                          value={deviceData?.last_record?.Current_y}
+                          value={(
+                            Number(deviceData?.last_record?.Current_y) / 10
+                          ).toString()}
                           maxValue={100}
                           unit="A"
                           title="Y Current"
                         />
                         <CurrentGauge
                           phase="B"
-                          value={deviceData?.last_record?.Current_b}
+                          value={(
+                            Number(deviceData?.last_record?.Current_b) / 10
+                          ).toString()}
                           maxValue={100}
                           unit="A"
                           title="B Current"
