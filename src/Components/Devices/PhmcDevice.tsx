@@ -83,7 +83,7 @@ const PhmcDevice = () => {
   const [customReportDuration, setCustomReportDuration] = useState<
     "15min" | "1hour" | "1day"
   >("15min");
-  const [pumpStatus, setPumpStatus] = useState<boolean>(false);
+  const [pumpStatus, setPumpStatus] = useState<number | undefined>(undefined);
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -173,7 +173,7 @@ const PhmcDevice = () => {
   useEffect(() => {
     if (deviceData?.last_record?.pumpstatus) {
       const status = deviceData.last_record.pumpstatus.toLowerCase();
-      setPumpStatus(status === "on" || status === "1" || status === "true");
+      setPumpStatus(status === "1" ? 1 : 0);
     }
   }, [deviceData?.last_record?.pumpstatus]);
 
@@ -195,10 +195,16 @@ const PhmcDevice = () => {
     hwidAuthSentRef.current = false;
   }, [device_id]);
 
-  // useEffect(() => {
-  //   if (latestMessage && latestMessage?.message?.data) {
-  //   }
-  // }, [latestMessage]);
+  useEffect(() => {
+    if (
+      latestMessage &&
+      latestMessage?.message?.data?.pumpstatus !== undefined
+    ) {
+      const pumpStatusValue = latestMessage.message.data.pumpstatus;
+      const status = pumpStatusValue.toString();
+      setPumpStatus(status === "1" ? 1 : 0);
+    }
+  }, [latestMessage]);
 
   const currentMonitoringData = useMemo(() => {
     if (latestMessage && latestMessage?.message?.data) {
@@ -207,10 +213,25 @@ const PhmcDevice = () => {
   }, [latestMessage]);
 
   const handlePumpToggle = (value: boolean) => {
-    setPumpStatus(value);
-    // TODO: Add API call to update pump status
-    // Example: dispatch(updatePumpStatus({ deviceId: device_id, status: value }));
-    console.log("Pump status toggled to:", value ? "ON" : "OFF");
+    setPumpStatus(value ? 1 : 0);
+
+    if (isConnected && deviceData?.hwid) {
+      const command = value ? "<SET>,<PUMP:1>" : "<SET>,<PUMP:0>";
+      const cmdMessage = JSON.stringify({
+        type: "cmd",
+        data: {
+          hwid: deviceData.hwid,
+          device: "phmc",
+          model: "pcs",
+          command: command,
+        },
+      });
+
+      sendMessage(cmdMessage);
+      console.log("Pump control command sent:", cmdMessage);
+    } else {
+      console.warn("WebSocket not connected or hwid not available");
+    }
   };
 
   const fetchRunTimeData = () => {
@@ -573,7 +594,7 @@ const PhmcDevice = () => {
                       {latestMessage && latestMessage?.message?.data && (
                         <div className="mt-4 flex items-center justify-center">
                           <ToggleSwitch
-                            isOn={pumpStatus}
+                            isOn={pumpStatus === 1}
                             onToggle={handlePumpToggle}
                             label="Pump Control"
                           />
