@@ -84,6 +84,7 @@ const PhmcDevice = () => {
     "15min" | "1hour" | "1day"
   >("15min");
   const [pumpToggleState, setPumpToggleState] = useState<boolean | null>(null);
+  const [pumpToggleLoading, setPumpToggleLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -96,6 +97,7 @@ const PhmcDevice = () => {
   const hwidAuthSentRef = useRef(false);
   const pumpStateInitializedRef = useRef(false);
   const userToggledRef = useRef(false);
+  const lastProcessedMessageRef = useRef<any>(null);
 
   const totalItems = useMemo(() => {
     if (selectedReport === "runTime") {
@@ -201,14 +203,17 @@ const PhmcDevice = () => {
     hwidAuthSentRef.current = false;
     pumpStateInitializedRef.current = false;
     userToggledRef.current = false;
+    lastProcessedMessageRef.current = null;
     setPumpToggleState(null);
+    setPumpToggleLoading(false);
   }, [device_id]);
 
   const currentMonitoringData = useMemo(() => {
     if (latestMessage && latestMessage?.message?.data) {
       return latestMessage?.message?.data;
     }
-  }, [latestMessage]);
+    return deviceData?.last_record;
+  }, [latestMessage, deviceData?.last_record]);
 
   const computedPumpOn = useMemo(() => {
     if (!latestMessage?.message?.data) return false;
@@ -234,16 +239,32 @@ const PhmcDevice = () => {
     ) {
       if (computedPumpOn === pumpToggleState) {
         setPumpToggleState(null);
+        setPumpToggleLoading(false);
         userToggledRef.current = false;
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [latestMessage, computedPumpOn]);
 
+  useEffect(() => {
+    if (latestMessage?.message?.data) {
+      const messageKey = JSON.stringify(latestMessage.message.data);
+      const lastKey = lastProcessedMessageRef.current
+        ? JSON.stringify(lastProcessedMessageRef.current)
+        : null;
+
+      if (messageKey !== lastKey) {
+        lastProcessedMessageRef.current = latestMessage.message.data;
+        setPumpToggleLoading(false);
+      }
+    }
+  }, [latestMessage]);
+
   const isPumpOn = pumpToggleState !== null ? pumpToggleState : computedPumpOn;
 
   const handlePumpToggle = (value: boolean) => {
     setPumpToggleState(value);
+    setPumpToggleLoading(true);
     userToggledRef.current = true;
 
     if (isConnected && deviceData?.hwid) {
@@ -263,6 +284,7 @@ const PhmcDevice = () => {
     } else {
       console.warn("WebSocket not connected or hwid not available");
       setPumpToggleState(null);
+      setPumpToggleLoading(false);
       userToggledRef.current = false;
     }
   };
@@ -624,16 +646,26 @@ const PhmcDevice = () => {
                           title="B Current"
                         />
                       </div>
-                      {latestMessage && latestMessage?.message?.data && (
-                        <div className="mt-4 flex items-center justify-center">
-                          <ToggleSwitch
-                            isOn={isPumpOn}
-                            onToggle={handlePumpToggle}
-                            label="Pump Control"
-                          />
-                        </div>
-                      )}
                     </div>
+
+                    {latestMessage && latestMessage?.message?.data ? (
+                      <div className="flex items-center justify-center">
+                        <ToggleSwitch
+                          isOn={isPumpOn}
+                          onToggle={handlePumpToggle}
+                          label="Pump Control"
+                          isLoading={pumpToggleLoading}
+                          disabled={pumpToggleLoading}
+                        />
+                      </div>
+                    ) : (
+                      <div className="mt-1 flex items-center justify-center">
+                        <span className="text-text-primary font-normal font-roboto">
+                          Connecting to device...
+                        </span>
+                        <Loader2 className="w-4 h-4 text-text-primary animate-spin" />
+                      </div>
+                    )}
                   </div>
                 </div>
 
