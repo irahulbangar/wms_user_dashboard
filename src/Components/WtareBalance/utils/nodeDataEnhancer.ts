@@ -132,7 +132,7 @@ export const enhanceNodeData = ({
   } else if (node.type === "bdwfms") {
     const matchingDevice = devices.find(
       (device: any) =>
-        device.device_family_type === "bdwfms" &&
+        device.device_family_type === "BDWFMS" &&
         device.device_name === node.data.label
     );
 

@@ -187,7 +187,7 @@ export const calculateSystemTotals = (
       flowValue = Number(device.last_record?.max) || 0;
     } else if (device.device_family_type === "brwhms") {
       flowValue = Number(device.last_record?.total) || 0;
-    } else if (device.device_family_type === "bdwfms") {
+    } else if (device.device_family_type === "BDWFMS") {
       flowValue = Number(device.last_record?.total) || 0;
     } else if (
       device.device_family_type === "phmc" &&

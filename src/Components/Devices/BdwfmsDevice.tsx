@@ -423,8 +423,8 @@ const BdwfmsDevice = () => {
                   </h2>
 
                   <WaterGauge
-                    maxValue={deviceData?.last_record?.max}
-                    lpmValue={deviceData?.last_record?.avg}
+                    maxValue={Number(deviceData?.last_record?.total) || 0}
+                    lpmValue={Number(deviceData?.last_record?.avg) || 0}
                     maxLpmLimit={deviceData?.params?.maxThreshold}
                     unit={deviceData?.unit}
                   />

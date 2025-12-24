@@ -62,6 +62,7 @@ export interface LastRecord {
   max: number;
   min: number;
   flow: number;
+  total: number;
   time: string;
   last_level: number;
   first_level: number;
