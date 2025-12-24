@@ -28,11 +28,11 @@ import { downloadCSV, flowUnit, formatDateForCSV } from "../../utils/utils";
 import NoDataFound from "../NoDataFound";
 import type { SingleDeviceResult } from "../../../model/single-device.interface";
 import Pagination from "../Pagination";
-import type { BrwhmsDeviceResultItem } from "../../../model/brwhms-device.interface";
+import type { BdwfmsDeviceResultItem } from "../../../model/bdwfms-device.interface";
 import {
-  getDeviceBrwhmsLogs,
-  getBrwhmsCustomReport,
-} from "../../../store/brwhmsDeviceSlice";
+  getDeviceBdwfmsLogs,
+  getBdwfmsCustomReport,
+} from "../../../store/bdwfmsDeviceSlice";
 import { getCurrentPlantId } from "../../utils/plantUtils";
 
 const BdwfmsDevice = () => {
@@ -67,7 +67,7 @@ const BdwfmsDevice = () => {
   const [runTimeDate, setRunTimeDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );
-  const [runTimeData, setRunTimeData] = useState<BrwhmsDeviceResultItem[]>([]);
+  const [runTimeData, setRunTimeData] = useState<BdwfmsDeviceResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPanelLoading, setIsPanelLoading] = useState(false);
   const [customReportFromDate, setCustomReportFromDate] =
@@ -75,7 +75,7 @@ const BdwfmsDevice = () => {
   const [customReportToDate, setCustomReportToDate] =
     useState<string>(defaultCustomTo);
   const [customReportData, setCustomReportData] = useState<
-    BrwhmsDeviceResultItem[]
+    BdwfmsDeviceResultItem[]
   >([]);
   const [customReportDuration, setCustomReportDuration] = useState<
     "15min" | "1hour" | "1day"
@@ -94,7 +94,7 @@ const BdwfmsDevice = () => {
   }, [runTimeData, selectedReport, customReportData]);
 
   const selectedRows = useMemo(() => {
-    let currentData: BrwhmsDeviceResultItem[] = [];
+    let currentData: BdwfmsDeviceResultItem[] = [];
     if (selectedReport === "runTime") {
       currentData = runTimeData;
     } else if (selectedReport === "customReport") {
@@ -116,7 +116,7 @@ const BdwfmsDevice = () => {
     setCurrentPage(1);
   }, [rowsPerPage]);
 
-  const handlePaginatedData = (data: BrwhmsDeviceResultItem[]) => {
+  const handlePaginatedData = (data: BdwfmsDeviceResultItem[]) => {
     return data.slice(
       (currentPage - 1) * rowsPerPage,
       currentPage * rowsPerPage
@@ -167,7 +167,7 @@ const BdwfmsDevice = () => {
 
     setIsLoading(true);
     dispatch(
-      getDeviceBrwhmsLogs({
+      getDeviceBdwfmsLogs({
         plantId: Number(deviceData?.plant_id) || 0,
         deviceId: Number(device_id) || 0,
         date: runTimeDate,
@@ -201,7 +201,7 @@ const BdwfmsDevice = () => {
     const toDateWithTime = `${customReportToDate} 23:59:59`;
 
     dispatch(
-      getBrwhmsCustomReport({
+      getBdwfmsCustomReport({
         plantId: Number(deviceData?.plant_id) || 0,
         deviceId: Number(device_id) || 0,
         from_date: fromDateWithTime,
@@ -299,7 +299,7 @@ const BdwfmsDevice = () => {
     }));
     downloadCSV(
       useArray,
-      `Brwhms_Custom_Report_${customReportFromDate}_to_${customReportToDate}`
+      `Bdwfms_Custom_Report_${customReportFromDate}_to_${customReportToDate}`
     );
   };
 
@@ -317,7 +317,7 @@ const BdwfmsDevice = () => {
       "Totalizer (Ltr)": data.total,
     }));
 
-    downloadCSV(useArray, `Brwhms_Run_Time_Report_${runTimeDate || "data"}`);
+    downloadCSV(useArray, `Bdwfms_Run_Time_Report_${runTimeDate || "data"}`);
   };
 
   return (
