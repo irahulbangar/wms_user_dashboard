@@ -143,7 +143,7 @@ const CurrentGauge: React.FC<CurrentGaugeProps> = ({
     <div className="bg-primary border border-border-primary rounded-lg py-2 h-full flex flex-col">
       <div className="text-center">
         <h3
-          className="text-base font-normal font-roboto"
+          className="text-sm font-normal font-roboto"
           style={{ color: phaseColor }}
         >
           {title}
