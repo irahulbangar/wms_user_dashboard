@@ -83,7 +83,7 @@ const PhmcDevice = () => {
   const [customReportDuration, setCustomReportDuration] = useState<
     "15min" | "1hour" | "1day"
   >("15min");
-  const [pumpStatus, setPumpStatus] = useState<number | undefined>(undefined);
+  const [pumpToggleState, setPumpToggleState] = useState<boolean | null>(null);
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -94,6 +94,8 @@ const PhmcDevice = () => {
   )?.role;
   const { sendMessage, isConnected, latestMessage } = useWebSocketConnection();
   const hwidAuthSentRef = useRef(false);
+  const pumpStateInitializedRef = useRef(false);
+  const userToggledRef = useRef(false);
 
   const totalItems = useMemo(() => {
     if (selectedReport === "runTime") {
@@ -171,13 +173,6 @@ const PhmcDevice = () => {
   }, [device_id, fetchDeviceData]);
 
   useEffect(() => {
-    if (deviceData?.last_record?.pumpstatus) {
-      const status = deviceData.last_record.pumpstatus.toLowerCase();
-      setPumpStatus(status === "1" ? 1 : 0);
-    }
-  }, [deviceData?.last_record?.pumpstatus]);
-
-  useEffect(() => {
     if (isConnected && deviceData?.hwid && !hwidAuthSentRef.current) {
       const authMessage = JSON.stringify({
         type: "subscribe",
@@ -193,18 +188,10 @@ const PhmcDevice = () => {
 
   useEffect(() => {
     hwidAuthSentRef.current = false;
+    pumpStateInitializedRef.current = false;
+    userToggledRef.current = false;
+    setPumpToggleState(null);
   }, [device_id]);
-
-  useEffect(() => {
-    if (
-      latestMessage &&
-      latestMessage?.message?.data?.pumpstatus !== undefined
-    ) {
-      const pumpStatusValue = latestMessage.message.data.pumpstatus;
-      const status = pumpStatusValue.toString();
-      setPumpStatus(status === "1" ? 1 : 0);
-    }
-  }, [latestMessage]);
 
   const currentMonitoringData = useMemo(() => {
     if (latestMessage && latestMessage?.message?.data) {
@@ -212,8 +199,41 @@ const PhmcDevice = () => {
     }
   }, [latestMessage]);
 
+  const computedPumpOn = useMemo(() => {
+    if (!latestMessage?.message?.data) return false;
+    const data = latestMessage.message.data;
+    const currentR = Number(data.Current_r || 0);
+    const currentY = Number(data.Current_y || 0);
+    const currentB = Number(data.Current_b || 0);
+    return currentR > 1 || currentY > 1 || currentB > 1;
+  }, [latestMessage]);
+
+  useEffect(() => {
+    if (latestMessage?.message?.data && !pumpStateInitializedRef.current) {
+      setPumpToggleState(computedPumpOn);
+      pumpStateInitializedRef.current = true;
+    }
+  }, [latestMessage, computedPumpOn]);
+
+  useEffect(() => {
+    if (
+      latestMessage?.message?.data &&
+      userToggledRef.current &&
+      pumpToggleState !== null
+    ) {
+      if (computedPumpOn === pumpToggleState) {
+        setPumpToggleState(null);
+        userToggledRef.current = false;
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latestMessage, computedPumpOn]);
+
+  const isPumpOn = pumpToggleState !== null ? pumpToggleState : computedPumpOn;
+
   const handlePumpToggle = (value: boolean) => {
-    setPumpStatus(value ? 1 : 0);
+    setPumpToggleState(value);
+    userToggledRef.current = true;
 
     if (isConnected && deviceData?.hwid) {
       const command = value ? "<SET>,<PUMP:1>" : "<SET>,<PUMP:0>";
@@ -231,6 +251,8 @@ const PhmcDevice = () => {
       console.log("Pump control command sent:", cmdMessage);
     } else {
       console.warn("WebSocket not connected or hwid not available");
+      setPumpToggleState(null);
+      userToggledRef.current = false;
     }
   };
 
@@ -594,7 +616,7 @@ const PhmcDevice = () => {
                       {latestMessage && latestMessage?.message?.data && (
                         <div className="mt-4 flex items-center justify-center">
                           <ToggleSwitch
-                            isOn={pumpStatus === 1}
+                            isOn={isPumpOn}
                             onToggle={handlePumpToggle}
                             label="Pump Control"
                           />
