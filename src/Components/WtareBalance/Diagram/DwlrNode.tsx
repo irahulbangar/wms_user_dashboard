@@ -58,11 +58,11 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
     departmentConnection ? `Dept Conn. : ${departmentConnection}` : null,
     systemConnection ? `System Conn. : ${systemConnection}` : null,
     `Report Type: ${reportType}`,
-    `Water Column: ${waterColumn} ${unit}`,
-    `Water Temp: ${waterTemperature}°C`,
-    `Water Pressure: ${waterPressure} ${unit}`,
-    `Ambient Temp: ${ambientTemperature}°C`,
-    `Battery: ${batteryVoltage}V`,
+    `Water Column: ${waterColumn?.toFixed(2)} ${unit}`,
+    `Water Temp: ${waterTemperature?.toFixed(1)}°C`,
+    `Water Pressure: ${waterPressure?.toFixed(2)} ${unit}`,
+    `Ambient Temp: ${ambientTemperature?.toFixed(1)}°C`,
+    `Battery: ${batteryVoltage?.toFixed(1)}V`,
   ]
     .filter((line) => line !== null && line !== "")
     .join("\n");
