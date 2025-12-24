@@ -172,8 +172,11 @@ const PhmcDevice = () => {
     }
   }, [device_id, fetchDeviceData]);
 
+  // Send subscribe message immediately and then every 60 seconds
   useEffect(() => {
-    if (isConnected && deviceData?.hwid && !hwidAuthSentRef.current) {
+    if (!isConnected || !deviceData?.hwid) return;
+
+    const sendSubscribeMessage = () => {
       const authMessage = JSON.stringify({
         type: "subscribe",
         data: {
@@ -181,9 +184,17 @@ const PhmcDevice = () => {
         },
       });
       sendMessage(authMessage);
-      hwidAuthSentRef.current = true;
-      console.log("WebSocket auth message sent with hwid:", authMessage);
-    }
+      console.log("WebSocket subscribe message sent:", authMessage);
+    };
+
+    sendSubscribeMessage();
+
+    // Set up interval to send every 60 seconds
+    const intervalId = setInterval(sendSubscribeMessage, 60000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [isConnected, deviceData?.hwid, sendMessage]);
 
   useEffect(() => {
