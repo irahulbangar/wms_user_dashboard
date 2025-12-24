@@ -2,6 +2,7 @@ import type { DevicesResult } from "../../model/devices.interface";
 import waterTank from "../assets/images/tank-logo.svg";
 import flowMeter from "../assets/images/fm-logo.svg";
 import brwhms from "../assets/images/brwhms-logo.png";
+import bdwfms from "../assets/images/bdwfms-logo.png";
 import arg from "../assets/images/arg-logo.png";
 import phmc from "../assets/images/phmc-logo.png";
 import virtual from "../assets/images/virtual.png";
@@ -37,6 +38,8 @@ export const getDeviceLogo = (device: DevicesResult): string => {
     return waterTank;
   } else if (device?.device_family_type === "brwhms") {
     return brwhms;
+  } else if (device?.device_family_type === "BDWFMS") {
+    return bdwfms;
   } else if (device?.device_family_type === "arg") {
     return arg;
   } else if (
@@ -57,7 +60,10 @@ export const getDeviceValue = (device: DevicesResult): number => {
   switch (device.device_family_type) {
     case "fm":
     case "brwhms":
-      value = Number(device.last_record?.max) || 0;
+      value = Number(device?.last_record?.total) || 0;
+      break;
+    case "BDWFMS":
+      value = Number(device?.last_record?.total) || 0;
       break;
     case "phmc":
       if (
@@ -86,6 +92,8 @@ export const getTotalizerText = (device: DevicesResult): string => {
     return "Totalizer";
   } else if (device?.device_family_type === "brwhms") {
     return "Totalizer";
+  } else if (device?.device_family_type === "BDWFMS") {
+    return "Totalizer";
   } else if (
     device?.device_family_type === "phmc" &&
     device?.device_type === "New phmc"
@@ -111,7 +119,9 @@ export const getTotalizer = (device: DevicesResult): string => {
   if (device?.device_family_type === "fm") {
     value = Number(device?.last_record?.max) || 0;
   } else if (device?.device_family_type === "brwhms") {
-    value = Number(device?.last_record?.max) || 0;
+    value = Number(device?.last_record?.total) || 0;
+  } else if (device?.device_family_type === "BDWFMS") {
+    value = Number(device?.last_record?.total) || 0;
   } else if (
     device?.device_family_type === "phmc" &&
     device?.device_type === "New phmc"
@@ -141,7 +151,9 @@ export const getTotalizerString = (device: DevicesResult): string => {
   if (device?.device_family_type === "fm") {
     value = Number(device?.last_record?.max) || 0;
   } else if (device?.device_family_type === "brwhms") {
-    value = Number(device?.last_record?.max) || 0;
+    value = Number(device?.last_record?.total) || 0;
+  } else if (device?.device_family_type === "BDWFMS") {
+    value = Number(device?.last_record?.total) || 0;
   } else if (
     device?.device_family_type === "phmc" &&
     device?.device_type === "New phmc"
@@ -171,6 +183,8 @@ export const getFlowText = (device: DevicesResult): string => {
     return "Flow";
   } else if (device?.device_family_type === "brwhms") {
     return "Flow";
+  } else if (device?.device_family_type === "BDWFMS") {
+    return "Flow";
   } else if (device?.device_family_type === "tank") {
     return "Level";
   } else if (
@@ -194,6 +208,8 @@ export const getFlow = (device: DevicesResult): string => {
   } else if (device?.device_family_type === "tank") {
     value = Number(device?.last_record?.last_level) || 0;
   } else if (device?.device_family_type === "brwhms") {
+    value = Number(device?.last_record?.avg) || 0;
+  } else if (device?.device_family_type === "BDWFMS") {
     value = Number(device?.last_record?.avg) || 0;
   } else if (
     device?.device_family_type === "phmc" &&
@@ -244,6 +260,8 @@ export const getDeviceRoute = (
     return `${pathPrefix}/tank-device/${device?.device_id}`;
   } else if (deviceType.includes("brwhms") || deviceType.includes("Brwhms")) {
     return `${pathPrefix}/brwhms-device/${device?.device_id}`;
+  } else if (deviceType.includes("BDWFMS") || deviceType.includes("Bdwfms")) {
+    return `${pathPrefix}/bdwfms-device/${device?.device_id}`;
   } else if (deviceType.includes("arg") || deviceType.includes("Arg")) {
     return `${pathPrefix}/arg-device/${device?.device_id}`;
   } else if (deviceType.includes("phmc") || deviceType.includes("Phmc")) {

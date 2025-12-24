@@ -2,6 +2,7 @@ import type { NodeTypes } from "@xyflow/react";
 import TankNode from "../Diagram/TankNode";
 import FMNode from "../Diagram/FMNode";
 import BRWHMSNode from "../Diagram/BRWHMSNode";
+import BDWFMSNode from "../Diagram/BDWFMSNode";
 import PHMCNode from "../Diagram/PHMCNode";
 import ARGNode from "../Diagram/ARGNode";
 import DwlrNode from "../Diagram/DwlrNode";
@@ -15,6 +16,7 @@ export const nodeTypes: NodeTypes = {
   tank: TankNode,
   fm: FMNode,
   brwhms: BRWHMSNode,
+  bdwfms: BDWFMSNode,
   phmc: PHMCNode,
   arg: ARGNode,
   dwlr: DwlrNode,

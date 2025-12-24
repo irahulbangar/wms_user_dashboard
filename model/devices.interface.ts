@@ -104,6 +104,7 @@ export interface LastRecord {
   min_mm?: number;
   last_mm?: number;
   first_mm?: number;
+  total: number;
 }
 
 export interface Params {

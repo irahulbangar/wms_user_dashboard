@@ -113,7 +113,7 @@ export const enhanceNodeData = ({
       enhancedData = {
         ...enhancedData,
         flowRate: Number(matchingDevice.last_record?.avg) || 0,
-        totalizerReading: Number(matchingDevice.last_record?.max) || 0,
+        totalizerReading: Number(matchingDevice.last_record?.total) || 0,
         isActive: matchingDevice.device_status === "active",
         organizationConnection:
           matchingDevice.organization_connection === "none"
@@ -125,10 +125,35 @@ export const enhanceNodeData = ({
         plantConnection: getPlantConnection(matchingDevice),
         departmentConnection: getDepartmentConnection(matchingDevice),
         systemConnection: getSystemConnection(matchingDevice),
-        lowerLimit: matchingDevice.params?.lowerLimit || "N/A",
-        upperLimit: matchingDevice.params?.upperLimit || "N/A",
-        lastRecordTime: matchingDevice.last_record?.time || "N/A",
-        reportType: matchingDevice.report_type || "N/A",
+        lastRecordTime: matchingDevice.last_record?.time,
+        reportType: matchingDevice.report_type,
+      };
+    }
+  } else if (node.type === "bdwfms") {
+    const matchingDevice = devices.find(
+      (device: any) =>
+        device.device_family_type === "bdwfms" &&
+        device.device_name === node.data.label
+    );
+
+    if (matchingDevice) {
+      enhancedData = {
+        ...enhancedData,
+        flowRate: Number(matchingDevice.last_record?.avg) || 0,
+        totalizerReading: Number(matchingDevice.last_record?.total) || 0,
+        isActive: matchingDevice.device_status === "active",
+        organizationConnection:
+          matchingDevice.organization_connection === "none"
+            ? ""
+            : matchingDevice.organization_connection,
+        systemName: matchingDevice.system_name,
+        unit: matchingDevice.unit,
+        deviceId: matchingDevice.device_id,
+        plantConnection: getPlantConnection(matchingDevice),
+        departmentConnection: getDepartmentConnection(matchingDevice),
+        systemConnection: getSystemConnection(matchingDevice),
+        lastRecordTime: matchingDevice.last_record?.time,
+        reportType: matchingDevice.report_type,
       };
     }
   } else if (node.type === "phmc") {

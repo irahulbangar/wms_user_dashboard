@@ -179,6 +179,11 @@ const Header: React.FC<HeaderProps> = ({
       path.startsWith("/system/device/dwlr-device/")
     )
       return "DWLR Device";
+    if (
+      path.startsWith("/device-details/bdwfms-device/") ||
+      path.startsWith("/system/device/bdwfms-device/")
+    )
+      return "BDWFMS Device";
   };
 
   const handleViewAllNotifications = () => {

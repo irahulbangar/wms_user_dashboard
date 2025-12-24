@@ -314,6 +314,9 @@ const Devices = () => {
     } else if (deviceType.includes("dwlr") || deviceType.includes("Dwlr")) {
       const route = `/device-details/dwlr-device/${device?.device_id}`;
       navigate(route);
+    } else if (deviceType.includes("bdwfms") || deviceType.includes("Bdwfms")) {
+      const route = `/device-details/bdwfms-device/${device?.device_id}`;
+      navigate(route);
     } else {
       const route = `/device-details/fm-device/${device?.device_id}`;
       navigate(route);

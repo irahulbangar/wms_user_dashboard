@@ -28,6 +28,7 @@ export interface Node {
     | "tank"
     | "fm"
     | "brwhms"
+    | "bdwfms"
     | "phmc"
     | "arg"
     | "dwlr"

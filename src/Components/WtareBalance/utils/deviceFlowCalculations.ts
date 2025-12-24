@@ -27,7 +27,9 @@ export const calculateDepartmentTotals = (
     if (device.device_family_type === "fm") {
       flowValue = Number(device.last_record?.max) || 0;
     } else if (device.device_family_type === "brwhms") {
-      flowValue = Number(device.last_record?.max) || 0;
+      flowValue = Number(device.last_record?.total) || 0;
+    } else if (device.device_family_type === "bdwfms") {
+      flowValue = Number(device.last_record?.total) || 0;
     } else if (
       device.device_family_type === "phmc" &&
       device.device_type === "New phmc"
@@ -76,7 +78,9 @@ export const calculatePlantTotals = (
     if (device.device_family_type === "fm") {
       flowValue = Number(device.last_record?.max) || 0;
     } else if (device.device_family_type === "brwhms") {
-      flowValue = Number(device.last_record?.max) || 0;
+      flowValue = Number(device.last_record?.total) || 0;
+    } else if (device.device_family_type === "bdwfms") {
+      flowValue = Number(device.last_record?.total) || 0;
     } else if (
       device.device_family_type === "phmc" &&
       device.device_type === "New phmc"
