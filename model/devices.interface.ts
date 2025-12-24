@@ -67,6 +67,21 @@ export interface DeviceReporting {
 }
 
 export interface LastRecord {
+  water_column?: number;
+  water_column_from_ground?: number;
+  water_temperature?: number;
+  water_pressure?: number;
+  ambient_temperature?: number;
+  ambient_pressure?: number;
+  sensor_voltage?: number;
+  battery_voltage?: number;
+  param_1?: number;
+  param_2?: number;
+  param_3?: number;
+  param_4?: number;
+  param_5?: number;
+  param_6?: number;
+  msg_time?: number;
   avg?: number;
   max?: number;
   min?: number;

@@ -96,6 +96,21 @@ export interface LastRecord {
   Reactive_Power: string;
   SignalStrength: string;
   Motor_Running_Mode: string;
+  water_column?: number;
+  water_column_from_ground?: number;
+  water_temperature?: number;
+  water_pressure?: number;
+  ambient_temperature?: number;
+  ambient_pressure?: number;
+  sensor_voltage?: number;
+  battery_voltage?: number;
+  param_1?: number;
+  param_2?: number;
+  param_3?: number;
+  param_4?: number;
+  param_5?: number;
+  param_6?: number;
+  msg_time?: number;
 }
 
 export interface Params {

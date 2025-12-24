@@ -9,6 +9,7 @@ import {
   getTotalizerString,
 } from "../../utils/deviceHelpers";
 import { useLocation } from "react-router-dom";
+import VoltageCurrentSection from "./VoltageCurrentSection";
 
 interface DeviceCardProps {
   device: DevicesResult;
@@ -80,7 +81,7 @@ const DeviceCard = ({ device, onViewDevice }: DeviceCardProps) => {
               className="pl-1 text-sm font-normal text-text-primary font-roboto uppercase truncate"
               title={device?.device_family || "N/A"}
             >
-              {device?.device_family || "N/A"}
+              {device?.device_family_type || "N/A"}
             </span>
           </div>
 
@@ -96,29 +97,76 @@ const DeviceCard = ({ device, onViewDevice }: DeviceCardProps) => {
             </span>
           </div>
 
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-text-secondary font-roboto">
-              {getFlowText(device)}
-            </span>
-            <span
-              className="text-sm font-normal text-text-primary font-roboto truncate"
-              title={getFlow(device)}
-            >
-              {getFlow(device)}
-            </span>
-          </div>
-          {getTotalizerText(device) && (
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-text-secondary font-roboto">
-                {getTotalizerText(device)}
-              </span>
-              <span
-                className="pl-1 text-sm font-normal text-text-primary font-roboto truncate"
-                title={getTotalizerString(device)}
-              >
-                {getTotalizer(device)}
-              </span>
-            </div>
+          {device?.device_family_type !== "phmc" &&
+            device?.device_family_type !== "dwlr" && (
+              <>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-secondary font-roboto">
+                    {getFlowText(device)}
+                  </span>
+                  <span
+                    className="text-sm font-normal text-text-primary font-roboto truncate"
+                    title={getFlow(device)}
+                  >
+                    {getFlow(device)}
+                  </span>
+                </div>
+                {getTotalizerText(device) && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-text-secondary font-roboto">
+                      {getTotalizerText(device)}
+                    </span>
+                    <span
+                      className="pl-1 text-sm font-normal text-text-primary font-roboto truncate"
+                      title={getTotalizerString(device)}
+                    >
+                      {getTotalizer(device)}
+                    </span>
+                  </div>
+                )}
+              </>
+            )}
+
+          {device?.device_family_type === "phmc" && (
+            <VoltageCurrentSection device={device} />
+          )}
+
+          {device?.device_family_type === "dwlr" && (
+            <>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-text-secondary font-roboto">
+                  Water Column :
+                </span>
+                <span className="text-sm font-normal text-text-primary font-roboto truncate">
+                  {device?.last_record?.water_column?.toFixed(2)} mWc
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-text-secondary font-roboto">
+                  Water Ground :
+                </span>
+                <span className="text-sm font-normal text-text-primary font-roboto truncate">
+                  {device?.last_record?.water_column_from_ground?.toFixed(2)}{" "}
+                  mRL
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-text-secondary font-roboto">
+                  Water Temperature :
+                </span>
+                <span className="text-sm font-normal text-text-primary font-roboto truncate">
+                  {device?.last_record?.water_temperature?.toFixed(1)} °C
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-text-secondary font-roboto">
+                  Water Pressure :
+                </span>
+                <span className="text-sm font-normal text-text-primary font-roboto truncate">
+                  {device?.last_record?.water_pressure?.toFixed(2)} Bar
+                </span>
+              </div>
+            </>
           )}
         </div>
       </div>
