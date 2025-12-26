@@ -230,6 +230,20 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+// get subdomain
+export const getSubdomain = createAsyncThunk(
+  "organization/getSubdomain",
+  async (_, thunkAPI) => {
+    try {
+      const response = await api().get("/organization/welcome");
+      return response.data;
+    } catch (error: unknown) {
+      const apiError = handleApiError(error);
+      return thunkAPI.rejectWithValue(apiError);
+    }
+  }
+);
+
 export const { setUser, setToken, logout, setLoading, checkAuthStatus } =
   usersSlice.actions;
 

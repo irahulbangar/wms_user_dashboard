@@ -138,16 +138,17 @@ const Header: React.FC<HeaderProps> = ({
 
   const getPageTitle = () => {
     const path = location.pathname;
+    const organization = localStorage.getItem("organization");
 
     if (path === "/devices") return "Devices";
     if (path === "/settings") return "Settings";
     if (path === "/users") return "Users";
     if (path === "/plant-layout") return "Plant Layout";
     if (path === "/notifications") return "Notifications";
-    if (path.startsWith("/organization/")) return organizationName;
-    if (path.startsWith("/plant/")) return organizationName || "";
-    if (path.startsWith("/department/device/")) return organizationName || "";
-    if (path.startsWith("/system/device/")) return organizationName || "";
+    if (path.startsWith("/organization/")) return organization || "";
+    if (path.startsWith("/plant/")) return organization || "";
+    if (path.startsWith("/department/device/")) return organization || "";
+    if (path.startsWith("/system/device/")) return organization || "";
 
     if (
       path.startsWith("/device-details/fm-device/") ||

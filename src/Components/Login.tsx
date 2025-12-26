@@ -10,6 +10,7 @@ import {
   setToken,
   setLoading,
   logout,
+  getSubdomain,
 } from "../../store/usersSlice";
 import Loader from "./Loader";
 import BackgroundImage from "../assets/images/background.jpg";
@@ -57,6 +58,50 @@ const Login: React.FC = () => {
     (state) => state.user
   );
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      return;
+    }
+
+    dispatch(getSubdomain())
+      .unwrap()
+      .then((res) => {
+        if (res.success || res.status === 200) {
+          const data = res.data || res;
+          const logo = data.logo || data.logo_url || data.logoUrl;
+          const organization =
+            data.organization_name ||
+            data.organizationName ||
+            data.organization;
+
+          if (logo) {
+            localStorage.setItem("logo", logo);
+          } else {
+            console.warn(
+              "Logo is missing in API response. Available keys:",
+              Object.keys(data)
+            );
+          }
+
+          if (organization) {
+            localStorage.setItem("organization", organization);
+          } else {
+            console.warn(
+              "Organization name is missing in API response. Available keys:",
+              Object.keys(data)
+            );
+          }
+        } else {
+          Error(res.message || "Error getting subdomain.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error getting subdomain:", err);
+        Error("Failed to load organization information.");
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleTokenLogin = useCallback(
     async (token: string) => {
       try {
@@ -72,7 +117,17 @@ const Login: React.FC = () => {
           return;
         }
 
+        const logo = localStorage.getItem("logo");
+        const organization = localStorage.getItem("organization");
+
         localStorage.clear();
+
+        if (logo) {
+          localStorage.setItem("logo", logo);
+        }
+        if (organization) {
+          localStorage.setItem("organization", organization);
+        }
 
         let decodedToken: TokenPayload;
         try {
@@ -159,8 +214,18 @@ const Login: React.FC = () => {
     const token = searchParams.get("token");
 
     if (token) {
+      const logo = localStorage.getItem("logo");
+      const organization = localStorage.getItem("organization");
+
       localStorage.clear();
       dispatch(logout());
+
+      if (logo) {
+        localStorage.setItem("logo", logo);
+      }
+      if (organization) {
+        localStorage.setItem("organization", organization);
+      }
 
       const tokenFromUrl = token.trim();
 
@@ -208,7 +273,17 @@ const Login: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const logo = localStorage.getItem("logo");
+    const organization = localStorage.getItem("organization");
+
     localStorage.clear();
+
+    if (logo) {
+      localStorage.setItem("logo", logo);
+    }
+    if (organization) {
+      localStorage.setItem("organization", organization);
+    }
 
     try {
       await dispatch(loginUser({ client_email, client_password }))

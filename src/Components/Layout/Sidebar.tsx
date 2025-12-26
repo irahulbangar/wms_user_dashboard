@@ -56,6 +56,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const userRole = user?.plantsList.find(
     (plant) => plant.plant_id === Number(localStorage.getItem("plantId"))
   )?.role;
+  const logo = localStorage.getItem("logo");
 
   const getInitialExpandedMenusFromPathname = (pathname: string): string[] => {
     const expanded: string[] = [];
@@ -412,7 +413,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                   navigate(`/plant/${plantId}`);
                 }
               }}
-              src={Logo}
+              src={logo ? logo : Logo}
               alt="logo"
               className="h-16 w-32 object-contain cursor-pointer scale-85"
             />
