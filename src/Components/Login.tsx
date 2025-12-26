@@ -97,7 +97,6 @@ const Login: React.FC = () => {
       })
       .catch((err) => {
         console.error("Error getting subdomain:", err);
-        Error("Failed to load organization information.");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
