@@ -153,6 +153,15 @@ export interface Params {
   water_temperature: WaterTemperature;
   ambient_temperature: AmbientTemperature;
   water_column_from_ground: WaterColumnFromGround;
+  display_params: DisplayParams[];
+}
+
+export interface DisplayParams {
+  name: string;
+  display_name: string;
+  unit: string;
+  report_visible: number;
+  diagram_visible: number;
 }
 
 export interface Node {

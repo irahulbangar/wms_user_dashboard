@@ -1,3 +1,5 @@
+import type { DisplayParams } from "./devices.interface";
+
 export interface SingleDeviceResponse {
   success: boolean;
   message: string;
@@ -141,6 +143,7 @@ export interface Params {
   overWrite: number;
   refValue: number;
   refPercent: number;
+  display_params: DisplayParams[];
 }
 
 export interface Param1 {

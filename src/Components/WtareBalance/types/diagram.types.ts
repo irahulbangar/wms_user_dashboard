@@ -32,6 +32,7 @@ export interface Node {
     | "phmc"
     | "arg"
     | "dwlr"
+    | "smartdevice"
     | "virtual"
     | "resultant"
     | "group";

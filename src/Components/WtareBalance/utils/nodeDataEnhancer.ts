@@ -330,6 +330,34 @@ export const enhanceNodeData = ({
         deviceFamilyType: matchingDevice?.device_family_type,
       };
     }
+  } else if (node.type === "smartdevice") {
+    const matchingDevice = devices.find(
+      (device: any) =>
+        (device.device_family_type === "smart" ||
+          device.device_family === "Smart Device") &&
+        device.device_name === node.data.label
+    );
+    
+    if (matchingDevice) {
+      enhancedData = {
+        ...enhancedData,
+        displayParams: matchingDevice.params?.display_params || [],
+        isActive: matchingDevice.device_status === "active",
+        organizationConnection:
+          matchingDevice.organization_connection === "none"
+            ? ""
+            : matchingDevice.organization_connection,
+        systemName: matchingDevice.system_name,
+        unit: matchingDevice.unit,
+        deviceId: matchingDevice.device_id,
+        plantConnection: getPlantConnection(matchingDevice),
+        departmentConnection: getDepartmentConnection(matchingDevice),
+        systemConnection: getSystemConnection(matchingDevice),
+        lastRecordTime: matchingDevice.last_record?.time || "N/A",
+        reportType: matchingDevice.report_type || "N/A",
+        deviceFamilyType: matchingDevice?.device_family_type,
+      };
+    }
   } else if (node.type === "resultant") {
     const matchingDevice = devices.find(
       (device: any) =>

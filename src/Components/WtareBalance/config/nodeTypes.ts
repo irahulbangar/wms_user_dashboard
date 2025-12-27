@@ -6,6 +6,7 @@ import BDWFMSNode from "../Diagram/BDWFMSNode";
 import PHMCNode from "../Diagram/PHMCNode";
 import ARGNode from "../Diagram/ARGNode";
 import DwlrNode from "../Diagram/DwlrNode";
+import SmartDeviceNode from "../Diagram/SmartDeviceNode";
 import SourceNode from "../Diagram/SourceNode";
 import SinkNode from "../Diagram/SinkNode";
 import GroupNodeWrapper from "../Diagram/GroupNodeWrapper";
@@ -20,6 +21,7 @@ export const nodeTypes: NodeTypes = {
   phmc: PHMCNode,
   arg: ARGNode,
   dwlr: DwlrNode,
+  smartdevice: SmartDeviceNode,
   source: SourceNode,
   sink: SinkNode,
   virtual: VirtualNode,

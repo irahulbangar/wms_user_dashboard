@@ -29,6 +29,7 @@ import Reports from "./Components/Report/Reports";
 import HomeRedirect from "./Components/HomeRedirect";
 import DwlrDevice from "./Components/Devices/DwlrDevice";
 import BdwfmsDevice from "./Components/Devices/BdwfmsDevice";
+import SmartDevice from "./Components/Devices/SmartDevice";
 
 function ThemedToast() {
   const { theme } = useTheme();
@@ -111,6 +112,14 @@ const router = createBrowserRouter([
       {
         path: "/system/device/bdwfms-device/:device_id",
         element: <BdwfmsDevice />,
+      },
+      {
+        path: "/device-details/smart-device/:device_id",
+        element: <SmartDevice />,
+      },
+      {
+        path: "/system/device/smart-device/:device_id",
+        element: <SmartDevice />,
       },
       { path: "/users", element: <Users /> },
       { path: "/notifications", element: <Notifications /> },

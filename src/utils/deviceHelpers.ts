@@ -7,6 +7,7 @@ import arg from "../assets/images/arg-logo.png";
 import phmc from "../assets/images/phmc-logo.png";
 import virtual from "../assets/images/virtual.png";
 import dwlr from "../assets/images/dwlr-logo.png";
+import smart from "../assets/images/smart-logo.png";
 
 export const getReportTypeColor = (reportType: string): string => {
   const colors: Record<string, string> = {
@@ -51,6 +52,8 @@ export const getDeviceLogo = (device: DevicesResult): string => {
     return virtual;
   } else if (device?.device_family_type === "dwlr") {
     return dwlr;
+  } else if (device?.device_family_type === "smart") {
+    return smart;
   }
   return "";
 };
@@ -227,7 +230,7 @@ export const getFlow = (device: DevicesResult): string => {
   }
 
   const unit = device?.unit === "M^3" ? "m³" : device?.unit || "";
-  return `${value.toFixed(2)} ${unit}`;
+  return value ? `${value.toFixed(2)} ${unit}` : "";
 };
 
 export const deviceStatus = (status: string): string => {

@@ -317,6 +317,9 @@ const Devices = () => {
     } else if (deviceType.includes("bdwfms") || deviceType.includes("Bdwfms")) {
       const route = `/device-details/bdwfms-device/${device?.device_id}`;
       navigate(route);
+    } else if (deviceType.includes("smart") || deviceType.includes("Smart")) {
+      const route = `/device-details/smart-device/${device?.device_id}`;
+      navigate(route);
     } else {
       const route = `/device-details/fm-device/${device?.device_id}`;
       navigate(route);

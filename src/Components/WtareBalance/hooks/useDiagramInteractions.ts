@@ -58,6 +58,9 @@ export const useDiagramInteractions = ({
           case "bdwfms":
             navigate(`/device-details/bdwfms-device/${deviceId}`);
             break;
+          case "smartdevice":
+            navigate(`/device-details/smart-device/${deviceId}`);
+            break;
           case "virtual":
           case "resultant":
             // Virtual devices don't have detail pages, just show in sidebar
