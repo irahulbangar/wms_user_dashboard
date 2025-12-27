@@ -327,13 +327,13 @@ const SmartDevice = () => {
       "Sr No": index + 1,
       "From Time": formatDateForCSV(data.from_time || ""),
       "To Time": formatDateForCSV(data.to_time || ""),
-      "Temperature (1)": data.last_record?.temp1,
-      "Temperature (2)": data.last_record?.temp2,
-      "Temperature (3)": data.last_record?.temp3,
-      Humidity: data.last_record?.humidity,
-      Power: data.last_record?.power,
-      Flow: data.last_record?.flow,
-      Level: data.last_record?.level,
+      "Temp (1)": data.last_record?.param1,
+      "Temp (2)": data.last_record?.param2,
+      "Temp (3)": data.last_record?.param3,
+      Humidity: data.last_record?.param4,
+      Power: data.last_record?.param5,
+      Flow: data.last_record?.param6,
+      Level: data.last_record?.param7,
     }));
     downloadCSV(
       useArray,
@@ -351,16 +351,19 @@ const SmartDevice = () => {
       "Sr No": index + 1,
       "From Time": formatDateForCSV(data.from_time || ""),
       "To Time": formatDateForCSV(data.to_time || ""),
-      "Temperature (1)": data.last_record?.temp1,
-      "Temperature (2)": data.last_record?.temp2,
-      "Temperature (3)": data.last_record?.temp3,
-      Humidity: data.last_record?.humidity,
-      Power: data.last_record?.power,
-      Flow: data.last_record?.flow,
-      Level: data.last_record?.level,
+      "Temp (1)": data.last_record?.param1,
+      "Temp (2)": data.last_record?.param2,
+      "Temp (3)": data.last_record?.param3,
+      Humidity: data.last_record?.param4,
+      Power: data.last_record?.param5,
+      Flow: data.last_record?.param6,
+      Level: data.last_record?.param7,
     }));
 
-    downloadCSV(useArray, `Smart Device Run Time Report_${runTimeDate || "data"}`);
+    downloadCSV(
+      useArray,
+      `Smart Device Run Time Report_${runTimeDate || "data"}`
+    );
   };
 
   return (
@@ -599,27 +602,16 @@ const SmartDevice = () => {
                               <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
                                 To Time
                               </th>
-                              <th className="px-4 py-2 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal font-roboto">
-                                Temp (1)
-                              </th>
-                              <th className="px-4 py-2 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal font-roboto">
-                                Temp (2)
-                              </th>
-                              <th className="px-4 py-2 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal font-roboto">
-                                Temp (3)
-                              </th>
-                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                                Humidity
-                              </th>
-                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                                Power
-                              </th>
-                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                                Flow
-                              </th>
-                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                                Level
-                              </th>
+                              {deviceData?.params?.display_params
+                                ?.filter((param) => param.report_visible !== 0)
+                                .map((param, index) => (
+                                  <th
+                                    key={index}
+                                    className="px-4 py-2 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal font-roboto"
+                                  >
+                                    {param.display_name}
+                                  </th>
+                                ))}
                             </tr>
                           </thead>
                           <tbody>
@@ -641,27 +633,30 @@ const SmartDevice = () => {
                                     <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize whitespace-nowrap">
                                       {formatDateForCSV(data?.to_time || "")}
                                     </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.temp1 || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.temp2 || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.temp3 || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.humidity || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.power || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.flow || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.level || 0}
-                                    </td>
+                                    {deviceData?.params?.display_params
+                                      ?.filter(
+                                        (param) => param.report_visible !== 0
+                                      )
+                                      .map((param) => {
+                                        const lastRecord = data.last_record;
+                                        const value =
+                                          lastRecord &&
+                                          typeof lastRecord === "object" &&
+                                          Object.keys(lastRecord).length > 0
+                                            ? lastRecord[param.name]
+                                            : null;
+                                        return (
+                                          <td
+                                            key={param.name}
+                                            className="px-4 py-2 text-text-primary text-center font-roboto text-base whitespace-nowrap"
+                                          >
+                                            {value !== null &&
+                                            value !== undefined
+                                              ? value
+                                              : "-"}
+                                          </td>
+                                        );
+                                      })}
                                   </tr>
                                 )
                               )}
@@ -805,27 +800,16 @@ const SmartDevice = () => {
                               <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
                                 To Time
                               </th>
-                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                                Temp (1)
-                              </th>
-                              <th className="px-4 py-2 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal font-roboto">
-                                Temp (2)
-                              </th>
-                              <th className="px-4 py-2 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal font-roboto">
-                                Temp (3)
-                              </th>
-                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                                Humidity
-                              </th>
-                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                                Power
-                              </th>
-                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                                Flow
-                              </th>
-                              <th className="px-4 py-2 text-text-primary text-start text-base font-roboto font-normal font-roboto">
-                                Level
-                              </th>
+                              {deviceData?.params?.display_params
+                                ?.filter((param) => param.report_visible !== 0)
+                                .map((param, index) => (
+                                  <th
+                                    key={index}
+                                    className="px-4 py-2 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal font-roboto"
+                                  >
+                                    {param.display_name}
+                                  </th>
+                                ))}
                             </tr>
                           </thead>
                           <tbody>
@@ -848,27 +832,30 @@ const SmartDevice = () => {
                                     <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize whitespace-nowrap">
                                       {formatDateForCSV(data?.to_time || "")}
                                     </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.temp1 || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.temp2 || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.temp3 || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.humidity || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.power || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.flow || 0}
-                                    </td>
-                                    <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
-                                      {data?.last_record?.level || 0}
-                                    </td>
+                                    {deviceData?.params?.display_params
+                                      ?.filter(
+                                        (param) => param.report_visible !== 0
+                                      )
+                                      .map((param) => {
+                                        const lastRecord = data.last_record;
+                                        const value =
+                                          lastRecord &&
+                                          typeof lastRecord === "object" &&
+                                          Object.keys(lastRecord).length > 0
+                                            ? lastRecord[param.name]
+                                            : null;
+                                        return (
+                                          <td
+                                            key={param.name}
+                                            className="px-4 py-2 text-text-primary text-center font-roboto text-base whitespace-nowrap"
+                                          >
+                                            {value !== null &&
+                                            value !== undefined
+                                              ? value
+                                              : "-"}
+                                          </td>
+                                        );
+                                      })}
                                   </tr>
                                 )
                               )}

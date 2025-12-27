@@ -16,6 +16,7 @@ interface SmartDeviceNodeProps {
     lastRecordTime: string;
     reportType: string;
     displayParams: DisplayParams[];
+    lastRecord: Record<string, any>;
   };
 }
 
@@ -32,7 +33,9 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
   const displayParams = (data.displayParams || []).filter(
     (param) => param.diagram_visible === 1 && param.report_visible !== 0
   );
-
+  const lastRecord = data.lastRecord || {};
+  console.log("lastRecord", lastRecord);
+  
   const borderColor = recordTimeOld
     ? "border-status-danger"
     : isActive
@@ -71,11 +74,11 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
       <div className="flex flex-col mt-1">
         {displayParams.map((param) => (
           <div
-            key={param.name}
+            key={param.display_name}
             className="text-sm font-normal text-left font-roboto text-wrap px-1 text-text-primary leading-4 whitespace-nowrap"
           >
-            {param.name} :{" "}
-            <span className="italic text-xs">({param.unit})</span>
+            {param.display_name} :{" "}
+            <span className="italic text-xs">{param.unit}</span>
           </div>
         ))}
       </div>

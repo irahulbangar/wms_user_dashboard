@@ -356,6 +356,7 @@ export const enhanceNodeData = ({
         lastRecordTime: matchingDevice.last_record?.time || "N/A",
         reportType: matchingDevice.report_type || "N/A",
         deviceFamilyType: matchingDevice?.device_family_type,
+        lastRecord: matchingDevice.last_record || {},
       };
     }
   } else if (node.type === "resultant") {
