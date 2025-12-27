@@ -30,7 +30,7 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
   const reportType = data.reportType || "N/A";
   const recordTimeOld = isRecordTimeOld(lastRecordTime);
   const displayParams = (data.displayParams || []).filter(
-    (param) => param.diagram_visible === 1
+    (param) => param.diagram_visible === 1 && param.report_visible !== 0
   );
 
   const borderColor = recordTimeOld
@@ -74,7 +74,7 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
             key={param.name}
             className="text-sm font-normal text-left font-roboto text-wrap px-1 text-text-primary leading-4 whitespace-nowrap"
           >
-            {param.display_name} :{" "}
+            {param.name} :{" "}
             <span className="italic text-xs">({param.unit})</span>
           </div>
         ))}
