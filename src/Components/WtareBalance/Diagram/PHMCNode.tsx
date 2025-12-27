@@ -31,13 +31,11 @@ const PHMCNode = ({ data }: PHMCNodeProps) => {
   const currentR = Number(data.currentR) || 0;
   const currentY = Number(data.currentY) || 0;
   const currentB = Number(data.currentB) || 0;
-  const pumpStatus = data.pumpStatus || "0";
   const departmentConnection = data.departmentConnection || "";
   const plantConnection = data.plantConnection || "";
   const organizationConnection = data.organizationConnection || "N/A";
   const systemName = data.systemName || "N/A";
   const systemConnection = data.systemConnection || "";
-  const isPumpRunning = pumpStatus === "1" ? "ON" : "OFF";
   const lastRecordTime = data.lastRecordTime || "N/A";
   const reportType = data.reportType || "N/A";
   const recordTimeOld = isRecordTimeOld(lastRecordTime);
@@ -51,9 +49,7 @@ const PHMCNode = ({ data }: PHMCNodeProps) => {
   const connectionInfo = [
     `System Name : ${systemName}`,
     `Device Name : ${data.label}`,
-    organizationConnection
-      ? `Org Conn. : ${organizationConnection}`
-      : null,
+    organizationConnection ? `Org Conn. : ${organizationConnection}` : null,
     plantConnection ? `Plant Conn. : ${plantConnection}` : null,
     departmentConnection ? `Dept Conn. : ${departmentConnection}` : null,
     systemConnection ? `System Conn. : ${systemConnection}` : null,
@@ -64,7 +60,6 @@ const PHMCNode = ({ data }: PHMCNodeProps) => {
     `Current R : ${currentR} A`,
     `Current Y : ${currentY} A`,
     `Current B : ${currentB} A`,
-    `Pump Status : ${isPumpRunning}`,
   ]
     .filter((line) => line !== null && line !== "")
     .join("\n");
@@ -138,7 +133,10 @@ const PHMCNode = ({ data }: PHMCNodeProps) => {
         className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-xs text-text-secondary whitespace-nowrap font-roboto truncate z-10 px-1"
         title={data.label}
       >
-        <div>Pump Status: {isPumpRunning}</div>
+        <div>
+          Pump Status:{" "}
+          {currentR > 1 || currentY > 1 || currentB > 1 ? "ON" : "OFF"}
+        </div>
       </div>
 
       <Handle
