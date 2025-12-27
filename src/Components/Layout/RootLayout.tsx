@@ -46,6 +46,10 @@ export default function RootLayout() {
   };
 
   useEffect(() => {
+    setIsDiagramSidebarOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       navigate("/login");
     }
