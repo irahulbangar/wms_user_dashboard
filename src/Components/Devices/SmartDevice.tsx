@@ -323,18 +323,30 @@ const SmartDevice = () => {
       return;
     }
 
-    const useArray = customReportData.map((data, index) => ({
-      "Sr No": index + 1,
-      "From Time": formatDateForCSV(data.from_time || ""),
-      "To Time": formatDateForCSV(data.to_time || ""),
-      "Temp (1)": data.last_record?.param1,
-      "Temp (2)": data.last_record?.param2,
-      "Temp (3)": data.last_record?.param3,
-      Humidity: data.last_record?.param4,
-      Power: data.last_record?.param5,
-      Flow: data.last_record?.param6,
-      Level: data.last_record?.param7,
-    }));
+    const visibleParams =
+      deviceData?.params?.display_params?.filter(
+        (param) => param.report_visible !== 0
+      ) || [];
+
+    const useArray = customReportData.map((data, index) => {
+      const row: Record<string, any> = {
+        "Sr No": index + 1,
+        "From Time": formatDateForCSV(data.from_time || ""),
+        "To Time": formatDateForCSV(data.to_time || ""),
+      };
+
+      visibleParams.forEach((param) => {
+        const value =
+          data.last_record && typeof data.last_record === "object"
+            ? data.last_record[param.name]
+            : null;
+        row[param.display_name] =
+          value !== null && value !== undefined ? value : "-";
+      });
+
+      return row;
+    });
+
     downloadCSV(
       useArray,
       `Smart Device Custom Report_${customReportFromDate}_to_${customReportToDate}`
@@ -347,18 +359,29 @@ const SmartDevice = () => {
       return;
     }
 
-    const useArray = runTimeData.map((data, index) => ({
-      "Sr No": index + 1,
-      "From Time": formatDateForCSV(data.from_time || ""),
-      "To Time": formatDateForCSV(data.to_time || ""),
-      "Temp (1)": data.last_record?.param1,
-      "Temp (2)": data.last_record?.param2,
-      "Temp (3)": data.last_record?.param3,
-      Humidity: data.last_record?.param4,
-      Power: data.last_record?.param5,
-      Flow: data.last_record?.param6,
-      Level: data.last_record?.param7,
-    }));
+    const visibleParams =
+      deviceData?.params?.display_params?.filter(
+        (param) => param.report_visible !== 0
+      ) || [];
+
+    const useArray = runTimeData.map((data, index) => {
+      const row: Record<string, any> = {
+        "Sr No": index + 1,
+        "From Time": formatDateForCSV(data.from_time || ""),
+        "To Time": formatDateForCSV(data.to_time || ""),
+      };
+
+      visibleParams.forEach((param) => {
+        const value =
+          data.last_record && typeof data.last_record === "object"
+            ? data.last_record[param.name]
+            : null;
+        row[param.display_name] =
+          value !== null && value !== undefined ? value : "-";
+      });
+
+      return row;
+    });
 
     downloadCSV(
       useArray,
