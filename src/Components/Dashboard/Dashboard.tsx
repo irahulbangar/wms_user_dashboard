@@ -887,8 +887,8 @@ const Dashboard = () => {
   }, [aggregatedWaterBalanceData, waterNeutralityIndexColors]);
 
   const waterNeutralityIndexValue = useMemo(() => {
-    if (!aggregatedWaterBalanceData) return null;
-    return aggregatedWaterBalanceData.neutrality || null;
+    if (!aggregatedWaterBalanceData) return 0;
+    return aggregatedWaterBalanceData.neutrality || 0;
   }, [aggregatedWaterBalanceData]);
 
   const waterQualityColors = useMemo(() => {

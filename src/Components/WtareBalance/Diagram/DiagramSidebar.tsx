@@ -170,7 +170,7 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
   }, [aggregatedWaterBalanceData]);
 
   const waterNeutralityIndexValue = useMemo(() => {
-    if (!aggregatedWaterBalanceData) return null;
+    if (!aggregatedWaterBalanceData) return 0;
     return aggregatedWaterBalanceData.neutrality === 0
       ? 0.00001
       : aggregatedWaterBalanceData.neutrality;
