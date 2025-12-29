@@ -116,10 +116,15 @@ const AnalysisPieChartCard = ({
                   // Value is > 120%, capped at 120% - status not applicable
                   statusText = "Not applicable (value exceeds 120%).";
                   statusColor = "text-status-warning";
-                } else if (displayedValue >= 100) {
+                } else if (displayedValue > 100) {
                   // WNI >= 100% and <= 120%
-                  statusText = "Water Neutral.";
+                  statusText =
+                    "Water Positive (replenishes more than it consumes).";
                   statusColor = "text-status-info";
+                } else if (displayedValue >= 100) {
+                  // WNI < 100%
+                  statusText = "Water Neutral.";
+                  statusColor = "text-status-success";
                 } else {
                   // WNI < 100%
                   statusText =
