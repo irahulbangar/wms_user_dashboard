@@ -632,7 +632,7 @@ const SmartDevice = () => {
                                     key={index}
                                     className="px-4 py-2 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal font-roboto"
                                   >
-                                    {param.display_name}
+                                    {param.display_name}({param.unit})
                                   </th>
                                 ))}
                             </tr>
@@ -830,7 +830,7 @@ const SmartDevice = () => {
                                     key={index}
                                     className="px-4 py-2 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal font-roboto"
                                   >
-                                    {param.display_name}
+                                    {param.display_name}({param.unit})
                                   </th>
                                 ))}
                             </tr>

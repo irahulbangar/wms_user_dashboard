@@ -34,7 +34,6 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
     (param) => param.diagram_visible === 1 && param.report_visible !== 0
   );
   const lastRecord = data.lastRecord || {};
-  console.log("lastRecord", lastRecord);
   
   const borderColor = recordTimeOld
     ? "border-status-danger"
@@ -56,7 +55,7 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
 
   return (
     <div
-      className={`relative w-32 h-fit bg-primary/20 border border-border-primary rounded-md p-1 z-10 ${borderColor}`}
+      className={`relative w-34 h-fit bg-primary/20 border border-border-primary rounded-md p-1 z-10 ${borderColor}`}
       title={connectionInfo}
     >
       <div className="text-sm font-normal text-left font-roboto text-wrap mb-1 px-1 text-text-primary leading-4">
@@ -72,15 +71,24 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
       </div>
 
       <div className="flex flex-col mt-1">
-        {displayParams.map((param) => (
-          <div
-            key={param.display_name}
-            className="text-sm font-normal text-left font-roboto text-wrap px-1 text-text-primary leading-4 whitespace-nowrap"
-          >
-            {param.display_name} :{" "}
-            <span className="italic text-xs">{param.unit}</span>
-          </div>
-        ))}
+        {displayParams.map((param) => {
+          const value =
+            lastRecord && typeof lastRecord === "object"
+              ? lastRecord[param.name]
+              : null;
+          return (
+            <div
+              key={param.display_name}
+              className="text-sm font-normal text-left font-roboto text-wrap px-1 text-text-primary leading-4 whitespace-nowrap"
+            >
+              {param.display_name} :{" "}
+              <span className="text-status-info">
+                {value !== null && value !== undefined ? value.toFixed(2) : "-"}
+              </span>
+              <span className="italic text-xs">{param.unit}</span>
+            </div>
+          );
+        })}
       </div>
 
       <div
