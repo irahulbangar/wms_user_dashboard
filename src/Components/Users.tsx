@@ -161,7 +161,7 @@ const Users = () => {
         </div>
       ) : (
         <div className="relative overflow-auto shadow-sm rounded-lg pb-0 bg-primary flex-1">
-          <div className="table-scrollbar overflow-x-auto overflow-y-auto h-[calc(100vh-305px)]">
+          <div className="table-scrollbar overflow-x-auto overflow-y-auto h-[calc(100vh-260px)]">
             <table className="w-full text-sm text-left rtl:text-right text-text-primary">
               <thead className="text-xs text-text-primary uppercase bg-primary border-b border-border-primary sticky top-0 z-10">
                 <tr>
@@ -172,15 +172,14 @@ const Users = () => {
                     Name
                   </th>
                   <th className="px-6 py-3 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal">
-                    Email
-                  </th>
-                  <th className="px-6 py-3 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal">
                     Phone
                   </th>
                   <th className="px-6 py-3 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal">
-                    Organization
+                    Email
                   </th>
-
+                  <th className="px-6 py-3 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal">
+                    Password
+                  </th>
                   <th className="px-6 py-3 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal">
                     Status
                   </th>
@@ -190,7 +189,7 @@ const Users = () => {
                   <th className="px-6 py-3 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal">
                     Updated At
                   </th>
-                  <th className="px-6 py-3 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal">
+                  <th className="px-6 py-3 text-text-primary whitespace-nowrap text-start text-base font-roboto font-normal sticky right-0 bg-primary">
                     Action
                   </th>
                 </tr>
@@ -205,15 +204,15 @@ const Users = () => {
                       {user.client_name}
                     </td>
                     <td className="px-6 py-4 font-roboto whitespace-nowrap text-start text-text-primary text-base">
-                      {user.client_email}
-                    </td>
-                    <td className="px-6 py-4 font-roboto whitespace-nowrap text-start text-text-primary text-base">
                       {user.client_phone}
                     </td>
                     <td className="px-6 py-4 font-roboto whitespace-nowrap text-start text-text-primary text-base">
-                      {user.organization_name}
+                      {user.client_email}
                     </td>
-                    <td className="px-6 py-4 font-roboto text-start text-text-primary text-base">
+                    <td className="px-6 py-4 font-roboto whitespace-nowrap text-start text-text-primary text-base">
+                      {user.client_password}
+                    </td>
+                    <td className="px-6 py-4 font-roboto whitespace-nowrap text-start text-text-primary text-base">
                       <span
                         className={`px-2 py-1 rounded-full text-sm font-normal capitalize ${handleStatus(
                           user.status
@@ -228,7 +227,7 @@ const Users = () => {
                     <td className="px-6 py-4 font-roboto whitespace-nowrap text-start text-text-primary text-base">
                       {fromatDateWithTime(user.updated_at)}
                     </td>
-                    <td className="px-6 py-4 text-text-primary text-start font-roboto text-base whitespace-nowrap">
+                    <td className="px-6 py-4 text-text-primary text-start font-roboto text-base whitespace-nowrap sticky right-0 bg-primary">
                       <div className="flex items-center gap-3 justify-center">
                         <SquarePen
                           className="w-5 h-5 text-status-info cursor-pointer hover:text-blue-600 transition-colors"
