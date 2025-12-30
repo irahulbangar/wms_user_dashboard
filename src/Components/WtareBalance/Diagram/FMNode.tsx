@@ -17,6 +17,7 @@ interface FMNodeProps {
     lowerLimit: string;
     lastRecordTime: string;
     reportType: string;
+    deviceId?: string;
   };
 }
 
@@ -27,12 +28,12 @@ const FMNode = ({ data }: FMNodeProps) => {
   const flowRate = Number(data.flowRate) || 0;
   const departmentConnection = data.departmentConnection || "";
   const plantConnection = data.plantConnection || "";
-  const organizationConnection = data.organizationConnection || "N/A";
-  const systemName = data.systemName || "N/A";
+  const organizationConnection = data.organizationConnection || "";
+  const systemName = data.systemName || "";
   const systemConnection = data.systemConnection || "";
-  const lastRecordTime = data.lastRecordTime || "N/A";
-  const reportType = data.reportType || "N/A";
-
+  const lastRecordTime = data.lastRecordTime || "";
+  const reportType = data.reportType || "";
+  const deviceId = data.deviceId || "";
   const recordTimeOld = isRecordTimeOld(lastRecordTime);
 
   const borderColor = recordTimeOld
@@ -53,6 +54,7 @@ const FMNode = ({ data }: FMNodeProps) => {
     `Report Type: ${reportType}`,
     `Totalizer: ${totalizerReading} ${unit}`,
     `Flow: ${flowRate} LPM`,
+    `Device ID: ${deviceId}`,
   ]
     .filter((line) => line !== null && line !== "")
     .join("\n");

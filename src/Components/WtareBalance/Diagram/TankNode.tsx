@@ -31,7 +31,7 @@ const TankNode = ({ data }: TankNodeProps) => {
   const systemConnection = data.systemConnection;
   const percentage = (currentLevel / capacity) * 100;
   const fillHeight = Math.min(percentage, 100);
-  const lastRecordTime = data.lastRecordTime || "N/A";
+  const lastRecordTime = data.lastRecordTime || "";
 
   const recordTimeOld = isRecordTimeOld(lastRecordTime);
 

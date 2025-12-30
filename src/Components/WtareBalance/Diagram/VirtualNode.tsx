@@ -19,12 +19,12 @@ interface VirtualNodeProps {
 }
 
 const VirtualNode: React.FC<VirtualNodeProps> = ({ data }) => {
-  const systemName = data?.systemName || "N/A";
+  const systemName = data?.systemName || "";
   const systemConnection = data?.systemConnection || "";
   const departmentConnection = data?.departmentConnection || "";
   const plantConnection = data?.plantConnection || "";
-  const organizationConnection = data?.organizationConnection || "N/A";
-  const reportType = data?.reportType || "N/A";
+  const organizationConnection = data?.organizationConnection || "";
+  const reportType = data?.reportType || "";
   const connectionInfo = [
     `System Name: ${systemName}`,
     `Device Name: ${data.label}`,

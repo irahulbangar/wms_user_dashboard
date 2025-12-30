@@ -20,6 +20,7 @@ interface PHMCNodeProps {
     systemConnection: string;
     lastRecordTime: string;
     reportType: string;
+    deviceId?: string;
   };
 }
 
@@ -33,11 +34,12 @@ const PHMCNode = ({ data }: PHMCNodeProps) => {
   const currentB = Number(data.currentB) || 0;
   const departmentConnection = data.departmentConnection || "";
   const plantConnection = data.plantConnection || "";
-  const organizationConnection = data.organizationConnection || "N/A";
-  const systemName = data.systemName || "N/A";
+  const organizationConnection = data.organizationConnection || "";
+  const systemName = data.systemName || "";
   const systemConnection = data.systemConnection || "";
-  const lastRecordTime = data.lastRecordTime || "N/A";
-  const reportType = data.reportType || "N/A";
+  const lastRecordTime = data.lastRecordTime || "";
+  const reportType = data.reportType || "";
+  const deviceId = data.deviceId || "";
   const recordTimeOld = isRecordTimeOld(lastRecordTime);
 
   const borderColor = recordTimeOld
@@ -60,6 +62,7 @@ const PHMCNode = ({ data }: PHMCNodeProps) => {
     `Current R : ${currentR} A`,
     `Current Y : ${currentY} A`,
     `Current B : ${currentB} A`,
+    `Device ID : ${deviceId}`,
   ]
     .filter((line) => line !== null && line !== "")
     .join("\n");

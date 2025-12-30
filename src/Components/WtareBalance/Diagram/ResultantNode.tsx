@@ -33,15 +33,15 @@ const ResultantNode: React.FC<ResultantNodeProps> = ({ data }) => {
       }`}
     >
       <div className="flex flex-col items-center gap-1 w-full">
-        <div className="text-white font-roboto font-medium px-1 text-base w-full text-left">
+        <div className="text-white font-roboto font-medium px-1 text-lg w-full text-left">
           {data.label}
         </div>
 
         <div className="flex flex-col items-center gap-0.5 w-full">
-          <div className="text-white font-roboto font-medium text-lg leading-tight">
+          <div className="text-white font-roboto font-medium text-base leading-tight">
             {formattedValue}
             {data.unit && (
-              <span className="text-white font-normal text-sm italic ml-1">
+              <span className="text-white font-normal text-base italic">
                 {data.unit === "M^3" ? "m³" : data.unit}
               </span>
             )}

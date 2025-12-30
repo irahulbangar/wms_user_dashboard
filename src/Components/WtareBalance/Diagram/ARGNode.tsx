@@ -18,6 +18,7 @@ interface ARGNodeProps {
     systemConnection: string;
     lastRecordTime: string;
     reportType: string;
+    deviceId?: string;
   };
 }
 
@@ -30,12 +31,12 @@ const ARGNode = ({ data }: ARGNodeProps) => {
   const firstMm = Number(data.firstMm) || 0;
   const departmentConnection = data.departmentConnection || "";
   const plantConnection = data.plantConnection || "";
-  const organizationConnection = data.organizationConnection || "N/A";
-  const systemName = data.systemName || "N/A";
+  const organizationConnection = data.organizationConnection || "";
+  const systemName = data.systemName || "";
   const systemConnection = data.systemConnection || "";
-  const lastRecordTime = data.lastRecordTime || "N/A";
-  const reportType = data.reportType || "N/A";
-
+  const lastRecordTime = data.lastRecordTime || "";
+  const reportType = data.reportType || "";
+  const deviceId = data.deviceId || "";
   const recordTimeOld = isRecordTimeOld(lastRecordTime);
 
   const totalRainfall = maxMm - minMm;
@@ -60,6 +61,7 @@ const ARGNode = ({ data }: ARGNodeProps) => {
     `Max : ${maxMm}`,
     `Min : ${minMm}`,
     `First : ${firstMm}`,
+    `Device ID : ${deviceId}`,
   ]
     .filter((line) => line !== null && line !== "")
     .join("\n");

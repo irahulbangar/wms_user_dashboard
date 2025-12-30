@@ -17,6 +17,7 @@ interface SmartDeviceNodeProps {
     reportType: string;
     displayParams: DisplayParams[];
     lastRecord: Record<string, any>;
+    deviceId?: string;
   };
 }
 
@@ -24,17 +25,17 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
   const isActive = data.isActive !== false;
   const departmentConnection = data.departmentConnection || "";
   const plantConnection = data.plantConnection || "";
-  const organizationConnection = data.organizationConnection || "N/A";
-  const systemName = data.systemName || "N/A";
+  const organizationConnection = data.organizationConnection || "";
+  const systemName = data.systemName || "";
   const systemConnection = data.systemConnection || "";
-  const lastRecordTime = data.lastRecordTime || "N/A";
-  const reportType = data.reportType || "N/A";
+  const lastRecordTime = data.lastRecordTime || "";
+  const reportType = data.reportType || "";
   const recordTimeOld = isRecordTimeOld(lastRecordTime);
   const displayParams = (data.displayParams || []).filter(
     (param) => param.diagram_visible === 1 && param.report_visible !== 0
   );
   const lastRecord = data.lastRecord || {};
-  
+  const deviceId = data.deviceId || "";
   const borderColor = recordTimeOld
     ? "border-status-danger"
     : isActive
@@ -49,6 +50,7 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
     departmentConnection ? `Dept Conn. : ${departmentConnection}` : null,
     systemConnection ? `System Conn. : ${systemConnection}` : null,
     `Report Type: ${reportType}`,
+    `Device ID: ${deviceId}`,
   ]
     .filter((line) => line !== null && line !== "")
     .join("\n");
