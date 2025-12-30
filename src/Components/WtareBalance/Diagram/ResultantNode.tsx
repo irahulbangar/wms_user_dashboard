@@ -33,7 +33,7 @@ const ResultantNode: React.FC<ResultantNodeProps> = ({ data }) => {
       }`}
     >
       <div className="flex flex-col items-center gap-1 w-full">
-        <div className="text-white font-roboto font-medium px-1 text-base w-full text-center">
+        <div className="text-white font-roboto font-medium px-1 text-base w-full text-left">
           {data.label}
         </div>
 

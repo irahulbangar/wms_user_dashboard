@@ -55,7 +55,7 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
 
   return (
     <div
-      className={`relative w-34 h-fit bg-primary/20 border border-border-primary rounded-md p-1 z-10 ${borderColor}`}
+      className={`relative w-fit h-fit bg-primary/20 border border-border-primary rounded-md p-1 z-10 ${borderColor}`}
       title={connectionInfo}
     >
       <div className="text-sm font-normal text-left font-roboto text-wrap mb-1 px-1 text-text-primary leading-4">

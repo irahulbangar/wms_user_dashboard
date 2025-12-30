@@ -378,10 +378,10 @@ export const enhanceNodeData = ({
 
       enhancedData = {
         ...enhancedData,
-        unit: matchingDevice.unit || "",
+        unit: matchingDevice?.device_reporting?.report_unit || "",
         isActive: matchingDevice.device_status === "active",
         deviceId: matchingDevice.device_id,
-        label: matchingDevice.device_name,
+        label: matchingDevice?.device_reporting?.report_name,
         report_value: isNaN(numericReportValue) ? 0 : numericReportValue,
         reportType: matchingDevice.report_type || "N/A",
       };
