@@ -410,7 +410,8 @@ const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => {
                 const plantId = getCurrentPlantId();
                 if (plantId) {
-                  navigate(`/plant/${plantId}`);
+                  const route = `/plant/${plantId}`;
+                  navigate(route);
                 }
               }}
               src={logo ? logo : Logo}

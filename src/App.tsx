@@ -15,6 +15,7 @@ import Dashboard from "./Components/Dashboard/Dashboard";
 import WaterBalance from "./Components/WtareBalance/WaterBalance";
 import Devices from "./Components/Devices/Devices";
 import OrganizationRouteGuard from "./Components/OrganizationRouteGuard";
+import FeatureRouteGuard from "./Components/FeatureRouteGuard";
 import Users from "./Components/Users";
 import TankDevice from "./Components/Devices/TankDevice";
 import DepartmentDevices from "./Components/Department/DepartmentDevices";
@@ -60,9 +61,30 @@ const router = createBrowserRouter([
         path: "/organization/:organizationId",
         element: <OrganizationRouteGuard />,
       },
-      { path: "/plant/:plantId", element: <Dashboard /> },
-      { path: "/plant-layout", element: <WaterBalance /> },
-      { path: "/devices", element: <Devices /> },
+      {
+        path: "/plant/:plantId",
+        element: (
+          <FeatureRouteGuard>
+            <Dashboard />
+          </FeatureRouteGuard>
+        ),
+      },
+      {
+        path: "/plant-layout",
+        element: (
+          <FeatureRouteGuard>
+            <WaterBalance />
+          </FeatureRouteGuard>
+        ),
+      },
+      {
+        path: "/devices",
+        element: (
+          <FeatureRouteGuard>
+            <Devices />
+          </FeatureRouteGuard>
+        ),
+      },
       { path: "/device-details/fm-device/:device_id", element: <FmDevice /> },
       {
         path: "/system/device/fm-device/:device_id",
@@ -122,17 +144,39 @@ const router = createBrowserRouter([
         element: <SmartDevice />,
       },
       { path: "/users", element: <Users /> },
-      { path: "/notifications", element: <Notifications /> },
+      {
+        path: "/notifications",
+        element: (
+          <FeatureRouteGuard>
+            <Notifications />
+          </FeatureRouteGuard>
+        ),
+      },
       { path: "/settings", element: <Setting /> },
       {
         path: "/department/device/:organizationId/:plantId/:departmentId",
-        element: <DepartmentDevices />,
+        element: (
+          <FeatureRouteGuard>
+            <DepartmentDevices />
+          </FeatureRouteGuard>
+        ),
       },
       {
         path: "/system/device/:organizationId/:plantId/:systemId",
-        element: <SystemDevices />,
+        element: (
+          <FeatureRouteGuard>
+            <SystemDevices />
+          </FeatureRouteGuard>
+        ),
       },
-      { path: "/reports", element: <Reports /> },
+      {
+        path: "/reports",
+        element: (
+          <FeatureRouteGuard>
+            <Reports />
+          </FeatureRouteGuard>
+        ),
+      },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },
