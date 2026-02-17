@@ -114,7 +114,7 @@ const GroupNode = ({ data, id }: GroupNodeProps) => {
                     <div className="font-normal text-text-primary font-roboto truncate whitespace-nowrap">
                       {unit === "M^3"
                         ? (Number(data.plantTotalBalance || 0) / 1000).toFixed(
-                            2
+                            2,
                           )
                         : Number(data.plantTotalBalance || 0).toFixed(1)}{" "}
                       {unit === "M^3" ? (
@@ -170,7 +170,7 @@ const GroupNode = ({ data, id }: GroupNodeProps) => {
                     <div className="font-normal text-text-primary font-roboto truncate whitespace-nowrap">
                       {unit === "M^3"
                         ? (Number(data.systemTotalBalance || 0) / 1000).toFixed(
-                            2
+                            2,
                           )
                         : Number(data.systemTotalBalance || 0).toFixed(1)}{" "}
                       {unit === "M^3" ? (

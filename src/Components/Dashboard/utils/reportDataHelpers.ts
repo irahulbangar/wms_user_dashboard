@@ -8,7 +8,7 @@ interface BalanceData {
 export function prepareReportData(
   flowBalanceData: BalanceData[],
   storageBalanceData: BalanceData[],
-  waterBalanceData: BalanceData[]
+  waterBalanceData: BalanceData[],
 ): ReportData {
   const getValue = (data: BalanceData[], name: string) =>
     data.find((d) => d.name === name)?.value || 0;
@@ -28,9 +28,8 @@ export function prepareReportData(
   const rainfall = getValue(waterBalanceData, "Rainfall");
 
   // Calculate totalIn for water balance: flowIn + evaporation + wastage + consumption
-  const waterBalanceTotalIn =
-    flowIn + regeneration + reuse + rainfall;
-  
+  const waterBalanceTotalIn = flowIn + regeneration + reuse + rainfall;
+
   // Calculate totalOut for water balance: flowOut + percolation + regeneration + reuse
   const waterBalanceTotalOut =
     flowOut + percolation + consumption + wastage + evaporation;
@@ -54,4 +53,3 @@ export function prepareReportData(
     netBalance: waterBalanceTotalIn - waterBalanceTotalOut,
   };
 }
-

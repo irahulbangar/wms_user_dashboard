@@ -32,15 +32,15 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
   const reportType = data.reportType || "";
   const recordTimeOld = isRecordTimeOld(lastRecordTime);
   const displayParams = (data.displayParams || []).filter(
-    (param) => param.diagram_visible === 1 && param.report_visible !== 0
+    (param) => param.diagram_visible === 1 && param.report_visible !== 0,
   );
   const lastRecord = data.lastRecord || {};
   const deviceId = data.deviceId || "";
   const borderColor = recordTimeOld
     ? "border-status-danger"
     : isActive
-    ? "border-status-success"
-    : "border-border-primary";
+      ? "border-status-success"
+      : "border-border-primary";
 
   const connectionInfo = [
     `System Name: ${systemName}`,
@@ -98,8 +98,8 @@ const SmartDeviceNode = ({ data }: SmartDeviceNodeProps) => {
           recordTimeOld
             ? "bg-status-danger animate-pulse"
             : isActive
-            ? "bg-status-success animate-pulse"
-            : "bg-status-danger"
+              ? "bg-status-success animate-pulse"
+              : "bg-status-danger"
         }`}
       />
 

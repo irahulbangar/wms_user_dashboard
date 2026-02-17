@@ -28,13 +28,13 @@ const Devices = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const [collapsedSystems, setCollapsedSystems] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const organizationId = localStorage.getItem("organizationId");
   const plantId = localStorage.getItem("plantId");
   const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(getCurrentPlantId())
+    (plant) => plant.plant_id === Number(getCurrentPlantId()),
   )?.role;
 
   const captureScreenshot = useCallback(async (): Promise<string | null> => {
@@ -48,7 +48,7 @@ const Devices = () => {
       const scrollWidth = Math.max(element.scrollWidth || 0, rect?.width || 0);
       const scrollHeight = Math.max(
         element.scrollHeight || 0,
-        rect?.height || 0
+        rect?.height || 0,
       );
 
       try {
@@ -149,7 +149,7 @@ const Devices = () => {
         getDeviceByOrganizationIdAndPlantId({
           plantId: Number(plantId),
           organizationId: Number(organizationId),
-        })
+        }),
       )
         .unwrap()
         .then((res) => {
@@ -201,7 +201,7 @@ const Devices = () => {
           getDeviceByOrganizationIdAndPlantId({
             plantId: Number(newPlantId),
             organizationId: Number(newOrganizationId),
-          })
+          }),
         )
           .unwrap()
           .then((res) => {
@@ -246,7 +246,7 @@ const Devices = () => {
             .includes(searchTerm.toLowerCase()) ||
           device.device_type_id.toString().includes(searchTerm) ||
           device.device_family_id.toString().includes(searchTerm) ||
-          device.device_status.toLowerCase().includes(searchTerm.toLowerCase())
+          device.device_status.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -532,7 +532,7 @@ const Devices = () => {
                                   (d) =>
                                     d.device_status?.toLowerCase() ===
                                       "active" &&
-                                    !isRecordTimeOld(d?.last_record?.time)
+                                    !isRecordTimeOld(d?.last_record?.time),
                                 ).length || 0}{" "}
                                 Active
                               </span>
@@ -544,7 +544,7 @@ const Devices = () => {
                                   (d) =>
                                     d.device_status?.toLowerCase() ===
                                       "inactive" ||
-                                    isRecordTimeOld(d?.last_record?.time)
+                                    isRecordTimeOld(d?.last_record?.time),
                                 ).length || 0}{" "}
                                 Inactive
                               </span>
@@ -557,7 +557,7 @@ const Devices = () => {
                                     d.device_status?.toLowerCase() !==
                                       "active" &&
                                     d.device_status?.toLowerCase() !==
-                                      "inactive"
+                                      "inactive",
                                 ).length || 0}{" "}
                                 Other
                               </span>
@@ -579,7 +579,7 @@ const Devices = () => {
                       </div>
                     </div>
                   );
-                }
+                },
               )
             ) : (
               <div className="text-text-primary text-center font-roboto text-sm w-full h-full">

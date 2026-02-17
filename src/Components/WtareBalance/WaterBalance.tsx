@@ -1,7 +1,7 @@
 import { useRef, useCallback, useEffect } from "react";
 import DiagramPage from "./DiagramPage";
 import domtoimage from "dom-to-image";
-import { useDiagramSidebar } from "../Layout/RootLayout";
+import { useDiagramSidebar } from "../Layout/DiagramSidebarContext";
 
 interface WaterBalanceProps {
   onDiagramSidebarToggle?: (isOpen: boolean) => void;
@@ -39,7 +39,7 @@ const WaterBalance = ({
         const reactFlowNodes = reactFlow?.querySelectorAll(".react-flow__node");
         const reactFlowEdges = reactFlow?.querySelectorAll(".react-flow__edge");
         const reactFlowViewport = reactFlow?.querySelector(
-          ".react-flow__viewport"
+          ".react-flow__viewport",
         );
 
         const hasNodes = reactFlowNodes && reactFlowNodes.length > 0;
@@ -72,10 +72,10 @@ const WaterBalance = ({
 
       let captureElement: HTMLElement = element;
       const reactFlowViewport = element.querySelector(
-        ".react-flow__viewport"
+        ".react-flow__viewport",
       ) as HTMLElement;
       const reactFlowContainer = element.querySelector(
-        ".react-flow"
+        ".react-flow",
       ) as HTMLElement;
 
       if (
@@ -119,13 +119,13 @@ const WaterBalance = ({
         captureElement.scrollWidth || 0,
         captureElement.offsetWidth || 0,
         rect?.width || 0,
-        1920
+        1920,
       );
       const scrollHeight = Math.max(
         captureElement.scrollHeight || 0,
         captureElement.offsetHeight || 0,
         rect?.height || 0,
-        1080
+        1080,
       );
 
       if (scrollWidth <= 0 || scrollHeight <= 0) {
@@ -198,7 +198,7 @@ const WaterBalance = ({
       } catch (svgError) {
         console.warn(
           "[WaterBalance] SVG capture failed, trying JPEG:",
-          svgError
+          svgError,
         );
 
         const fallbackOriginalStyle = captureElement.style.cssText;

@@ -37,7 +37,7 @@ const DiagramContent = ({ onDiagramSidebarToggle }: DiagramContentProps) => {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(getCurrentPlantId())
+    (plant) => plant.plant_id === Number(getCurrentPlantId()),
   )?.role;
   const plantId = localStorage.getItem("plantId");
   const organizationId = localStorage.getItem("organizationId");
@@ -102,7 +102,7 @@ const DiagramContent = ({ onDiagramSidebarToggle }: DiagramContentProps) => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(now.getDate()).padStart(2, "0")}`;
   });
   const [yearlyDate, setYearlyDate] = useState(() => {
@@ -113,14 +113,14 @@ const DiagramContent = ({ onDiagramSidebarToggle }: DiagramContentProps) => {
     date.setDate(date.getDate() - 6);
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(date.getDate()).padStart(2, "0")}`;
   });
   const [customEndDate, setCustomEndDate] = useState(() => {
     const date = new Date();
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(date.getDate()).padStart(2, "0")}`;
   });
 
@@ -235,7 +235,7 @@ const DiagramContent = ({ onDiagramSidebarToggle }: DiagramContentProps) => {
       monthYear,
       yearlyDate,
       customStartDate,
-      customEndDate
+      customEndDate,
     );
 
     // Determine payload based on node type:
@@ -264,7 +264,7 @@ const DiagramContent = ({ onDiagramSidebarToggle }: DiagramContentProps) => {
         from_date: fromDate,
         to_date: toDate,
         duration: durationType,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {

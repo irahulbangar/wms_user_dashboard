@@ -49,19 +49,19 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { user } = useAppSelector((state) => state.user);
   const { sidebarMenu: sidebarMenuFromStore } = useAppSelector(
-    (state) => state.plant
+    (state) => state.plant,
   );
   const navigate = useNavigate();
   const location = useLocation();
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(localStorage.getItem("plantId"))
+    (plant) => plant.plant_id === Number(localStorage.getItem("plantId")),
   )?.role;
   const logo = localStorage.getItem("logo");
 
   const getInitialExpandedMenusFromPathname = (pathname: string): string[] => {
     const expanded: string[] = [];
     const manuallyCollapsed = new Set(
-      JSON.parse(localStorage.getItem("manuallyCollapsedMenus") || "[]")
+      JSON.parse(localStorage.getItem("manuallyCollapsedMenus") || "[]"),
     );
 
     if (pathname.startsWith("/department/device/")) {
@@ -84,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         const plantId = pathParts[3];
         const systemId = pathParts[4];
         const menuItem = sidebarMenuFromStore?.find(
-          (item) => item.system_id?.toString() === systemId
+          (item) => item.system_id?.toString() === systemId,
         );
         if (menuItem) {
           const orgMenuId = `org-${orgId}`;
@@ -100,7 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       if (pathParts.length >= 2) {
         const plantId = pathParts[1];
         const menuItem = sidebarMenuFromStore?.find(
-          (item) => item.plant_id?.toString() === plantId
+          (item) => item.plant_id?.toString() === plantId,
         );
         if (menuItem) {
           const orgId = menuItem.organization_id.toString();
@@ -123,10 +123,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const [expandedMenus, setExpandedMenus] = useState<string[]>(() =>
-    getInitialExpandedMenusFromPathname(location.pathname)
+    getInitialExpandedMenusFromPathname(location.pathname),
   );
   const manuallyCollapsedRef = useRef<Set<string>>(
-    new Set(JSON.parse(localStorage.getItem("manuallyCollapsedMenus") || "[]"))
+    new Set(JSON.parse(localStorage.getItem("manuallyCollapsedMenus") || "[]")),
   );
   const isInitialMountRef = useRef(true);
   const dispatch = useAppDispatch();
@@ -167,7 +167,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       if (pathParts.length >= 2) {
         const plantId = pathParts[1];
         const menuItem = sidebarMenuFromStore?.find(
-          (item) => item.plant_id?.toString() === plantId
+          (item) => item.plant_id?.toString() === plantId,
         );
         if (menuItem) {
           const orgId = menuItem.organization_id.toString();
@@ -236,7 +236,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         const plantId = pathParts[3];
         const systemId = pathParts[4];
         const menuItem = sidebarMenuFromStore?.find(
-          (item) => item.system_id?.toString() === systemId
+          (item) => item.system_id?.toString() === systemId,
         );
         if (menuItem) {
           const orgMenuId = `org-${orgId}`;
@@ -268,7 +268,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     if (newExpandedMenus.length > 0) {
       setExpandedMenus((prev) => {
         const hasAllMenus = newExpandedMenus.every((menu) =>
-          prev.includes(menu)
+          prev.includes(menu),
         );
         if (hasAllMenus && prev.length === newExpandedMenus.length) {
           return prev;
@@ -337,10 +337,10 @@ const Sidebar: React.FC<SidebarProps> = ({
         location,
         currentPage,
         [],
-        sidebarMenuFromStore
+        sidebarMenuFromStore,
       );
     },
-    [location.pathname, currentPage, sidebarMenuFromStore]
+    [location.pathname, currentPage, sidebarMenuFromStore],
   );
 
   const isMenuExpanded = (itemId: string) => {
@@ -478,7 +478,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                           subItem,
                           location,
                           isDepartmentMenuItem,
-                          currentSystemId
+                          currentSystemId,
                         ) ||
                         (subItem.id.startsWith("org-") ||
                         subItem.id.startsWith("plant-") ||
@@ -516,7 +516,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                         subItem,
                                         navigate,
                                         userRole,
-                                        setIsOpen
+                                        setIsOpen,
                                       );
                                     } else if (
                                       subItem.id.startsWith("plant-")
@@ -529,37 +529,37 @@ const Sidebar: React.FC<SidebarProps> = ({
                                             (otherSubItem) => {
                                               if (
                                                 otherSubItem.id.startsWith(
-                                                  "plant-"
+                                                  "plant-",
                                                 ) &&
                                                 otherSubItem.id !==
                                                   subItem.id &&
                                                 updated.includes(
-                                                  otherSubItem.id
+                                                  otherSubItem.id,
                                                 )
                                               ) {
                                                 const index = updated.indexOf(
-                                                  otherSubItem.id
+                                                  otherSubItem.id,
                                                 );
                                                 if (index > -1) {
                                                   updated.splice(index, 1);
                                                   manuallyCollapsedRef.current.add(
-                                                    otherSubItem.id
+                                                    otherSubItem.id,
                                                   );
                                                 }
                                               }
-                                            }
+                                            },
                                           );
                                         }
 
                                         if (!updated.includes(subItem.id)) {
                                           updated.push(subItem.id);
                                           manuallyCollapsedRef.current.delete(
-                                            subItem.id
+                                            subItem.id,
                                           );
                                         }
 
                                         saveManuallyCollapsedMenus(
-                                          manuallyCollapsedRef.current
+                                          manuallyCollapsedRef.current,
                                         );
                                         return updated;
                                       });
@@ -569,7 +569,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                       handlePlantMenuClick(
                                         subItem,
                                         navigate,
-                                        setIsOpen
+                                        setIsOpen,
                                       );
                                     } else if (subItem.id.startsWith("dept-")) {
                                       setExpandedMenus((prev) => {
@@ -580,37 +580,37 @@ const Sidebar: React.FC<SidebarProps> = ({
                                             (otherSubItem) => {
                                               if (
                                                 otherSubItem.id.startsWith(
-                                                  "dept-"
+                                                  "dept-",
                                                 ) &&
                                                 otherSubItem.id !==
                                                   subItem.id &&
                                                 updated.includes(
-                                                  otherSubItem.id
+                                                  otherSubItem.id,
                                                 )
                                               ) {
                                                 const index = updated.indexOf(
-                                                  otherSubItem.id
+                                                  otherSubItem.id,
                                                 );
                                                 if (index > -1) {
                                                   updated.splice(index, 1);
                                                   manuallyCollapsedRef.current.add(
-                                                    otherSubItem.id
+                                                    otherSubItem.id,
                                                   );
                                                 }
                                               }
-                                            }
+                                            },
                                           );
                                         }
 
                                         if (!updated.includes(subItem.id)) {
                                           updated.push(subItem.id);
                                           manuallyCollapsedRef.current.delete(
-                                            subItem.id
+                                            subItem.id,
                                           );
                                         }
 
                                         saveManuallyCollapsedMenus(
-                                          manuallyCollapsedRef.current
+                                          manuallyCollapsedRef.current,
                                         );
                                         return updated;
                                       });
@@ -624,7 +624,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                         sidebarMenuFromStore || [],
                                         expandMenu,
                                         collapseMenuIfExpanded,
-                                        setIsOpen
+                                        setIsOpen,
                                       );
                                     }
                                   } else {
@@ -635,7 +635,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                     handleSystemMenuClick(
                                       subItem,
                                       navigate,
-                                      setIsOpen
+                                      setIsOpen,
                                     );
                                   } else {
                                     if (subItem.href) {
@@ -674,7 +674,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                   subSubItem.subMenu &&
                                   subSubItem.subMenu.length > 0;
                                 const isSubSubExpanded = isMenuExpanded(
-                                  subSubItem.id
+                                  subSubItem.id,
                                 );
                                 const isSubLastItem =
                                   subIndex ===
@@ -686,12 +686,12 @@ const Sidebar: React.FC<SidebarProps> = ({
                                   subSubPathParts.some(
                                     (part) =>
                                       part.includes("-device") &&
-                                      part !== "device"
+                                      part !== "device",
                                   );
                                 const isSubActive =
                                   isMenuItemActive(subSubItem) ||
                                   (location.pathname.startsWith(
-                                    "/system/device/"
+                                    "/system/device/",
                                   ) &&
                                     subSubPathParts.length >= 5 &&
                                     !subSubIsDeviceDetailRoute &&
@@ -728,9 +728,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                                                       sub.subMenu?.some(
                                                         (subSub) =>
                                                           subSub.id ===
-                                                          subSubItem.id
-                                                      )
-                                                  )
+                                                          subSubItem.id,
+                                                      ),
+                                                  ),
                                               );
 
                                               if (parentOrg?.subMenu) {
@@ -741,44 +741,44 @@ const Sidebar: React.FC<SidebarProps> = ({
                                                     (otherSubItem) => {
                                                       if (
                                                         otherSubItem.id.startsWith(
-                                                          "plant-"
+                                                          "plant-",
                                                         ) &&
                                                         otherSubItem.id !==
                                                           subSubItem.id &&
                                                         updated.includes(
-                                                          otherSubItem.id
+                                                          otherSubItem.id,
                                                         )
                                                       ) {
                                                         const index =
                                                           updated.indexOf(
-                                                            otherSubItem.id
+                                                            otherSubItem.id,
                                                           );
                                                         if (index > -1) {
                                                           updated.splice(
                                                             index,
-                                                            1
+                                                            1,
                                                           );
                                                           manuallyCollapsedRef.current.add(
-                                                            otherSubItem.id
+                                                            otherSubItem.id,
                                                           );
                                                         }
                                                       }
-                                                    }
+                                                    },
                                                   );
 
                                                   if (
                                                     !updated.includes(
-                                                      subSubItem.id
+                                                      subSubItem.id,
                                                     )
                                                   ) {
                                                     updated.push(subSubItem.id);
                                                     manuallyCollapsedRef.current.delete(
-                                                      subSubItem.id
+                                                      subSubItem.id,
                                                     );
                                                   }
 
                                                   saveManuallyCollapsedMenus(
-                                                    manuallyCollapsedRef.current
+                                                    manuallyCollapsedRef.current,
                                                   );
                                                   return updated;
                                                 });
@@ -791,7 +791,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                               handlePlantMenuClick(
                                                 subSubItem,
                                                 navigate,
-                                                setIsOpen
+                                                setIsOpen,
                                               );
                                             } else if (
                                               subSubItem.id.startsWith("dept-")
@@ -804,45 +804,45 @@ const Sidebar: React.FC<SidebarProps> = ({
                                                     (otherSubSubItem) => {
                                                       if (
                                                         otherSubSubItem.id.startsWith(
-                                                          "dept-"
+                                                          "dept-",
                                                         ) &&
                                                         otherSubSubItem.id !==
                                                           subSubItem.id &&
                                                         updated.includes(
-                                                          otherSubSubItem.id
+                                                          otherSubSubItem.id,
                                                         )
                                                       ) {
                                                         const index =
                                                           updated.indexOf(
-                                                            otherSubSubItem.id
+                                                            otherSubSubItem.id,
                                                           );
                                                         if (index > -1) {
                                                           updated.splice(
                                                             index,
-                                                            1
+                                                            1,
                                                           );
                                                           manuallyCollapsedRef.current.add(
-                                                            otherSubSubItem.id
+                                                            otherSubSubItem.id,
                                                           );
                                                         }
                                                       }
-                                                    }
+                                                    },
                                                   );
                                                 }
 
                                                 if (
                                                   !updated.includes(
-                                                    subSubItem.id
+                                                    subSubItem.id,
                                                   )
                                                 ) {
                                                   updated.push(subSubItem.id);
                                                   manuallyCollapsedRef.current.delete(
-                                                    subSubItem.id
+                                                    subSubItem.id,
                                                   );
                                                 }
 
                                                 saveManuallyCollapsedMenus(
-                                                  manuallyCollapsedRef.current
+                                                  manuallyCollapsedRef.current,
                                                 );
                                                 return updated;
                                               });
@@ -856,7 +856,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                                 sidebarMenuFromStore || [],
                                                 expandMenu,
                                                 collapseMenuIfExpanded,
-                                                setIsOpen
+                                                setIsOpen,
                                               );
                                             } else {
                                               toggleMenu(subSubItem.id);
@@ -865,7 +865,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                             handleSystemMenuClick(
                                               subSubItem,
                                               navigate,
-                                              setIsOpen
+                                              setIsOpen,
                                             );
                                           }
                                         }}
@@ -907,7 +907,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                                 systemItem,
                                                 location,
                                                 true,
-                                                currentSystemId
+                                                currentSystemId,
                                               );
 
                                             return (
@@ -932,7 +932,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                                     handleSystemMenuClick(
                                                       systemItem,
                                                       navigate,
-                                                      setIsOpen
+                                                      setIsOpen,
                                                     );
                                                   }}
                                                 >
@@ -950,7 +950,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                                 </button>
                                               </div>
                                             );
-                                          }
+                                          },
                                         )}
                                       </div>
                                     )}

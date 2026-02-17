@@ -1,6 +1,7 @@
 import Login from "./Components/Login";
 import AuthInitializer from "./Components/AuthInitializer";
-import { ThemeProvider, useTheme } from "./context/ThemeContext";
+import ThemeProvider from "./context/ThemeContext";
+import { useTheme } from "./context/useTheme";
 import {
   Navigate,
   createBrowserRouter,

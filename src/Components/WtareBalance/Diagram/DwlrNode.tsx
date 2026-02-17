@@ -48,8 +48,8 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
   const borderColor = recordTimeOld
     ? "border-status-danger"
     : isActive
-    ? "border-status-success"
-    : "border-border-primary";
+      ? "border-status-success"
+      : "border-border-primary";
 
   const connectionInfo = [
     `System Name: ${systemName}`,
@@ -91,8 +91,8 @@ const DwlrNode = ({ data }: DwlrNodeProps) => {
           recordTimeOld
             ? "bg-status-danger animate-pulse"
             : isActive
-            ? "bg-status-success animate-pulse"
-            : "bg-status-danger"
+              ? "bg-status-success animate-pulse"
+              : "bg-status-danger"
         }`}
       />
 

@@ -88,4 +88,3 @@ const DwlrDeviceInfo = ({ deviceData }: DwlrDeviceInfoProps) => {
 };
 
 export default DwlrDeviceInfo;
-

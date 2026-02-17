@@ -44,28 +44,28 @@ const BdwfmsDevice = () => {
   const location = useLocation();
   const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(getCurrentPlantId())
+    (plant) => plant.plant_id === Number(getCurrentPlantId()),
   )?.role;
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const defaultCustomFrom = sevenDaysAgo.toISOString().split("T")[0];
   const defaultCustomTo = now.toISOString().split("T")[0];
   const [activeTab, setActiveTab] = useState<"panel" | "reports">(
-    (searchParams.get("tab") as "panel" | "reports") || "panel"
+    (searchParams.get("tab") as "panel" | "reports") || "panel",
   );
   const [selectedReport, setSelectedReport] = useState<
     "none" | "runTime" | "customReport"
   >(
     (searchParams.get("report") as "none" | "runTime" | "customReport") ||
-      "none"
+      "none",
   );
 
   const [deviceData, setDeviceData] = useState<SingleDeviceResult>(
-    {} as SingleDeviceResult
+    {} as SingleDeviceResult,
   );
 
   const [runTimeDate, setRunTimeDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [runTimeData, setRunTimeData] = useState<BdwfmsDeviceResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -103,7 +103,7 @@ const BdwfmsDevice = () => {
 
     const paginatedData = currentData.slice(
       (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
+      currentPage * rowsPerPage,
     );
     return paginatedData.length;
   }, [runTimeData, selectedReport, currentPage, rowsPerPage, customReportData]);
@@ -119,7 +119,7 @@ const BdwfmsDevice = () => {
   const handlePaginatedData = (data: BdwfmsDeviceResultItem[]) => {
     return data.slice(
       (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
+      currentPage * rowsPerPage,
     );
   };
 
@@ -171,7 +171,7 @@ const BdwfmsDevice = () => {
         plantId: Number(deviceData?.plant_id) || 0,
         deviceId: Number(device_id) || 0,
         date: runTimeDate,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -207,7 +207,7 @@ const BdwfmsDevice = () => {
         from_date: fromDateWithTime,
         to_date: toDateWithTime,
         duration: customReportDuration,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -264,7 +264,7 @@ const BdwfmsDevice = () => {
   };
 
   const updateSelectedReport = (
-    report: "none" | "runTime" | "customReport"
+    report: "none" | "runTime" | "customReport",
   ) => {
     setSelectedReport(report);
     setSearchParams((prev) => {
@@ -299,7 +299,7 @@ const BdwfmsDevice = () => {
     }));
     downloadCSV(
       useArray,
-      `Bdwfms_Custom_Report_${customReportFromDate}_to_${customReportToDate}`
+      `Bdwfms_Custom_Report_${customReportFromDate}_to_${customReportToDate}`,
     );
   };
 
@@ -363,7 +363,7 @@ const BdwfmsDevice = () => {
               navigate(
                 location.pathname.startsWith("/system/device/")
                   ? `/system/device/${organizationId}/${getCurrentPlantId()}/${systemId}`
-                  : "/devices"
+                  : "/devices",
               )
             }
             className="text-text-secondary hover:text-text-primary hover:bg-overlay/20 px-2 py-1 rounded transition-all duration-200 cursor-pointer font-roboto"
@@ -609,7 +609,7 @@ const BdwfmsDevice = () => {
                                       : Number(data?.total)}
                                   </td>
                                 </tr>
-                              )
+                              ),
                             )}
                         </tbody>
                       </table>
@@ -650,7 +650,7 @@ const BdwfmsDevice = () => {
                         value={customReportDuration}
                         onChange={(e) =>
                           setCustomReportDuration(
-                            e.target.value as "15min" | "1hour" | "1day"
+                            e.target.value as "15min" | "1hour" | "1day",
                           )
                         }
                         className="w-42 px-3 py-1.5 border border-border-primary bg-primary text-text-primary rounded-md focus:outline-none focus:ring-1 focus:ring-status-info"
@@ -751,7 +751,7 @@ const BdwfmsDevice = () => {
                                 {flowUnit(
                                   selectedReport,
                                   customReportDuration,
-                                  deviceData
+                                  deviceData,
                                 )}
                                 )
                               </span>
@@ -787,7 +787,7 @@ const BdwfmsDevice = () => {
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
                                     {formatDateForCSV(
-                                      data?.interval_start || ""
+                                      data?.interval_start || "",
                                     )}
                                   </td>
                                   <td className="px-4 py-3 text-text-primary text-start font-roboto text-base capitalize">
@@ -799,7 +799,7 @@ const BdwfmsDevice = () => {
                                         flowUnit(
                                           selectedReport,
                                           customReportDuration,
-                                          deviceData
+                                          deviceData,
                                         ) === "LPM"
                                           ? Number(data?.avg || 0)
                                           : Number(data?.flow || 0);
@@ -814,7 +814,7 @@ const BdwfmsDevice = () => {
                                       : Number(data?.total)}
                                   </td>
                                 </tr>
-                              )
+                              ),
                             )}
                         </tbody>
                       </table>

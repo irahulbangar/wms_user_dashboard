@@ -15,7 +15,7 @@ interface FeatureRouteGuardProps {
 const FeatureRouteGuard: React.FC<FeatureRouteGuardProps> = ({ children }) => {
   const location = useLocation();
   const { sidebarMenu: sidebarMenuFromStore } = useAppSelector(
-    (state) => state.plant
+    (state) => state.plant,
   );
   const [isChecking, setIsChecking] = useState(true);
   const [currentPlantId, setCurrentPlantId] = useState<string | null>(() => {
@@ -74,7 +74,7 @@ const FeatureRouteGuard: React.FC<FeatureRouteGuardProps> = ({ children }) => {
   const routeCheck = checkRouteFeature(
     location.pathname,
     sidebarMenuFromStore,
-    plantIdFromStorage
+    plantIdFromStorage,
   );
 
   if (!routeCheck.available) {

@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 interface DateSelectionProps {
   dateSelectionType: "daily" | "monthly" | "yearly" | "custom";
   setDateSelectionType: (
-    type: "daily" | "monthly" | "yearly" | "custom"
+    type: "daily" | "monthly" | "yearly" | "custom",
   ) => void;
   dailyDate: string;
   setDailyDate: (date: string) => void;
@@ -73,12 +73,12 @@ const DateSelection: React.FC<DateSelectionProps> = ({
   useEffect(() => {
     const availableOptions = getAvailableDurationOptions();
     const isValidDuration = availableOptions.some(
-      (opt) => opt.value === durationType
+      (opt) => opt.value === durationType,
     );
 
     if (!isValidDuration && availableOptions.length > 0) {
       setDurationType(
-        availableOptions[0].value as "min" | "hour" | "day" | "month"
+        availableOptions[0].value as "min" | "hour" | "day" | "month",
       );
     }
   }, [
@@ -220,10 +220,10 @@ const DateSelection: React.FC<DateSelectionProps> = ({
             {durationType === "min"
               ? "Every 15 min"
               : durationType === "hour"
-              ? "Every hour"
-              : durationType === "day"
-              ? "Every day"
-              : "Every month"}
+                ? "Every hour"
+                : durationType === "day"
+                  ? "Every day"
+                  : "Every month"}
           </span>
           <ChevronDown
             className={`w-4 h-4 text-text-secondary transition-transform duration-200 ${
@@ -242,7 +242,7 @@ const DateSelection: React.FC<DateSelectionProps> = ({
                 type="button"
                 onClick={() => {
                   setDurationType(
-                    option.value as "min" | "hour" | "day" | "month"
+                    option.value as "min" | "hour" | "day" | "month",
                   );
                   setIsDurationTypeDropdownOpen(false);
                 }}

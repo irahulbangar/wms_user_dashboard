@@ -119,7 +119,7 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
             if (dateFormat === "min") {
               return `${monthName} ${day} ${String(hour).padStart(
                 2,
-                "0"
+                "0",
               )}:${String(minutes || 0).padStart(2, "0")}`;
             } else {
               return `${monthName} ${day} ${String(hour).padStart(2, "0")}:00`;
@@ -150,7 +150,7 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
           dataSeries.consumption.push(ensureNonNegative(dayData?.consumption));
           dataSeries.wastage.push(ensureNonNegative(dayData?.wastage));
           dataSeries.regeneration.push(
-            ensureNonNegative(dayData?.regeneration)
+            ensureNonNegative(dayData?.regeneration),
           );
           dataSeries.reuse.push(ensureNonNegative(dayData?.reuse));
           dataSeries.rainfall.push(ensureNonNegative(dayData?.rainfall));
@@ -222,7 +222,7 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
           padding: [8, 12],
           textStyle: { color: "#fff", fontSize: 12 },
           formatter: function (
-            params: TooltipFormatterParam[] | TooltipFormatterParam
+            params: TooltipFormatterParam[] | TooltipFormatterParam,
           ) {
             const paramsArray = Array.isArray(params) ? params : [params];
             if (!paramsArray || paramsArray.length === 0) return "";
@@ -243,11 +243,11 @@ export const useLineChart = ({ daywiseData, unit }: UseLineChartProps = {}) => {
               .map((p) => {
                 if (p.seriesName === "Water Neutrality Index") {
                   return `${p.marker} ${p.seriesName}: ${Number(p.data).toFixed(
-                    2
+                    2,
                   )}%`;
                 }
                 return `${p.marker} ${p.seriesName}: ${Number(
-                  p.data
+                  p.data,
                 ).toLocaleString()}`;
               });
 

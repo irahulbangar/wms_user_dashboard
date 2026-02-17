@@ -40,7 +40,7 @@ const DepartmentDevices = () => {
   const departmentDevicesRef = useRef<HTMLDivElement>(null);
   const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(plantId)
+    (plant) => plant.plant_id === Number(plantId),
   )?.role;
   const [devices, setDevices] = useState<DevicesResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -108,7 +108,7 @@ const DepartmentDevices = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(now.getDate()).padStart(2, "0")}`;
   });
   const [yearlyDate, setYearlyDate] = useState(() => {
@@ -118,14 +118,14 @@ const DepartmentDevices = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(now.getDate()).padStart(2, "0")}`;
   });
   const [customEndDate, setCustomEndDate] = useState(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(now.getDate()).padStart(2, "0")}`;
   });
   const [plantReport, setPlantReport] = useState<PlantReportData | null>(null);
@@ -144,7 +144,7 @@ const DepartmentDevices = () => {
       monthYear,
       yearlyDate,
       customStartDate,
-      customEndDate
+      customEndDate,
     );
 
     dispatch(
@@ -155,7 +155,7 @@ const DepartmentDevices = () => {
         from_date: fromDate,
         to_date: toDate,
         duration: durationType,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -421,7 +421,7 @@ const DepartmentDevices = () => {
         console.warn(
           "Error processing date entry for daywise data:",
           dateKey,
-          error
+          error,
         );
       }
     });
@@ -438,7 +438,7 @@ const DepartmentDevices = () => {
     const hasData =
       Object.keys(daywiseData).length > 0 &&
       Object.values(daywiseData).some((dayData) =>
-        Object.values(dayData).some((value) => value > 0)
+        Object.values(dayData).some((value) => value > 0),
       );
 
     return hasData ? daywiseData : null;
@@ -487,7 +487,7 @@ const DepartmentDevices = () => {
           organizationId: Number(organizationId),
           plantId: Number(plantId),
           departmentId: Number(departmentId),
-        })
+        }),
       )
         .unwrap()
         .then((res) => {
@@ -535,7 +535,7 @@ const DepartmentDevices = () => {
       devices,
       calculateDepartmentWaterBalance,
       departmentId || 0,
-      false
+      false,
     );
   }, [aggregatedWaterBalanceData, devices, departmentId]);
 
@@ -550,17 +550,17 @@ const DepartmentDevices = () => {
       getReportTypeColor("Regeneration"),
       getReportTypeColor("Re-use"),
     ],
-    []
+    [],
   );
 
   const storageBalanceData = useMemo(
     () => calculateDepartmentStorageBalance(devices, departmentId || 0),
-    [devices, departmentId]
+    [devices, departmentId],
   );
 
   const storageBalanceColors = useMemo(
     () => getDepartmentStorageBalanceColors(),
-    []
+    [],
   );
 
   const waterNeutralityIndexColors = useMemo(() => {
@@ -735,7 +735,7 @@ const DepartmentDevices = () => {
       monthYear,
       yearlyDate,
       customStartDate,
-      customEndDate
+      customEndDate,
     );
 
     try {
@@ -748,7 +748,7 @@ const DepartmentDevices = () => {
             from_date: fromDate,
             to_date: toDate,
             duration: durationType,
-          })
+          }),
         )
           .unwrap()
           .then((res) => ({
@@ -758,7 +758,7 @@ const DepartmentDevices = () => {
           .catch((err) => {
             console.log(`Failed to fetch report for system ${system.id}:`, err);
             return { systemId: system.id, report: null };
-          })
+          }),
       );
 
       const results = await Promise.all(systemPromises);
@@ -940,7 +940,7 @@ const DepartmentDevices = () => {
       const maxLoadAttempts = 200;
       while (loadCheckAttempts < maxLoadAttempts) {
         const allSkeletons = departmentDevicesRef.current.querySelectorAll(
-          '[class*="animate-pulse"]'
+          '[class*="animate-pulse"]',
         );
         const visibleSkeletons = Array.from(allSkeletons).filter((el) => {
           const htmlEl = el as HTMLElement;
@@ -952,21 +952,21 @@ const DepartmentDevices = () => {
         });
 
         const pieChartSkeletons = departmentDevicesRef.current.querySelectorAll(
-          '.bg-card [class*="rounded-full"][class*="bg-input-bg"][class*="animate-pulse"]'
+          '.bg-card [class*="rounded-full"][class*="bg-input-bg"][class*="animate-pulse"]',
         );
         const hasPieChartSkeletons = Array.from(pieChartSkeletons).some(
-          (el) => (el as HTMLElement).offsetParent !== null
+          (el) => (el as HTMLElement).offsetParent !== null,
         );
 
         const tableSkeletonRows = departmentDevicesRef.current.querySelectorAll(
-          'table tbody tr[class*="animate-pulse"]'
+          'table tbody tr[class*="animate-pulse"]',
         );
         const hasTableSkeletons = Array.from(tableSkeletonRows).some(
-          (el) => (el as HTMLElement).offsetParent !== null
+          (el) => (el as HTMLElement).offsetParent !== null,
         );
 
         const skeletonCards = departmentDevicesRef.current.querySelectorAll(
-          '[class*="LoadingSkeleton"], [class*="animate-pulse"]'
+          '[class*="LoadingSkeleton"], [class*="animate-pulse"]',
         );
         const hasSkeletonCards = Array.from(skeletonCards).some((el) => {
           const htmlEl = el as HTMLElement;
@@ -988,7 +988,7 @@ const DepartmentDevices = () => {
           departmentDevicesRef.current.querySelector("table tbody");
         const tableRows = dataTable
           ? Array.from(
-              dataTable.querySelectorAll("tr:not([class*='animate-pulse'])")
+              dataTable.querySelectorAll("tr:not([class*='animate-pulse'])"),
             ).filter((row) => {
               const text = row.textContent || "";
               return (
@@ -1001,7 +1001,7 @@ const DepartmentDevices = () => {
         const hasTableData = tableRows.length > 0;
 
         const lineChartContainer = departmentDevicesRef.current.querySelector(
-          '[class*="h-[300px]"], [class*="min-h-[300px]"]'
+          '[class*="h-[300px]"], [class*="min-h-[300px]"]',
         );
         const lineChartCanvas = lineChartContainer
           ? lineChartContainer.querySelector("canvas")
@@ -1015,10 +1015,10 @@ const DepartmentDevices = () => {
               (card) => {
                 const hasCanvas = card.querySelector("canvas") !== null;
                 const hasSkeleton = card.querySelector(
-                  '[class*="rounded-full"][class*="bg-input-bg"][class*="animate-pulse"]'
+                  '[class*="rounded-full"][class*="bg-input-bg"][class*="animate-pulse"]',
                 );
                 return hasCanvas && !hasSkeleton;
-              }
+              },
             )
           : [];
         const hasPieCharts = pieChartCards.length > 0;
@@ -1027,7 +1027,7 @@ const DepartmentDevices = () => {
         let systemBalanceGrid: Element | null = null;
         for (const grid of Array.from(allGrids)) {
           const hasSystemBalance = grid.querySelector(
-            '[class*="SystemBalance"], [class*="balance"]'
+            '[class*="SystemBalance"], [class*="balance"]',
           );
           if (hasSystemBalance) {
             systemBalanceGrid = grid;
@@ -1043,17 +1043,17 @@ const DepartmentDevices = () => {
                   !text.includes("No systems found") &&
                   !card.querySelector('[class*="animate-pulse"]')
                 );
-              }
+              },
             )
           : [];
         const hasSystemBalances = systemBalanceCards.length > 0;
 
         const deviceSections = departmentDevicesRef.current.querySelectorAll(
-          '[class*="SystemGroup"], [class*="device"]'
+          '[class*="SystemGroup"], [class*="device"]',
         );
         const hasDeviceSections = deviceSections.length > 0;
         const deviceRows = departmentDevicesRef.current.querySelectorAll(
-          'tbody tr:not([class*="animate-pulse"])'
+          'tbody tr:not([class*="animate-pulse"])',
         );
         const hasDeviceRows = deviceRows.length > 0;
 
@@ -1070,10 +1070,10 @@ const DepartmentDevices = () => {
 
           const finalSkeletonCheck =
             departmentDevicesRef.current.querySelectorAll(
-              '[class*="animate-pulse"]'
+              '[class*="animate-pulse"]',
             );
           const finalVisibleSkeletons = Array.from(finalSkeletonCheck).filter(
-            (el) => (el as HTMLElement).offsetParent !== null
+            (el) => (el as HTMLElement).offsetParent !== null,
           );
 
           if (finalVisibleSkeletons.length === 0) {
@@ -1086,7 +1086,7 @@ const DepartmentDevices = () => {
       }
 
       const collapsedElements = departmentDevicesRef.current.querySelectorAll(
-        '[class*="collapsed"], [aria-expanded="false"]'
+        '[class*="collapsed"], [aria-expanded="false"]',
       );
       if (collapsedElements.length > 0) {
         collapsedElements.forEach((el) => {
@@ -1101,7 +1101,7 @@ const DepartmentDevices = () => {
         const maxExpansionChecks = 30;
         while (expansionCheckAttempts < maxExpansionChecks) {
           const stillCollapsed = departmentDevicesRef.current.querySelectorAll(
-            '[class*="collapsed"], [aria-expanded="false"]'
+            '[class*="collapsed"], [aria-expanded="false"]',
           );
           if (stillCollapsed.length === 0) {
             break;
@@ -1135,7 +1135,7 @@ const DepartmentDevices = () => {
         ? Array.from(gridContainer.querySelectorAll(".bg-card")).filter(
             (card) => {
               return card.querySelector("canvas") !== null;
-            }
+            },
           )
         : [];
       const expectedPieCharts = pieChartContainers.length;
@@ -1213,26 +1213,26 @@ const DepartmentDevices = () => {
                   htmlCanvas.width - 10,
                   10,
                   1,
-                  1
+                  1,
                 );
                 const bottomLeftData = ctx.getImageData(
                   10,
                   htmlCanvas.height - 10,
                   1,
-                  1
+                  1,
                 );
                 const bottomRightData = ctx.getImageData(
                   htmlCanvas.width - 10,
                   htmlCanvas.height - 10,
                   1,
-                  1
+                  1,
                 );
                 const quarterData = ctx.getImageData(quarterX, quarterY, 1, 1);
                 const threeQuarterData = ctx.getImageData(
                   threeQuarterX,
                   threeQuarterY,
                   1,
-                  1
+                  1,
                 );
 
                 const hasContent =
@@ -1267,7 +1267,7 @@ const DepartmentDevices = () => {
       }
 
       const lineChartContainer = departmentDevicesRef.current.querySelector(
-        '[class*="h-[300px]"], [class*="min-h-[300px]"]'
+        '[class*="h-[300px]"], [class*="min-h-[300px]"]',
       );
       const lineChartCanvas = lineChartContainer
         ? (lineChartContainer.querySelector("canvas") as HTMLCanvasElement)
@@ -1308,7 +1308,7 @@ const DepartmentDevices = () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const finalSkeletons = departmentDevicesRef.current.querySelectorAll(
-        '[class*="animate-pulse"]'
+        '[class*="animate-pulse"]',
       );
       const finalVisibleSkeletons = Array.from(finalSkeletons).filter((el) => {
         const htmlEl = el as HTMLElement;
@@ -1322,7 +1322,7 @@ const DepartmentDevices = () => {
       if (finalVisibleSkeletons.length > 0) {
         await new Promise((resolve) => setTimeout(resolve, 500));
         const retrySkeletons = departmentDevicesRef.current.querySelectorAll(
-          '[class*="animate-pulse"]'
+          '[class*="animate-pulse"]',
         );
         const retryVisible = Array.from(retrySkeletons).filter((el) => {
           const htmlEl = el as HTMLElement;
@@ -1330,7 +1330,7 @@ const DepartmentDevices = () => {
         });
         if (retryVisible.length > 0) {
           console.warn(
-            "Warning: Some skeleton elements still visible, proceeding anyway"
+            "Warning: Some skeleton elements still visible, proceeding anyway",
           );
         }
       }
@@ -1371,9 +1371,9 @@ const DepartmentDevices = () => {
         Math.max(
           element.scrollWidth || 0,
           element.offsetWidth || 0,
-          rect?.width || 0
+          rect?.width || 0,
         ),
-        maxWidth
+        maxWidth,
       );
       const scrollHeight = Math.min(Math.max(...allHeights, 0), maxHeight);
 
@@ -1495,7 +1495,7 @@ const DepartmentDevices = () => {
             plantId: Number(newPlantId),
             organizationId: Number(newOrganizationId),
             departmentId: Number(newDepartmentId),
-          })
+          }),
         )
           .unwrap()
           .then((res) => {
@@ -1722,7 +1722,7 @@ const DepartmentDevices = () => {
                   if (sys.organizationId && sys.plantId && sys.id) {
                     localStorage.setItem("systemId", sys.id.toString());
                     navigate(
-                      `/system/device/${sys.organizationId}/${sys.plantId}/${sys.id}`
+                      `/system/device/${sys.organizationId}/${sys.plantId}/${sys.id}`,
                     );
                   }
                 }}

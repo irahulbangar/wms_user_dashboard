@@ -22,7 +22,7 @@ const Notifications = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalAlerts, setTotalAlerts] = useState(0);
-  const [selectedStatus, _setSelectedStatus] = useState<string>("all");
+  const [selectedStatus] = useState<string>("all");
   const pageSize = 20;
 
   const getCurrentMonthYear = () => {
@@ -56,7 +56,7 @@ const Notifications = () => {
           page_size: pageSize,
           yyyy,
           mm,
-        })
+        }),
       ).unwrap();
 
       if (response.success) {
@@ -113,7 +113,7 @@ const Notifications = () => {
         if (a === "Unknown") return 1;
         if (b === "Unknown") return -1;
         return new Date(b).getTime() - new Date(a).getTime();
-      }
+      },
     );
 
     return { grouped, sortedDates };
@@ -251,7 +251,9 @@ const Notifications = () => {
                         {alert.updated_at &&
                           alert.updated_at !== alert.created_at && (
                             <div className="flex items-center gap-1">
-                              <span className="whitespace-nowrap">Updated :</span>
+                              <span className="whitespace-nowrap">
+                                Updated :
+                              </span>
                               <span className="truncate">
                                 {formatDateWithTime(alert.updated_at)}
                               </span>

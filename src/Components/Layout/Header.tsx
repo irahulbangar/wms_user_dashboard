@@ -10,7 +10,7 @@ import {
   Mail,
   Phone,
 } from "lucide-react";
-import { useTheme } from "../../context/ThemeContext";
+import { useTheme } from "../../context/useTheme";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { logout } from "../../../store/usersSlice";
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
@@ -64,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(getCurrentPlantId())
+    (plant) => plant.plant_id === Number(getCurrentPlantId()),
   )?.role;
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ const Header: React.FC<HeaderProps> = ({
         page_size: 50,
         yyyy: new Date().getFullYear(),
         mm: new Date().getMonth() + 1,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -210,8 +210,8 @@ const Header: React.FC<HeaderProps> = ({
             location.pathname === "/plant-layout"
               ? "block"
               : sidebarOpen
-              ? "hidden"
-              : "lg:hidden"
+                ? "hidden"
+                : "lg:hidden"
           }`}
         >
           <Menu className="h-5 w-5" />
@@ -360,10 +360,10 @@ const Header: React.FC<HeaderProps> = ({
                 {userRole === "org_admin"
                   ? "Admin"
                   : userRole === "org_user"
-                  ? "User"
-                  : user?.plantsList[0].role === "org_admin"
-                  ? "Admin"
-                  : "User"}
+                    ? "User"
+                    : user?.plantsList[0].role === "org_admin"
+                      ? "Admin"
+                      : "User"}
               </p>
             </div>
             <ChevronDown

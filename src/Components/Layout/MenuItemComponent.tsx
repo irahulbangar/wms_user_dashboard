@@ -9,7 +9,12 @@ interface MenuItemComponentProps {
   isLastItem: boolean;
   onToggle: (itemId: string) => void;
   onClick: (item: MenuItem) => void;
-  renderSubMenu?: (subItem: MenuItem, parentItem: MenuItem, index: number, isLastItem: boolean) => React.ReactNode;
+  renderSubMenu?: (
+    subItem: MenuItem,
+    parentItem: MenuItem,
+    index: number,
+    isLastItem: boolean,
+  ) => React.ReactNode;
 }
 
 const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
@@ -24,13 +29,10 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
 }) => {
   const hasSubMenu = item.subMenu && item.subMenu.length > 0;
   const textSizeClass =
-    level === 0
-      ? "text-lg"
-      : level === 1
-      ? "text-base"
-      : "text-sm";
+    level === 0 ? "text-lg" : level === 1 ? "text-base" : "text-sm";
   const iconSizeClass = level === 0 ? "w-5 h-5" : "w-4 h-4";
-  const paddingClass = level === 0 ? "px-3" : level === 1 ? "pl-3 pr-3" : "px-3";
+  const paddingClass =
+    level === 0 ? "px-3" : level === 1 ? "pl-3 pr-3" : "px-3";
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -46,7 +48,9 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
       <div className="relative flex items-start">
         {level > 0 && (
           <>
-            <div className={`absolute left-2 ${level === 1 ? "top-4.5" : "top-4"} w-4 h-px bg-border-primary`}></div>
+            <div
+              className={`absolute left-2 ${level === 1 ? "top-4.5" : "top-4"} w-4 h-px bg-border-primary`}
+            ></div>
             {!isLastItem && (
               <div className="absolute left-2 top-3 bottom-0 w-px bg-border-primary"></div>
             )}
@@ -58,8 +62,8 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
             isActive
               ? "bg-linear-to-r text-white shadow-lg"
               : level === 0
-              ? "text-text-primary hover:bg-hover-bg-primary"
-              : "text-text-secondary hover:bg-hover-bg-primary"
+                ? "text-text-primary hover:bg-hover-bg-primary"
+                : "text-text-secondary hover:bg-hover-bg-primary"
           }`}
           onClick={handleClick}
         >
@@ -95,4 +99,3 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
 };
 
 export default MenuItemComponent;
-

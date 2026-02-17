@@ -16,8 +16,8 @@ export const buildMenuItems = (
   plants: PlantResult[],
   departments: DepartmentResult[],
   systems: SystemResult[],
-  _userRole?: string,
-  _user?: any
+  // _userRole?: string,
+  // _user?: any,
 ): MenuItem[] => {
   const baseItems: MenuItem[] = [];
 

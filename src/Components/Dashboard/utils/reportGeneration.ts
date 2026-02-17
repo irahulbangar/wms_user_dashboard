@@ -11,35 +11,35 @@ export const setupWaterNeutralityIndexSection = (
   neutralityData: Array<{ name: string; value: number; color: string }>,
   neutralityValue: number | null,
   selectedSections: SectionVisibility,
-  unit: string = "Ltr."
+  unit: string = "Ltr.",
 ): void => {
   const hasNeutralityData = neutralityData.some((item) => item.value > 0);
   const shouldShow = selectedSections.waterNeutralityIndex && hasNeutralityData;
 
   const sectionContainer = wrapper.querySelector(
-    ".piechart-section"
+    ".piechart-section",
   ) as HTMLElement;
   setElementVisibility(sectionContainer, shouldShow);
   setElementVisibility(
     sectionContainer?.querySelector("h2") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
   setElementVisibility(
     wrapper.querySelector(".piechart-flow") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
   setElementVisibility(
     wrapper.querySelector("#neutralityPieChart") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
   setElementVisibility(
     wrapper.querySelector(".piechart-flow table") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
 
   if (shouldShow) {
     const neutralityTableRows = wrapper.querySelectorAll(
-      ".piechart-flow table tr:not(:first-child)"
+      ".piechart-flow table tr:not(:first-child)",
     );
 
     const dataMap: Record<string, number> = {};
@@ -80,34 +80,34 @@ export const setupWaterNeutralityIndexSection = (
 export const setupStorageSection = (
   wrapper: HTMLElement,
   data: ReportData,
-  selectedSections: SectionVisibility
+  selectedSections: SectionVisibility,
 ): void => {
   const hasStorageData = data.totalStock > 0 || data.availableCapacity > 0;
   const shouldShow = selectedSections.storageAnalysis && hasStorageData;
 
   const sectionContainer = wrapper.querySelector(
-    ".piechart-section-storage"
+    ".piechart-section-storage",
   ) as HTMLElement;
   setElementVisibility(sectionContainer, shouldShow);
   setElementVisibility(
     sectionContainer?.querySelector("h2") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
   setElementVisibility(
     wrapper.querySelector(".piechart-storage") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
   setElementVisibility(
     wrapper.querySelector("#storagePieChart") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
   setElementVisibility(
     wrapper.querySelector(".piechart-storage table") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
 
   const storageTableRows = wrapper.querySelectorAll(
-    ".piechart-storage table tr:not(:first-child)"
+    ".piechart-storage table tr:not(:first-child)",
   );
   if (storageTableRows.length >= 3 && shouldShow) {
     updateTableRow(storageTableRows[0], data.totalStock);
@@ -119,7 +119,7 @@ export const setupStorageSection = (
 export const setupWaterBalanceSection = (
   wrapper: HTMLElement,
   data: ReportData,
-  selectedSections: SectionVisibility
+  selectedSections: SectionVisibility,
 ): void => {
   const hasWaterBalanceData =
     data.flowIn > 0 ||
@@ -133,28 +133,28 @@ export const setupWaterBalanceSection = (
   const shouldShow = selectedSections.waterBalance && hasWaterBalanceData;
 
   const sectionContainer = wrapper.querySelector(
-    ".piechart-section.water-balance-section"
+    ".piechart-section.water-balance-section",
   ) as HTMLElement;
   setElementVisibility(sectionContainer, shouldShow);
   setElementVisibility(
     sectionContainer?.querySelector("h2") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
   setElementVisibility(
     wrapper.querySelector(".piechart-balance") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
   setElementVisibility(
     wrapper.querySelector("#balancePieChart") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
   setElementVisibility(
     wrapper.querySelector(".piechart-balance table") as HTMLElement,
-    shouldShow
+    shouldShow,
   );
 
   const balanceTableRows = wrapper.querySelectorAll(
-    ".piechart-balance table tr:not(:first-child)"
+    ".piechart-balance table tr:not(:first-child)",
   );
   if (balanceTableRows.length >= 9 && shouldShow) {
     const balanceValues = [
@@ -178,35 +178,35 @@ export const setupDetailedReportSection = (
   wrapper: HTMLElement,
   data: ReportData,
   neutralityValue: number | null,
-  selectedSections: SectionVisibility
+  selectedSections: SectionVisibility,
 ): void => {
   const hasDetailedReportData =
     data.totalCapacity > 0 || data.netBalance !== 0 || neutralityValue !== null;
   const shouldShow = selectedSections.detailedReport && hasDetailedReportData;
 
   const section = wrapper.querySelector(
-    ".detailed-report-section"
+    ".detailed-report-section",
   ) as HTMLElement;
   setElementVisibility(section, shouldShow);
   setElementVisibility(section?.querySelector("h2") as HTMLElement, shouldShow);
 
   if (shouldShow) {
     const flowSection = wrapper.querySelector(
-      ".detailed-report-section .detailed-report-table:nth-of-type(1)"
+      ".detailed-report-section .detailed-report-table:nth-of-type(1)",
     ) as HTMLElement;
     if (flowSection) {
       flowSection.style.display = "none";
     }
 
     const storageBalance = wrapper.querySelector(
-      ".detailed-report-section .detailed-report-table:nth-of-type(1) table td:nth-child(2)"
+      ".detailed-report-section .detailed-report-table:nth-of-type(1) table td:nth-child(2)",
     );
     if (storageBalance) {
       storageBalance.textContent = `${data.totalCapacity.toFixed(2)} Ltr`;
     }
 
     const waterBalance = wrapper.querySelector(
-      ".detailed-report-section .detailed-report-table:nth-of-type(2) table td:nth-child(2)"
+      ".detailed-report-section .detailed-report-table:nth-of-type(2) table td:nth-child(2)",
     );
     if (waterBalance) {
       const formattedValue =
@@ -217,7 +217,7 @@ export const setupDetailedReportSection = (
     }
 
     const neutralityIndex = wrapper.querySelector(
-      ".detailed-report-section .detailed-report-table:nth-of-type(3) table td:nth-child(2)"
+      ".detailed-report-section .detailed-report-table:nth-of-type(3) table td:nth-child(2)",
     );
     if (neutralityIndex && neutralityValue !== null) {
       const percentageValue =
@@ -226,7 +226,7 @@ export const setupDetailedReportSection = (
     }
 
     const statusText = wrapper.querySelector(
-      ".detailed-report-section .detailed-report-table:nth-of-type(3) .neutrality-status-text"
+      ".detailed-report-section .detailed-report-table:nth-of-type(3) .neutrality-status-text",
     ) as HTMLElement;
     if (statusText && neutralityValue !== null) {
       const ratioValue =
@@ -248,7 +248,7 @@ export const setupCharts = (
   wrapper: HTMLElement,
   data: ReportData,
   neutralityData: Array<{ name: string; value: number; color: string }>,
-  selectedSections: SectionVisibility
+  selectedSections: SectionVisibility,
 ): void => {
   const scriptTag = wrapper.querySelector("script:last-of-type");
   if (!scriptTag) return;
@@ -261,7 +261,7 @@ export const setupCharts = (
     const values = neutralityData.map((item) => item.value);
     if (labels.length > 0 && values.some((v) => v > 0)) {
       chartScripts.push(
-        createChartScript("neutralityPieChart", labels, values)
+        createChartScript("neutralityPieChart", labels, values),
       );
     }
   }
@@ -274,8 +274,8 @@ export const setupCharts = (
         createChartScript(
           "storagePieChart",
           storageChart.labels,
-          storageChart.values
-        )
+          storageChart.values,
+        ),
       );
     }
   }
@@ -296,8 +296,8 @@ export const setupCharts = (
         createChartScript(
           "balancePieChart",
           balanceChart.labels,
-          balanceChart.values
-        )
+          balanceChart.values,
+        ),
       );
     }
   }
@@ -498,7 +498,7 @@ export const setupScreenshotSections = (
     plantDiagram: string;
     system: string;
     department: string;
-  }
+  },
 ): void => {
   const sections = [
     { key: "dashboard", selector: ".dashboard" },
@@ -509,7 +509,7 @@ export const setupScreenshotSections = (
     const section = wrapper.querySelector(selector) as HTMLElement;
     setElementVisibility(
       section,
-      selectedSections[key as keyof SectionVisibility]
+      selectedSections[key as keyof SectionVisibility],
     );
   });
 
@@ -517,14 +517,14 @@ export const setupScreenshotSections = (
   if (systemSection) {
     const shouldShow = Boolean(
       selectedSections.system &&
-        screenshots.systems &&
-        screenshots.systems.length > 0
+      screenshots.systems &&
+      screenshots.systems.length > 0,
     );
     setElementVisibility(systemSection, shouldShow);
 
     if (shouldShow && screenshots.systems && screenshots.systems.length > 0) {
       const systemsWithScreenshots = screenshots.systems.filter(
-        (sys) => sys.screenshot && sys.screenshot.trim() !== ""
+        (sys) => sys.screenshot && sys.screenshot.trim() !== "",
       );
 
       if (systemsWithScreenshots.length === 0) {
@@ -575,7 +575,7 @@ export const setupScreenshotSections = (
               const newSection = systemSection.cloneNode(true) as HTMLElement;
 
               const newH1 = newSection.querySelector(
-                "h1.system-title"
+                "h1.system-title",
               ) as HTMLElement;
               if (newH1) {
                 newH1.style.display = "none";
@@ -610,7 +610,7 @@ export const setupScreenshotSections = (
                   ) {
                     lastInsertedNode.parentNode.insertBefore(
                       newSection,
-                      nextSibling
+                      nextSibling,
                     );
                   } else {
                     lastInsertedNode.parentNode.appendChild(newSection);
@@ -619,7 +619,7 @@ export const setupScreenshotSections = (
                 } catch (error) {
                   console.warn(
                     "insertBefore failed, appending instead:",
-                    error
+                    error,
                   );
                   try {
                     if (
@@ -647,13 +647,13 @@ export const setupScreenshotSections = (
   }
 
   const departmentSection = wrapper.querySelector(
-    ".department-section"
+    ".department-section",
   ) as HTMLElement;
   if (departmentSection) {
     const shouldShow = Boolean(
       selectedSections.department &&
-        screenshots.departments &&
-        screenshots.departments.length > 0
+      screenshots.departments &&
+      screenshots.departments.length > 0,
     );
     setElementVisibility(departmentSection, shouldShow);
 
@@ -663,16 +663,16 @@ export const setupScreenshotSections = (
       screenshots.departments.length > 0
     ) {
       const departmentsWithScreenshots = screenshots.departments.filter(
-        (dept) => dept.screenshot && dept.screenshot.trim() !== ""
+        (dept) => dept.screenshot && dept.screenshot.trim() !== "",
       );
       const departmentContent = departmentSection.querySelector(
-        ".department-content"
+        ".department-content",
       );
       if (departmentContent) {
         departmentContent.innerHTML = "";
 
         const departmentTitle = departmentSection.querySelector(
-          "h1.department-title"
+          "h1.department-title",
         );
         if (departmentTitle) {
           departmentTitle.textContent = "Departments Report";
@@ -711,11 +711,11 @@ export const setupScreenshotSections = (
               departmentContent.appendChild(img);
             } else if (lastInsertedNode.parentNode) {
               const newSection = departmentSection.cloneNode(
-                true
+                true,
               ) as HTMLElement;
 
               const newH1 = newSection.querySelector(
-                "h1.department-title"
+                "h1.department-title",
               ) as HTMLElement;
               if (newH1) {
                 newH1.style.display = "none";
@@ -727,7 +727,7 @@ export const setupScreenshotSections = (
               }
 
               const newContent = newSection.querySelector(
-                ".department-content"
+                ".department-content",
               );
               if (newContent) {
                 newContent.innerHTML = "";
@@ -752,7 +752,7 @@ export const setupScreenshotSections = (
                   ) {
                     lastInsertedNode.parentNode.insertBefore(
                       newSection,
-                      nextSibling
+                      nextSibling,
                     );
                   } else {
                     lastInsertedNode.parentNode.appendChild(newSection);
@@ -761,7 +761,7 @@ export const setupScreenshotSections = (
                 } catch (error) {
                   console.warn(
                     "insertBefore failed, appending instead:",
-                    error
+                    error,
                   );
                   try {
                     if (
@@ -789,7 +789,7 @@ export const setupScreenshotSections = (
   }
 
   const dashboardImg = wrapper.querySelector(
-    '.dashboard img.dashboard-image, img[src="images/dashboard.png"]'
+    '.dashboard img.dashboard-image, img[src="images/dashboard.png"]',
   ) as HTMLImageElement | null;
   if (dashboardImg) {
     const screenshotSrc =
@@ -801,12 +801,12 @@ export const setupScreenshotSections = (
     dashboardImg.style.height = "auto";
   } else {
     console.warn(
-      "[Report] Dashboard image element not found in report template"
+      "[Report] Dashboard image element not found in report template",
     );
   }
 
   const plantDiagramImg = wrapper.querySelector(
-    '.daigram-section img.daigram-image, img[src="images/daigram.png"]'
+    '.daigram-section img.daigram-image, img[src="images/daigram.png"]',
   ) as HTMLImageElement | null;
   if (plantDiagramImg) {
     const screenshotSrc =
@@ -818,7 +818,7 @@ export const setupScreenshotSections = (
     plantDiagramImg.style.height = "auto";
   } else {
     console.warn(
-      "[Report] Plant diagram image element not found in report template"
+      "[Report] Plant diagram image element not found in report template",
     );
   }
 

@@ -155,7 +155,7 @@ const PieChart: React.FC<PieChartProps> = ({
             _params: any,
             _dom: HTMLElement,
             _rect: any,
-            size: any
+            size: any,
           ) {
             const chartContainer = chartRef.current;
             if (!chartContainer) return [point[0] + 20, point[1] - 20];

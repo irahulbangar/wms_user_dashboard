@@ -11,7 +11,7 @@ import type { SidebarMenuResult } from "../../model/sidebar-menu.interface";
  * Build menu items from SidebarMenuResult API data
  */
 export const buildMenuItemsFromAPI = (
-  sidebarMenuData: SidebarMenuResult[]
+  sidebarMenuData: SidebarMenuResult[],
 ): MenuItem[] => {
   if (!sidebarMenuData || sidebarMenuData.length === 0) {
     return [];
@@ -94,7 +94,7 @@ export const buildMenuItemsFromAPI = (
 
     if (systemName && item.system_id) {
       const isDuplicate = dept.systems.some(
-        (s) => s.system_id === item.system_id
+        (s) => s.system_id === item.system_id,
       );
 
       if (!isDuplicate) {
@@ -113,17 +113,17 @@ export const buildMenuItemsFromAPI = (
 
   Array.from(organizationsMap.entries())
     .sort((a, b) =>
-      a[1].organization_name.localeCompare(b[1].organization_name)
+      a[1].organization_name.localeCompare(b[1].organization_name),
     )
-    .forEach(([_orgKey, org]) => {
+    .forEach(([, org]) => {
       const orgId = `org-${org.organization_id}`;
       const plantMenuItems: MenuItem[] = [];
 
-      Array.from(org.plants.entries()).forEach(([_plantKey, plant]) => {
+      Array.from(org.plants.entries()).forEach(([, plant]) => {
         const plantId = `plant-${plant.plant_id}`;
         const departmentMenuItems: MenuItem[] = [];
 
-        Array.from(plant.departments.entries()).forEach(([_deptKey, dept]) => {
+        Array.from(plant.departments.entries()).forEach(([, dept]) => {
           const deptId = `dept-${dept.department_id}`;
           const systemMenuItems: MenuItem[] = [];
 

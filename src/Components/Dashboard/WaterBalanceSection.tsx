@@ -47,7 +47,8 @@ export const WaterBalanceSection = ({
     }));
   };
 
-  const hasData = plantReportNameWise !== null && 
+  const hasData =
+    plantReportNameWise !== null &&
     Object.values(plantReportNameWise).some((value) => value > 0);
 
   const titleText = dateSelectionType

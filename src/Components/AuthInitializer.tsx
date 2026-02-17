@@ -23,9 +23,12 @@ const AuthInitializer: React.FC<AuthInitializerProps> = ({ children }) => {
 
     initializeAuth();
 
-    const tokenValidationInterval = setInterval(() => {
-      dispatch(checkAuthStatus());
-    }, 5 * 60 * 1000);
+    const tokenValidationInterval = setInterval(
+      () => {
+        dispatch(checkAuthStatus());
+      },
+      5 * 60 * 1000,
+    );
 
     return () => {
       clearInterval(tokenValidationInterval);

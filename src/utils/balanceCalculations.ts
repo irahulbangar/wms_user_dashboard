@@ -14,7 +14,7 @@ interface BalanceDataItem {
  */
 const getInId = (
   device: DevicesResult,
-  context: ContextType
+  context: ContextType,
 ): number | null => {
   if (context === "system") return device.in_system_id;
   if (context === "department") return device.in_department_id;
@@ -25,7 +25,7 @@ const getInId = (
 
 const getOutId = (
   device: DevicesResult,
-  context: ContextType
+  context: ContextType,
 ): number | null => {
   if (context === "system") return device.out_system_id;
   if (context === "department") return device.out_department_id;
@@ -40,7 +40,7 @@ const getOutId = (
 export const calculateWaterBalance = (
   devices: DevicesResult[],
   id: string | number,
-  context: ContextType = "plant"
+  context: ContextType = "plant",
 ): BalanceDataItem[] => {
   if (!devices || devices.length === 0 || !id) {
     return [
@@ -72,8 +72,14 @@ export const calculateWaterBalance = (
   }
 
   const idNum = Number(id);
-  const inReportTypes = ["In", "Regeneration", "Re-use","Rainfall"];
-  const outReportTypes = ["Out", "Percolation", "Consumption", "Wastage", "Evaporation"];
+  const inReportTypes = ["In", "Regeneration", "Re-use", "Rainfall"];
+  const outReportTypes = [
+    "Out",
+    "Percolation",
+    "Consumption",
+    "Wastage",
+    "Evaporation",
+  ];
 
   const flowInTotal = devices
     .filter((device) => {
@@ -162,7 +168,7 @@ export const calculateWaterBalance = (
 export const calculateFlowBalance = (
   devices: DevicesResult[],
   id: string | number,
-  context: ContextType = "plant"
+  context: ContextType = "plant",
 ): BalanceDataItem[] => {
   if (!devices || devices.length === 0 || !id) {
     return [
@@ -193,7 +199,7 @@ export const calculateFlowBalance = (
 export const calculateStorageBalance = (
   devices: DevicesResult[],
   id: string | number,
-  context: ContextType = "plant"
+  context: ContextType = "plant",
 ): BalanceDataItem[] => {
   if (!devices || devices.length === 0 || !id) {
     return [
@@ -267,11 +273,11 @@ export const getStorageBalanceColors = () => ["#5070de", "#7da6d2"];
  */
 const getContextIds = (
   device: DevicesResult,
-  context: "system" | "department"
+  context: "system" | "department",
 ): number[] => {
   if (context === "system") {
     return [device.system_id, device.in_system_id, device.out_system_id].filter(
-      Boolean
+      Boolean,
     ) as number[];
   } else {
     return [
@@ -288,7 +294,7 @@ const getContextIds = (
 const getContextName = (
   device: DevicesResult,
   contextId: number,
-  context: "system" | "department"
+  context: "system" | "department",
 ): string => {
   if (context === "system") {
     if (device.system_id === contextId) {
@@ -314,7 +320,7 @@ const getContextName = (
  */
 const getContextInId = (
   device: DevicesResult,
-  context: "system" | "department"
+  context: "system" | "department",
 ): number | null => {
   return context === "system" ? device.in_system_id : device.in_department_id;
 };
@@ -324,7 +330,7 @@ const getContextInId = (
  */
 const getContextOutId = (
   device: DevicesResult,
-  context: "system" | "department"
+  context: "system" | "department",
 ): number | null => {
   return context === "system" ? device.out_system_id : device.out_department_id;
 };
@@ -341,7 +347,7 @@ const getReportType = (device: DevicesResult): string => {
  */
 const calculateBalances = (
   devices: DevicesResult[],
-  context: "system" | "department"
+  context: "system" | "department",
 ): Array<{
   id: number;
   name: string;
@@ -352,8 +358,14 @@ const calculateBalances = (
 }> => {
   if (!devices || devices.length === 0) return [];
 
-  const inReportTypes = ["In", "Regeneration", "Re-use","Rainfall"];
-  const outReportTypes = ["Out", "Percolation", "Consumption", "Wastage", "Evaporation"];
+  const inReportTypes = ["In", "Regeneration", "Re-use", "Rainfall"];
+  const outReportTypes = [
+    "Out",
+    "Percolation",
+    "Consumption",
+    "Wastage",
+    "Evaporation",
+  ];
 
   const contextMap = new Map<
     number,
@@ -393,7 +405,7 @@ const calculateBalances = (
     });
     contextItem.totalIn = inDevices.reduce(
       (sum, device) => sum + getDeviceValue(device),
-      0
+      0,
     );
 
     const outDevices = devices.filter((device) => {
@@ -406,7 +418,7 @@ const calculateBalances = (
     });
     contextItem.totalOut = outDevices.reduce(
       (sum, device) => sum + getDeviceValue(device),
-      0
+      0,
     );
   });
 
@@ -427,7 +439,7 @@ const calculateBalances = (
  * Used for department view to show system balances
  */
 export const calculateSystemBalances = (
-  devices: DevicesResult[]
+  devices: DevicesResult[],
 ): Array<{
   id: number;
   name: string;
@@ -443,7 +455,7 @@ export const calculateSystemBalances = (
  * Calculate department balances from devices
  */
 export const calculateDepartmentBalances = (
-  devices: DevicesResult[]
+  devices: DevicesResult[],
 ): Array<{
   id: number;
   name: string;
@@ -464,52 +476,52 @@ export const calculateDepartmentBalances = (
 
 export const calculateSystemWaterBalance = (
   devices: DevicesResult[],
-  systemId: string | number
+  systemId: string | number,
 ) => calculateWaterBalance(devices, systemId, "system");
 
 export const calculateDepartmentWaterBalance = (
   devices: DevicesResult[],
-  departmentId: string | number
+  departmentId: string | number,
 ) => calculateWaterBalance(devices, departmentId, "department");
 
 export const calculatePlantWaterBalance = (
   devices: DevicesResult[],
-  plantId: string | number
+  plantId: string | number,
 ) => calculateWaterBalance(devices, plantId, "plant");
 
 export const calculateSystemFlowBalance = (
   devices: DevicesResult[],
-  systemId: string | number
+  systemId: string | number,
 ) => calculateFlowBalance(devices, systemId, "system");
 
 export const calculateDepartmentFlowBalance = (
   devices: DevicesResult[],
-  departmentId: string | number
+  departmentId: string | number,
 ) => calculateFlowBalance(devices, departmentId, "department");
 
 export const calculateSystemStorageBalance = (
   devices: DevicesResult[],
-  systemId: string | number
+  systemId: string | number,
 ) => calculateStorageBalance(devices, systemId, "system");
 
 export const calculatePlantFlowBalance = (
   devices: DevicesResult[],
-  plantId: string | number
+  plantId: string | number,
 ) => calculateFlowBalance(devices, plantId, "plant");
 
 export const calculatePlantStorageBalance = (
   devices: DevicesResult[],
-  plantId: string | number
+  plantId: string | number,
 ) => calculateStorageBalance(devices, plantId, "plant");
 
 export const calculateDepartmentStorageBalance = (
   devices: DevicesResult[],
-  departmentId: string | number
+  departmentId: string | number,
 ) => calculateStorageBalance(devices, departmentId, "department");
 
 export const calculateOrganizationStorageBalance = (
   devices: DevicesResult[],
-  organizationId: string | number
+  organizationId: string | number,
 ) => calculateStorageBalance(devices, organizationId, "organization");
 
 export const getSystemWaterBalanceColors = getWaterBalanceColors;

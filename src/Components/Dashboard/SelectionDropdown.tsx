@@ -37,7 +37,7 @@ export function SelectionDropdown<T>({
           type="button"
           onClick={() => {
             onSelectionChange(
-              allSelected ? new Set() : new Set(items.map(getItemId))
+              allSelected ? new Set() : new Set(items.map(getItemId)),
             );
           }}
           className="text-xs font-roboto text-text-secondary hover:underline cursor-pointer"

@@ -30,7 +30,7 @@ export const useZoomToGroup = ({ devices }: UseZoomToGroupParams) => {
 
             if (node.data && node.data.deviceId) {
               const device = devices.find(
-                (d: any) => d.device_id === node.data.deviceId
+                (d: any) => d.device_id === node.data.deviceId,
               );
               if (
                 device &&
@@ -60,7 +60,7 @@ export const useZoomToGroup = ({ devices }: UseZoomToGroupParams) => {
 
             if (node.data && node.data.deviceId) {
               const device = devices.find(
-                (d: any) => d.device_id === node.data.deviceId
+                (d: any) => d.device_id === node.data.deviceId,
               );
               if (
                 device &&
@@ -115,7 +115,7 @@ export const useZoomToGroup = ({ devices }: UseZoomToGroupParams) => {
         isZoomingRef.current = false;
       }
     },
-    [getNodes, fitView, devices]
+    [getNodes, fitView, devices],
   );
 
   return { zoomToGroup, isZoomingRef };

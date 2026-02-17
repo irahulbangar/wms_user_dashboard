@@ -54,21 +54,21 @@ const PhmcDevice = () => {
   const defaultCustomFrom = sevenDaysAgo.toISOString().split("T")[0];
   const defaultCustomTo = now.toISOString().split("T")[0];
   const [activeTab, setActiveTab] = useState<"panel" | "reports">(
-    (searchParams.get("tab") as "panel" | "reports") || "panel"
+    (searchParams.get("tab") as "panel" | "reports") || "panel",
   );
   const [selectedReport, setSelectedReport] = useState<
     "none" | "runTime" | "customReport"
   >(
     (searchParams.get("report") as "none" | "runTime" | "customReport") ||
-      "none"
+      "none",
   );
 
   const [deviceData, setDeviceData] = useState<SingleDeviceResult>(
-    {} as SingleDeviceResult
+    {} as SingleDeviceResult,
   );
 
   const [runTimeDate, setRunTimeDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [runTimeData, setRunTimeData] = useState<PhmcDeviceResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -91,7 +91,7 @@ const PhmcDevice = () => {
   const systemId = localStorage.getItem("systemId");
   const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(getCurrentPlantId())
+    (plant) => plant.plant_id === Number(getCurrentPlantId()),
   )?.role;
   const { sendMessage, isConnected, latestMessage } = useWebSocketConnection();
   const hwidAuthSentRef = useRef(false);
@@ -118,7 +118,7 @@ const PhmcDevice = () => {
 
     const paginatedData = currentData.slice(
       (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
+      currentPage * rowsPerPage,
     );
     return paginatedData.length;
   }, [runTimeData, customReportData, selectedReport, currentPage, rowsPerPage]);
@@ -134,7 +134,7 @@ const PhmcDevice = () => {
   const handlePaginatedData = (data: PhmcDeviceResultItem[]) => {
     return data.slice(
       (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
+      currentPage * rowsPerPage,
     );
   };
 
@@ -301,7 +301,7 @@ const PhmcDevice = () => {
         plantId: Number(deviceData?.plant_id) || 0,
         deviceId: Number(device_id) || 0,
         date: runTimeDate,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -337,7 +337,7 @@ const PhmcDevice = () => {
         from_date: fromDateWithTime,
         to_date: toDateWithTime,
         duration: customReportDuration,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -394,7 +394,7 @@ const PhmcDevice = () => {
   };
 
   const updateSelectedReport = (
-    report: "none" | "runTime" | "customReport"
+    report: "none" | "runTime" | "customReport",
   ) => {
     setSelectedReport(report);
     setSearchParams((prev) => {
@@ -433,7 +433,7 @@ const PhmcDevice = () => {
     }));
     downloadCSV(
       useArray,
-      `Fm_Custom_Report_${customReportFromDate}_to_${customReportToDate}`
+      `Fm_Custom_Report_${customReportFromDate}_to_${customReportToDate}`,
     );
   };
 
@@ -501,7 +501,7 @@ const PhmcDevice = () => {
               navigate(
                 location.pathname.startsWith("/system/device/")
                   ? `/system/device/${organizationId}/${getCurrentPlantId()}/${systemId}`
-                  : "/devices"
+                  : "/devices",
               )
             }
             className="text-text-secondary hover:text-text-primary hover:bg-overlay/20 px-2 py-1 rounded transition-all duration-200 cursor-pointer font-roboto"
@@ -568,10 +568,10 @@ const PhmcDevice = () => {
                           latestMessage?.message?.data?.date
                             ? convertDeviceDateTime(
                                 latestMessage.message.data.date,
-                                latestMessage.message.data.Time
+                                latestMessage.message.data.Time,
                               )
                             : formatDateForCSV(
-                                deviceData?.last_record_time || ""
+                                deviceData?.last_record_time || "",
                               )}
                         </span>
                       </span>
@@ -858,7 +858,7 @@ const PhmcDevice = () => {
                                       {data?.last_record?.Current_b}
                                     </td>
                                   </tr>
-                                )
+                                ),
                               )}
                           </tbody>
                         </table>
@@ -900,7 +900,7 @@ const PhmcDevice = () => {
                         value={customReportDuration}
                         onChange={(e) =>
                           setCustomReportDuration(
-                            e.target.value as "15min" | "1hour" | "1day"
+                            e.target.value as "15min" | "1hour" | "1day",
                           )
                         }
                         className="w-42 px-3 py-1.5 border border-border-primary bg-primary text-text-primary rounded-md focus:outline-none focus:ring-1 focus:ring-status-info"
@@ -1059,7 +1059,7 @@ const PhmcDevice = () => {
                                       {data?.last_record?.Current_b}
                                     </td>
                                   </tr>
-                                )
+                                ),
                               )}
                           </tbody>
                         </table>

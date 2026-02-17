@@ -14,7 +14,7 @@ export const checkMenuItemActive = (
   location: { pathname: string },
   currentPage: string,
   plants: PlantResult[],
-  sidebarMenu?: SidebarMenuResult[]
+  sidebarMenu?: SidebarMenuResult[],
 ): boolean => {
   if (item.href && location.pathname === item.href) {
     return true;
@@ -39,7 +39,7 @@ export const checkMenuItemActive = (
       const plantId = pathParts[1];
       if (sidebarMenu && sidebarMenu.length > 0) {
         const menuItem = sidebarMenu.find(
-          (item) => item.plant_id?.toString() === plantId
+          (item) => item.plant_id?.toString() === plantId,
         );
         if (menuItem && menuItem.organization_id.toString() === orgId) {
           return true;
@@ -88,7 +88,7 @@ export const checkMenuItemActive = (
     ) {
       const urlDeptId = pathParts[4];
       const isDeviceDetailRoute = pathParts.some(
-        (part) => part.includes("-device") && part !== "device"
+        (part) => part.includes("-device") && part !== "device",
       );
       if (urlDeptId === deptId && !isDeviceDetailRoute) {
         return true;
@@ -100,13 +100,13 @@ export const checkMenuItemActive = (
       pathParts.length >= 5
     ) {
       const isDeviceDetailRoute = pathParts.some(
-        (part) => part.includes("-device") && part !== "device"
+        (part) => part.includes("-device") && part !== "device",
       );
       if (!isDeviceDetailRoute) {
         const urlSystemId = pathParts[4];
         if (sidebarMenu && sidebarMenu.length > 0) {
           const systemItem = sidebarMenu.find(
-            (menuItem) => menuItem.system_id?.toString() === urlSystemId
+            (menuItem) => menuItem.system_id?.toString() === urlSystemId,
           );
           if (systemItem && systemItem.department_id.toString() === deptId) {
             return true;
@@ -125,7 +125,7 @@ export const checkMenuItemActive = (
   if (location.pathname.startsWith("/system/device/")) {
     const pathParts = location.pathname.split("/").filter(Boolean);
     const isDeviceDetailRoute = pathParts.some(
-      (part) => part.includes("-device") && part !== "device"
+      (part) => part.includes("-device") && part !== "device",
     );
 
     if (isDeviceDetailRoute) {
@@ -180,7 +180,7 @@ export const checkSystemMenuItemActive = (
   item: MenuItem,
   location: { pathname: string },
   _isDepartmentMenuItem: boolean,
-  currentSystemId?: string | null
+  currentSystemId?: string | null,
 ): boolean => {
   if (item.href && location.pathname === item.href) {
     return true;
@@ -189,7 +189,7 @@ export const checkSystemMenuItemActive = (
   if (location.pathname.startsWith("/system/device/")) {
     const pathParts = location.pathname.split("/").filter(Boolean);
     const isDeviceDetailRoute = pathParts.some(
-      (part) => part.includes("-device") && part !== "device"
+      (part) => part.includes("-device") && part !== "device",
     );
 
     if (isDeviceDetailRoute) {

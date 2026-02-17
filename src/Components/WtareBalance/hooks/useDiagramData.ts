@@ -42,7 +42,7 @@ export const useDiagramData = ({
         getDeviceByOrganizationIdAndPlantId({
           plantId: Number(plantId),
           organizationId: Number(organizationId),
-        })
+        }),
       )
         .unwrap()
         .then((res) => {

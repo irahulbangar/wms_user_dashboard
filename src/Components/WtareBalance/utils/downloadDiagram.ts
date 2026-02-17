@@ -51,11 +51,11 @@ export const downloadDiagramAsImage = async (): Promise<void> => {
       const rect = reactFlowElement?.getBoundingClientRect();
       const scrollWidth = Math.max(
         reactFlowElement?.scrollWidth || 0,
-        rect?.width || 0
+        rect?.width || 0,
       );
       const scrollHeight = Math.max(
         reactFlowElement?.scrollHeight || 0,
-        rect?.height || 0
+        rect?.height || 0,
       );
 
       try {
@@ -78,7 +78,7 @@ export const downloadDiagramAsImage = async (): Promise<void> => {
               }
               return true;
             },
-          }
+          },
         );
 
         const img = new Image();
@@ -131,7 +131,7 @@ export const downloadDiagramAsImage = async (): Promise<void> => {
     } catch (domError) {
       console.warn(
         "All dom-to-image methods failed, trying basic method:",
-        domError
+        domError,
       );
 
       dataUrl = await domtoimage.toJpeg(reactFlowElement as HTMLElement, {

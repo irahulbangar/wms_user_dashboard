@@ -9,7 +9,7 @@ import { Error } from "./toast";
  * Check if a feature flag is enabled (handles "0"/"1" strings)
  */
 export const isFeatureEnabled = (
-  flag: string | boolean | undefined
+  flag: string | boolean | undefined,
 ): boolean => {
   if (flag === undefined || flag === null) {
     return true;
@@ -32,7 +32,7 @@ export const isFeatureEnabled = (
 export const getFeatureFlagsForRoute = (
   route: string,
   sidebarMenuData: SidebarMenuResult[],
-  currentPlantId?: string | null
+  currentPlantId?: string | null,
 ): {
   show_plant: boolean;
   show_department: boolean;
@@ -49,7 +49,7 @@ export const getFeatureFlagsForRoute = (
   if (route.startsWith("/plant/")) {
     const plantId = route.split("/")[2];
     const menuItem = sidebarMenuData.find(
-      (item) => item.plant_id?.toString() === plantId
+      (item) => item.plant_id?.toString() === plantId,
     );
     if (menuItem) {
       return {
@@ -67,7 +67,7 @@ export const getFeatureFlagsForRoute = (
     if (parts.length >= 5) {
       const deptId = parts[4];
       const menuItem = sidebarMenuData.find(
-        (item) => item.department_id?.toString() === deptId
+        (item) => item.department_id?.toString() === deptId,
       );
       if (menuItem) {
         return {
@@ -86,7 +86,7 @@ export const getFeatureFlagsForRoute = (
     if (parts.length >= 5) {
       const systemId = parts[4];
       const menuItem = sidebarMenuData.find(
-        (item) => item.system_id?.toString() === systemId
+        (item) => item.system_id?.toString() === systemId,
       );
       if (menuItem) {
         return {
@@ -112,7 +112,7 @@ export const getFeatureFlagsForRoute = (
 
     if (currentPlantId) {
       menuItem = sidebarMenuData.find(
-        (item) => item.plant_id?.toString() === currentPlantId.toString()
+        (item) => item.plant_id?.toString() === currentPlantId.toString(),
       );
     }
 
@@ -152,7 +152,7 @@ export const getFeatureFlagsForRoute = (
 export const checkRouteFeature = (
   route: string,
   sidebarMenuData: SidebarMenuResult[],
-  currentPlantId?: string | null
+  currentPlantId?: string | null,
 ): { available: boolean; featureName?: string } => {
   const flags = getFeatureFlagsForRoute(route, sidebarMenuData, currentPlantId);
 
@@ -209,7 +209,7 @@ export const checkRouteFeature = (
 export const checkFeatureAndShowError = (
   route: string,
   sidebarMenuData: SidebarMenuResult[],
-  currentPlantId?: string | null
+  currentPlantId?: string | null,
 ): boolean => {
   const routeCheck = checkRouteFeature(route, sidebarMenuData, currentPlantId);
   if (!routeCheck.available) {

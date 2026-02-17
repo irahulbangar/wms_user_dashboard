@@ -32,7 +32,7 @@ export class ApiError extends Error {
     status: number = 500,
     errors?: Record<string, string[]>,
     timestamp?: string,
-    path?: string
+    path?: string,
   ) {
     super(message);
     this.name = "ApiError";
@@ -46,7 +46,7 @@ export class ApiError extends Error {
 
 const getStatusSpecificMessage = (
   status: number,
-  defaultMessage?: string
+  defaultMessage?: string,
 ): string => {
   const statusMessages: Record<number, string> = {
     100: "Continue - The server has received the request headers",
@@ -125,7 +125,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 401:
           return new ApiError(
@@ -134,7 +134,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 402:
           return new ApiError(
@@ -143,7 +143,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 403:
           return new ApiError(
@@ -152,7 +152,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 404:
           return new ApiError(
@@ -161,7 +161,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 405:
           return new ApiError(
@@ -170,7 +170,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 408:
           return new ApiError(
@@ -179,7 +179,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 409:
           return new ApiError(
@@ -188,7 +188,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 410:
           return new ApiError(
@@ -197,7 +197,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 413:
           return new ApiError(
@@ -206,7 +206,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 415:
           return new ApiError(
@@ -215,7 +215,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 422:
           return new ApiError(
@@ -224,7 +224,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 423:
           return new ApiError(
@@ -233,7 +233,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 424:
           return new ApiError(
@@ -242,7 +242,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 425:
           return new ApiError(
@@ -251,7 +251,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 428:
           return new ApiError(
@@ -260,7 +260,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 429:
           return new ApiError(
@@ -269,7 +269,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 431:
           return new ApiError(
@@ -278,7 +278,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 451:
           return new ApiError(
@@ -287,7 +287,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 500:
           return new ApiError(
@@ -296,7 +296,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 501:
           return new ApiError(
@@ -305,7 +305,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 502:
           return new ApiError(
@@ -314,7 +314,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 503:
           return new ApiError(
@@ -323,7 +323,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 504:
           return new ApiError(
@@ -332,7 +332,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 505:
           return new ApiError(
@@ -341,7 +341,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 507:
           return new ApiError(
@@ -350,7 +350,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 508:
           return new ApiError(
@@ -359,7 +359,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 510:
           return new ApiError(
@@ -368,7 +368,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         case 511:
           return new ApiError(
@@ -377,7 +377,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
         default:
           return new ApiError(
@@ -386,7 +386,7 @@ export const handleApiError = (error: unknown): ApiError => {
             status,
             errorData.errors,
             errorData.timestamp,
-            errorData.path
+            errorData.path,
           );
       }
     }
@@ -396,20 +396,20 @@ export const handleApiError = (error: unknown): ApiError => {
         return new ApiError(
           "Request timeout. Please check your connection and try again.",
           ErrorType.TIMEOUT_ERROR,
-          408
+          408,
         );
       }
       return new ApiError(
         "Network error. Please check your internet connection.",
         ErrorType.NETWORK_ERROR,
-        0
+        0,
       );
     }
 
     return new ApiError(
       message || "Request failed",
       ErrorType.UNKNOWN_ERROR,
-      0
+      0,
     );
   }
 
@@ -424,7 +424,7 @@ export const handleApiError = (error: unknown): ApiError => {
   return new ApiError(
     "An unexpected error occurred",
     ErrorType.UNKNOWN_ERROR,
-    0
+    0,
   );
 };
 
@@ -502,7 +502,7 @@ export const isRetryableError = (error: ApiError): boolean => {
 };
 
 export const formatValidationErrors = (
-  errors: Record<string, string[]>
+  errors: Record<string, string[]>,
 ): string[] => {
   const formattedErrors: string[] = [];
 

@@ -22,7 +22,7 @@ export const useDiagramNodes = ({
     }
 
     const currentPlant = plants.find(
-      (plant: any) => plant.plant_id === Number(plantId)
+      (plant: any) => plant.plant_id === Number(plantId),
     ) as Plant;
 
     if (!currentPlant) {

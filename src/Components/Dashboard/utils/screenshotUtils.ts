@@ -3,7 +3,7 @@ import domtoimage from "dom-to-image";
 import { captureRouteScreenshot } from "../../../utils/screenshotCapture";
 
 export const captureDashboardScreenshot = async (
-  dashboardRef: RefObject<HTMLDivElement>
+  dashboardRef: RefObject<HTMLDivElement>,
 ): Promise<string | null> => {
   if (!dashboardRef.current) return null;
 
@@ -17,7 +17,7 @@ export const captureDashboardScreenshot = async (
     originalStyle = dashboardElement.style.cssText;
 
     const contentContainer = dashboardElement.querySelector(
-      ".flex.flex-col.gap-3.overflow-y-auto"
+      ".flex.flex-col.gap-3.overflow-y-auto",
     ) as HTMLElement | null;
 
     if (contentContainer) {
@@ -36,7 +36,7 @@ export const captureDashboardScreenshot = async (
     }
 
     const loadingIndicator = dashboardElement.querySelector(
-      '[class*="animate-pulse"][class*="status-warning"]'
+      '[class*="animate-pulse"][class*="status-warning"]',
     ) as HTMLElement | null;
     const originalDisplay = loadingIndicator?.style.display;
     if (loadingIndicator) {
@@ -44,7 +44,7 @@ export const captureDashboardScreenshot = async (
     }
 
     const progressBar = dashboardElement.querySelector(
-      '[data-exclude-from-screenshot="true"]'
+      '[data-exclude-from-screenshot="true"]',
     ) as HTMLElement | null;
     const originalProgressDisplay = progressBar?.style.display;
     if (progressBar) {
@@ -113,11 +113,11 @@ export const captureDashboardScreenshot = async (
     const maxContentAttempts = 30;
     while (!contentReady && contentAttempts < maxContentAttempts) {
       const lineChart = dashboardElement.querySelector(
-        '[class*="h-[300px]"], [class*="min-h-[300px]"]'
+        '[class*="h-[300px]"], [class*="min-h-[300px]"]',
       );
       const balanceTable = dashboardElement.querySelector("table tbody");
       const departmentCards = dashboardElement.querySelectorAll(
-        '[class*="DepartmentBalance"], [class*="department-balance"]'
+        '[class*="DepartmentBalance"], [class*="department-balance"]',
       );
 
       const hasLineChart = lineChart !== null;
@@ -129,7 +129,7 @@ export const captureDashboardScreenshot = async (
       let lineChartHasContent = false;
       if (lineChart) {
         const lineChartCanvas = lineChart.querySelector(
-          "canvas"
+          "canvas",
         ) as HTMLCanvasElement | null;
         if (
           lineChartCanvas &&
@@ -154,14 +154,14 @@ export const captureDashboardScreenshot = async (
 
       contentReady = Boolean(
         hasLineChart &&
-          (lineChartHasContent || !lineChart) &&
-          hasTable &&
-          (hasCards || departmentCards.length === 0)
+        (lineChartHasContent || !lineChart) &&
+        hasTable &&
+        (hasCards || departmentCards.length === 0),
       );
 
       if (contentAttempts % 5 === 0) {
         console.log(
-          `[Dashboard Screenshot] Content ready check - lineChart: ${hasLineChart}, lineChartContent: ${lineChartHasContent}, table: ${hasTable}, cards: ${hasCards}, ready: ${contentReady}`
+          `[Dashboard Screenshot] Content ready check - lineChart: ${hasLineChart}, lineChartContent: ${lineChartHasContent}, table: ${hasTable}, cards: ${hasCards}, ready: ${contentReady}`,
         );
       }
 
@@ -174,15 +174,15 @@ export const captureDashboardScreenshot = async (
     console.log(
       `[Dashboard Screenshot] Content ready after ${contentAttempts} attempts. Line chart: ${
         dashboardElement.querySelector(
-          '[class*="h-[300px]"], [class*="min-h-[300px]"]'
+          '[class*="h-[300px]"], [class*="min-h-[300px]"]',
         ) !== null
       }, Table: ${
         dashboardElement.querySelector("table tbody") !== null
       }, Cards: ${
         dashboardElement.querySelectorAll(
-          '[class*="DepartmentBalance"], [class*="department-balance"]'
+          '[class*="DepartmentBalance"], [class*="department-balance"]',
         ).length
-      }`
+      }`,
     );
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -312,7 +312,7 @@ export const captureDashboardScreenshot = async (
         dashboardRef.current.style.cssText = originalStyle;
       }
       const contentContainerToRestore = dashboardRef.current?.querySelector(
-        ".flex.flex-col.gap-3.overflow-y-auto"
+        ".flex.flex-col.gap-3.overflow-y-auto",
       ) as HTMLElement | null;
       if (contentContainerToRestore && originalContentStyle) {
         contentContainerToRestore.style.cssText = originalContentStyle;
@@ -367,7 +367,7 @@ export const captureDashboardScreenshot = async (
         dashboardRef.current.style.cssText = originalStyle;
       }
       const contentContainerToRestore = dashboardRef.current?.querySelector(
-        ".flex.flex-col.gap-3.overflow-y-auto"
+        ".flex.flex-col.gap-3.overflow-y-auto",
       ) as HTMLElement | null;
       if (contentContainerToRestore && originalContentStyle) {
         contentContainerToRestore.style.cssText = originalContentStyle;
@@ -391,7 +391,7 @@ export const captureDashboardScreenshot = async (
       dashboardRef.current.style.cssText = originalStyle;
     }
     const contentContainerToRestore = dashboardRef.current?.querySelector(
-      ".flex.flex-col.gap-3.overflow-y-auto"
+      ".flex.flex-col.gap-3.overflow-y-auto",
     ) as HTMLElement | null;
     if (contentContainerToRestore && originalContentStyle) {
       contentContainerToRestore.style.cssText = originalContentStyle;
@@ -400,13 +400,13 @@ export const captureDashboardScreenshot = async (
     }
 
     const loadingIndicator = dashboardRef.current?.querySelector(
-      '[class*="animate-pulse"][class*="status-warning"]'
+      '[class*="animate-pulse"][class*="status-warning"]',
     ) as HTMLElement | null;
     if (loadingIndicator) {
       loadingIndicator.style.display = "";
     }
     const progressBar = dashboardRef.current?.querySelector(
-      '[data-exclude-from-screenshot="true"]'
+      '[data-exclude-from-screenshot="true"]',
     ) as HTMLElement | null;
     if (progressBar) {
       progressBar.style.display = "";
@@ -416,7 +416,7 @@ export const captureDashboardScreenshot = async (
 };
 
 export const captureDepartmentScreenshot = async (
-  departmentId: number | null
+  departmentId: number | null,
 ): Promise<string | null> => {
   const organizationId = localStorage.getItem("organizationId");
   const plantId = localStorage.getItem("plantId");
@@ -433,21 +433,21 @@ export const captureDepartmentScreenshot = async (
 };
 
 export const captureSystemScreenshot = async (
-  systemId: number | null
+  systemId: number | null,
 ): Promise<string | null> => {
   const organizationId = localStorage.getItem("organizationId");
   const plantId = localStorage.getItem("plantId");
 
   if (!organizationId || !plantId || !systemId) {
     console.warn(
-      `[captureSystemScreenshot] Missing required IDs - organizationId: ${organizationId}, plantId: ${plantId}, systemId: ${systemId}`
+      `[captureSystemScreenshot] Missing required IDs - organizationId: ${organizationId}, plantId: ${plantId}, systemId: ${systemId}`,
     );
     return null;
   }
 
   const route = `/system/device/${organizationId}/${plantId}/${systemId}`;
   console.log(
-    `[captureSystemScreenshot] Starting capture for system ${systemId} at route: ${route}`
+    `[captureSystemScreenshot] Starting capture for system ${systemId} at route: ${route}`,
   );
 
   try {
@@ -459,11 +459,11 @@ export const captureSystemScreenshot = async (
 
     if (result) {
       console.log(
-        `[captureSystemScreenshot] ✅ Successfully captured screenshot for system ${systemId}, length: ${result.length}`
+        `[captureSystemScreenshot] ✅ Successfully captured screenshot for system ${systemId}, length: ${result.length}`,
       );
     } else {
       console.error(
-        `[captureSystemScreenshot] ❌ Failed to capture screenshot for system ${systemId} - returned null. This could be due to:`
+        `[captureSystemScreenshot] ❌ Failed to capture screenshot for system ${systemId} - returned null. This could be due to:`,
       );
     }
 
@@ -471,7 +471,7 @@ export const captureSystemScreenshot = async (
   } catch (error) {
     console.error(
       `[captureSystemScreenshot] ❌ Error capturing screenshot for system ${systemId}:`,
-      error
+      error,
     );
     return null;
   }

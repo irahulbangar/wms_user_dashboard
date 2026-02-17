@@ -169,7 +169,7 @@ export const getTotalizerString = (device: DevicesResult): string => {
       Number(
         (device?.params?.height || 0) -
           Number(device?.last_record?.last_level || 0) *
-            (device?.params?.crossSectionArea || 0)
+            (device?.params?.crossSectionArea || 0),
       ) || 0;
   }
 
@@ -247,7 +247,7 @@ export const deviceStatus = (status: string): string => {
 
 export const getDeviceRoute = (
   device: DevicesResult,
-  basePath: "department" | "system" = "department"
+  basePath: "department" | "system" = "department",
 ): string | null => {
   const deviceType = device?.device_family_type?.toLowerCase() || "";
 

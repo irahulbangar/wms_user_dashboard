@@ -1,24 +1,12 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import { useAppSelector } from "../../../store/store";
-import { useEffect, useState, createContext, useContext } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../Loader";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import { useWebSocketConnection } from "../../hooks/useWebSocketConnection";
-
-interface DiagramSidebarContextType {
-  onDiagramSidebarToggle: (isOpen: boolean) => void;
-  isDiagramSidebarOpen: boolean;
-}
-
-const DiagramSidebarContext = createContext<DiagramSidebarContextType | null>(
-  null
-);
-
-export const useDiagramSidebar = () => {
-  return useContext(DiagramSidebarContext);
-};
+import { DiagramSidebarContext } from "./DiagramSidebarContext";
 
 export default function RootLayout() {
   const { isAuthenticated, isLoading } = useAppSelector((state) => state.user);

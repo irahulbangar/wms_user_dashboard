@@ -5,11 +5,11 @@ export interface ScreenshotItem {
 }
 
 export async function captureScreenshots<
-  T extends { id: number; name: string }
+  T extends { id: number; name: string },
 >(
   items: T[],
   selectedIds: number[],
-  captureFn: (id: number) => Promise<string | null>
+  captureFn: (id: number) => Promise<string | null>,
 ): Promise<ScreenshotItem[]> {
   const itemsMap = new Map(items.map((item) => [item.id, item]));
   const screenshots: ScreenshotItem[] = [];
@@ -28,7 +28,6 @@ export async function captureScreenshots<
         name: item?.name || `Item ${id}`,
         screenshot,
       });
-
     } catch (error) {
       console.error(`Failed to capture screenshot for item ${id}:`, error);
       screenshots.push({

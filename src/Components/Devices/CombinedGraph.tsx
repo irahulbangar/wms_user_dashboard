@@ -28,13 +28,13 @@ const CombinedGraph: React.FC<CombinedGraphProps> = ({
       });
 
       const voltageRData = data.map((item) =>
-        item.last_record?.voltage_r ? item.last_record.voltage_r / 10 : 0
+        item.last_record?.voltage_r ? item.last_record.voltage_r / 10 : 0,
       );
       const voltageYData = data.map((item) =>
-        item.last_record?.voltage_y ? item.last_record.voltage_y / 10 : 0
+        item.last_record?.voltage_y ? item.last_record.voltage_y / 10 : 0,
       );
       const voltageBData = data.map((item) =>
-        item.last_record?.voltage_b ? item.last_record.voltage_b / 10 : 0
+        item.last_record?.voltage_b ? item.last_record.voltage_b / 10 : 0,
       );
 
       const currentRData = data.map((item) => item.last_record?.Current_r || 0);
@@ -73,10 +73,10 @@ const CombinedGraph: React.FC<CombinedGraphProps> = ({
             result += `<br/>`;
 
             const voltageData = params.filter((param: any) =>
-              param.seriesName.includes("Voltage")
+              param.seriesName.includes("Voltage"),
             );
             const currentData = params.filter((param: any) =>
-              param.seriesName.includes("Current")
+              param.seriesName.includes("Current"),
             );
 
             if (voltageData.length > 0) {

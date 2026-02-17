@@ -49,7 +49,7 @@ const SystemDevices = () => {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(getCurrentPlantId())
+    (plant) => plant.plant_id === Number(getCurrentPlantId()),
   )?.role;
   const [devices, setDevices] = useState<DevicesResult[]>([]);
   const [filteredDevices, setFilteredDevices] = useState<DevicesResult[]>([]);
@@ -118,7 +118,7 @@ const SystemDevices = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(now.getDate()).padStart(2, "0")}`;
   });
   const [yearlyDate, setYearlyDate] = useState(() => {
@@ -128,14 +128,14 @@ const SystemDevices = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(now.getDate()).padStart(2, "0")}`;
   });
   const [customEndDate, setCustomEndDate] = useState(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(now.getDate()).padStart(2, "0")}`;
   });
   const [plantReport, setPlantReport] = useState<PlantReportData | null>(null);
@@ -150,7 +150,7 @@ const SystemDevices = () => {
       monthYear,
       yearlyDate,
       customStartDate,
-      customEndDate
+      customEndDate,
     );
 
     dispatch(
@@ -161,7 +161,7 @@ const SystemDevices = () => {
         from_date: fromDate,
         to_date: toDate,
         duration: durationType,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -400,18 +400,20 @@ const SystemDevices = () => {
                 (daywiseData[groupKey] as any)._neutralitySum += value;
                 (daywiseData[groupKey] as any)._neutralityCount += 1;
               } else {
-                const keyMap: Record<string, keyof (typeof daywiseData)[string]> =
-                  {
-                    Flow_in: "flow_in",
-                    Flow_out: "flow_out",
-                    Percolation: "percolation",
-                    Evaporation: "evaporation",
-                    Consumption: "consumption",
-                    Wastage: "wastage",
-                    Regeneration: "regeneration",
-                    "Re-use": "reuse",
-                    Rainfall: "rainfall",
-                  };
+                const keyMap: Record<
+                  string,
+                  keyof (typeof daywiseData)[string]
+                > = {
+                  Flow_in: "flow_in",
+                  Flow_out: "flow_out",
+                  Percolation: "percolation",
+                  Evaporation: "evaporation",
+                  Consumption: "consumption",
+                  Wastage: "wastage",
+                  Regeneration: "regeneration",
+                  "Re-use": "reuse",
+                  Rainfall: "rainfall",
+                };
 
                 const mappedKey = keyMap[key];
                 if (mappedKey) {
@@ -425,7 +427,7 @@ const SystemDevices = () => {
         console.warn(
           "Error processing date entry for daywise data:",
           dateKey,
-          error
+          error,
         );
       }
     });
@@ -442,7 +444,7 @@ const SystemDevices = () => {
     const hasData =
       Object.keys(daywiseData).length > 0 &&
       Object.values(daywiseData).some((dayData) =>
-        Object.values(dayData).some((value) => value > 0)
+        Object.values(dayData).some((value) => value > 0),
       );
 
     return hasData ? daywiseData : null;
@@ -515,7 +517,7 @@ const SystemDevices = () => {
           organizationId: Number(organizationId),
           plantId: Number(plantId),
           systemId: Number(systemId),
-        })
+        }),
       )
         .unwrap()
         .then((res) => {
@@ -548,7 +550,7 @@ const SystemDevices = () => {
       devices,
       calculateSystemWaterBalance,
       systemId || 0,
-      false
+      false,
     );
   }, [aggregatedWaterBalanceData, devices, systemId]);
 
@@ -556,12 +558,12 @@ const SystemDevices = () => {
 
   const storageBalanceData = useMemo(
     () => calculateSystemStorageBalance(devices, systemId || 0),
-    [devices, systemId]
+    [devices, systemId],
   );
 
   const storageBalanceColors = useMemo(
     () => getSystemStorageBalanceColors(),
-    []
+    [],
   );
 
   const waterNeutralityIndexColors = useMemo(() => {
@@ -709,7 +711,7 @@ const SystemDevices = () => {
           device?.device_status
             ?.toLowerCase()
             .includes(searchTerm.toLowerCase()) ||
-          device?.system_name?.toLowerCase().includes(searchTerm.toLowerCase())
+          device?.system_name?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -735,18 +737,18 @@ const SystemDevices = () => {
     const active = filteredDevices.filter(
       (d) =>
         d.device_status?.toLowerCase() === "active" &&
-        !isRecordTimeOld(d?.last_record?.time)
+        !isRecordTimeOld(d?.last_record?.time),
     ).length;
     const inactive = filteredDevices.filter(
       (d) =>
         d.device_status?.toLowerCase() === "inactive" ||
-        isRecordTimeOld(d?.last_record?.time)
+        isRecordTimeOld(d?.last_record?.time),
     ).length;
     const other = filteredDevices.filter(
       (d) =>
         d.device_status?.toLowerCase() !== "active" &&
         d.device_status?.toLowerCase() !== "inactive" &&
-        !isRecordTimeOld(d?.last_record?.time)
+        !isRecordTimeOld(d?.last_record?.time),
     ).length;
     return { active, inactive, other };
   }, [filteredDevices]);
@@ -767,10 +769,10 @@ const SystemDevices = () => {
       const maxLoadAttempts = 100;
       while (loadCheckAttempts < maxLoadAttempts) {
         const loadingSkeletons = systemDevicesRef.current.querySelectorAll(
-          '[class*="animate-pulse"]:not([style*="display: none"])'
+          '[class*="animate-pulse"]:not([style*="display: none"])',
         );
         const hasVisibleLoading = Array.from(loadingSkeletons).some(
-          (el) => (el as HTMLElement).offsetParent !== null
+          (el) => (el as HTMLElement).offsetParent !== null,
         );
 
         const dataTable = systemDevicesRef.current.querySelector("table tbody");
@@ -783,7 +785,7 @@ const SystemDevices = () => {
           systemDevicesRef.current.querySelectorAll("canvas, svg").length > 0;
 
         const pieChartCards = systemDevicesRef.current.querySelectorAll(
-          '[class*="card"], [class*="chart"]'
+          '[class*="card"], [class*="chart"]',
         );
         const hasPieCharts = pieChartCards.length > 0;
 
@@ -859,7 +861,7 @@ const SystemDevices = () => {
                   htmlCanvas.width - 10,
                   htmlCanvas.height - 10,
                   1,
-                  1
+                  1,
                 );
                 if (
                   alpha > 0 ||
@@ -922,9 +924,9 @@ const SystemDevices = () => {
         Math.max(
           element.scrollWidth || 0,
           element.offsetWidth || 0,
-          rect?.width || 0
+          rect?.width || 0,
         ),
-        maxWidth
+        maxWidth,
       );
       const scrollHeight = Math.min(Math.max(...allHeights, 0), maxHeight);
 
@@ -1074,7 +1076,7 @@ const SystemDevices = () => {
                 const plantId = localStorage.getItem("plantId");
                 if (departmentId && organizationId && plantId) {
                   navigate(
-                    `/department/device/${organizationId}/${plantId}/${departmentId}`
+                    `/department/device/${organizationId}/${plantId}/${departmentId}`,
                   );
                 }
               }}

@@ -31,16 +31,16 @@ const Reports = () => {
   >("monthly");
   const [monthYear, setMonthYear] = useState(getCurrentMonthYear());
   const [dailyDate, setDailyDate] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [yearlyDate, setYearlyDate] = useState(
-    new Date().getFullYear().toString()
+    new Date().getFullYear().toString(),
   );
   const [customStartDate, setCustomStartDate] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [customEndDate, setCustomEndDate] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
 
   const [selectedPlantId, setSelectedPlantId] = useState<number | null>(null);
@@ -136,7 +136,7 @@ const Reports = () => {
       monthYear,
       yearlyDate,
       customStartDate,
-      customEndDate
+      customEndDate,
     );
 
     let departmentId = 0;
@@ -161,7 +161,7 @@ const Reports = () => {
         from_date: fromDate,
         to_date: toDate,
         duration: durationType,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -221,7 +221,7 @@ const Reports = () => {
 
   const selectedPlant = plants.find((p) => p.plant_id === selectedPlantId);
   const selectedDepartment = departments.find(
-    (d) => d.department_id === selectedDepartmentId
+    (d) => d.department_id === selectedDepartmentId,
   );
   const selectedSystem = systems.find((s) => s.system_id === selectedSystemId);
 
@@ -324,7 +324,7 @@ const Reports = () => {
       monthYear,
       yearlyDate,
       customStartDate,
-      customEndDate
+      customEndDate,
     );
     const plantName = selectedPlant?.plant_name || "Plant";
     const fromDateStr = fromDate.split(" ")[0].replace(/-/g, "");
@@ -339,7 +339,8 @@ const Reports = () => {
     const firstEntry = Object.values(plantReport)[0];
     if (!firstEntry) return [];
     return Object.keys(firstEntry).filter(
-      (key) => key !== "Flow" && key !== "Storage" && key !== "Neutrality-Index"
+      (key) =>
+        key !== "Flow" && key !== "Storage" && key !== "Neutrality-Index",
     );
   };
 
@@ -664,7 +665,7 @@ const Reports = () => {
                           {formatNumber(
                             (data as unknown as Record<string, number | null>)[
                               key
-                            ]
+                            ],
                           )}
                         </td>
                       ))}

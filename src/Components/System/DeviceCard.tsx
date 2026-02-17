@@ -26,8 +26,8 @@ const DeviceCard = ({ device, onViewDevice }: DeviceCardProps) => {
         recordTimeOld
           ? "bg-status-danger/10 border-status-danger/20"
           : location.pathname.startsWith("/system/device/")
-          ? "bg-primary border-border-primary"
-          : "bg-secondary border-border-primary"
+            ? "bg-primary border-border-primary"
+            : "bg-secondary border-border-primary"
       }`}
     >
       <div className="flex items-center justify-between mb-3 gap-1">
@@ -37,10 +37,10 @@ const DeviceCard = ({ device, onViewDevice }: DeviceCardProps) => {
               recordTimeOld
                 ? "bg-status-danger animate-pulse"
                 : device?.device_status?.toLowerCase() === "active"
-                ? "bg-status-success animate-pulse"
-                : device?.device_status?.toLowerCase() === "inactive"
-                ? "bg-status-danger"
-                : "bg-status-danger animate-pulse"
+                  ? "bg-status-success animate-pulse"
+                  : device?.device_status?.toLowerCase() === "inactive"
+                    ? "bg-status-danger"
+                    : "bg-status-danger animate-pulse"
             }`}
           ></div>
           <span

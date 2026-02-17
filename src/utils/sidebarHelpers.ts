@@ -17,7 +17,7 @@ export interface PathInfo {
 export const parsePath = (pathname: string): PathInfo => {
   const pathParts = pathname.split("/").filter(Boolean);
   const isDeviceDetailRoute = pathParts.some(
-    (part) => part.includes("-device") && part !== "device"
+    (part) => part.includes("-device") && part !== "device",
   );
 
   const info: PathInfo = {
@@ -46,11 +46,10 @@ export const parsePath = (pathname: string): PathInfo => {
  * Save manually collapsed menus to localStorage
  */
 export const saveManuallyCollapsedMenus = (
-  manuallyCollapsed: Set<string>
+  manuallyCollapsed: Set<string>,
 ): void => {
   localStorage.setItem(
     "manuallyCollapsedMenus",
-    JSON.stringify(Array.from(manuallyCollapsed))
+    JSON.stringify(Array.from(manuallyCollapsed)),
   );
 };
-

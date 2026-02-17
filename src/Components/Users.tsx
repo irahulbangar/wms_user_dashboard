@@ -44,7 +44,7 @@ const Users = () => {
   const handlePaginatedData = (data: UsersPlantIdResult[]) => {
     return data.slice(
       (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
+      currentPage * rowsPerPage,
     );
   };
 
@@ -215,7 +215,7 @@ const Users = () => {
                     <td className="px-6 py-4 font-roboto whitespace-nowrap text-start text-text-primary text-base">
                       <span
                         className={`px-2 py-1 rounded-full text-sm font-normal capitalize ${handleStatus(
-                          user.status
+                          user.status,
                         )}`}
                       >
                         {user.status}

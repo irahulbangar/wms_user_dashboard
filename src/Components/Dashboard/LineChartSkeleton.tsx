@@ -1,4 +1,3 @@
-
 const LineChartSkeleton = () => {
   return (
     <div className="h-[300px] md:h-auto md:min-h-[300px] w-full bg-card animate-pulse rounded-lg p-2 flex flex-col justify-between gap-2">

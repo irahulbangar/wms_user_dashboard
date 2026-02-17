@@ -57,7 +57,7 @@ export const DepartmentBalanceCards = ({
         ) : departmentBalances.length >= 0 ? (
           departmentBalances.map((dept) => {
             const department = departments?.find(
-              (d) => d.department_id === dept.id
+              (d) => d.department_id === dept.id,
             );
             const deptOrganizationId =
               department?.organization_id || organizationId;
@@ -70,7 +70,7 @@ export const DepartmentBalanceCards = ({
                   if (deptOrganizationId && deptPlantId && dept.id) {
                     localStorage.setItem("departmentId", dept.id.toString());
                     navigate(
-                      `/department/device/${deptOrganizationId}/${deptPlantId}/${dept.id}`
+                      `/department/device/${deptOrganizationId}/${deptPlantId}/${dept.id}`,
                     );
                   }
                 }}

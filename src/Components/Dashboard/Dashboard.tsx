@@ -93,7 +93,7 @@ const Dashboard = () => {
     Set<number>
   >(new Set());
   const [selectedSystemIds, setSelectedSystemIds] = useState<Set<number>>(
-    new Set()
+    new Set(),
   );
   const [selectedSections, setSelectedSections] = useState<SectionVisibility>({
     dashboard: true,
@@ -119,7 +119,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(getCurrentPlantId())
+    (plant) => plant.plant_id === Number(getCurrentPlantId()),
   )?.role;
   const getCurrentMonthYear = () => {
     const now = new Date();
@@ -136,7 +136,7 @@ const Dashboard = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(now.getDate()).padStart(2, "0")}`;
   });
   const [yearlyDate, setYearlyDate] = useState(() => {
@@ -147,14 +147,14 @@ const Dashboard = () => {
     date.setDate(date.getDate() - 6);
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(date.getDate()).padStart(2, "0")}`;
   });
   const [customEndDate, setCustomEndDate] = useState(() => {
     const date = new Date();
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(date.getDate()).padStart(2, "0")}`;
   });
   const [durationType, setDurationType] = useState<
@@ -217,7 +217,7 @@ const Dashboard = () => {
       monthYear,
       yearlyDate,
       customStartDate,
-      customEndDate
+      customEndDate,
     );
 
     dispatch(
@@ -228,7 +228,7 @@ const Dashboard = () => {
         from_date: fromDate,
         to_date: toDate,
         duration: durationType,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -345,7 +345,7 @@ const Dashboard = () => {
         getDeviceByOrganizationIdAndPlantId({
           organizationId: Number(organizationId),
           plantId: Number(plantId),
-        })
+        }),
       )
         .unwrap()
         .then((res) => {
@@ -432,7 +432,7 @@ const Dashboard = () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener(
         "reportDownloadComplete",
-        handleReportComplete
+        handleReportComplete,
       );
     };
   }, []);
@@ -644,7 +644,7 @@ const Dashboard = () => {
       devices,
       calculatePlantWaterBalance,
       plantIdNum,
-      false
+      false,
     );
   }, [devices, plantIdNum, aggregatedWaterBalanceData]);
 
@@ -763,7 +763,7 @@ const Dashboard = () => {
         console.warn(
           "Error processing date entry for daywise data:",
           dateKey,
-          error
+          error,
         );
       }
     });
@@ -771,7 +771,7 @@ const Dashboard = () => {
     const hasData =
       Object.keys(daywiseData).length > 0 &&
       Object.values(daywiseData).some((dayData) =>
-        Object.values(dayData).some((value) => value > 0)
+        Object.values(dayData).some((value) => value > 0),
       );
 
     return hasData ? daywiseData : null;
@@ -822,7 +822,7 @@ const Dashboard = () => {
       getReportTypeColor("Regeneration"),
       getReportTypeColor("Re-use"),
     ],
-    []
+    [],
   );
 
   const waterNeutralityIndexColors = useMemo(() => {
@@ -976,7 +976,7 @@ const Dashboard = () => {
       monthYear,
       yearlyDate,
       customStartDate,
-      customEndDate
+      customEndDate,
     );
 
     const promises = uniqueDepartments.map((dept) => {
@@ -988,7 +988,7 @@ const Dashboard = () => {
           from_date: fromDate,
           to_date: toDate,
           duration: durationType,
-        })
+        }),
       )
         .unwrap()
         .then((res) => {
@@ -1000,7 +1000,7 @@ const Dashboard = () => {
         .catch((err) => {
           console.warn(
             `Failed to fetch report for department ${dept.id}:`,
-            err
+            err,
           );
           return { deptId: dept.id, report: null };
         });
@@ -1144,7 +1144,7 @@ const Dashboard = () => {
           console.warn(
             "Error processing department date entry:",
             dateKey,
-            error
+            error,
           );
         }
       });
@@ -1194,7 +1194,7 @@ const Dashboard = () => {
       selectedDepartmentIds.size === 0
     ) {
       setSelectedDepartmentIds(
-        new Set(plantDepartments.map((d) => d.department_id))
+        new Set(plantDepartments.map((d) => d.department_id)),
       );
       hasInitializedDepartments.current = true;
     }
@@ -1232,13 +1232,13 @@ const Dashboard = () => {
       console.log("[Report] Fetching departments...");
       try {
         const deptRes = await dispatch(
-          getDepartmentsByPlantId(Number(plantId))
+          getDepartmentsByPlantId(Number(plantId)),
         ).unwrap();
         if (deptRes.success && deptRes.data) {
           dispatch(setDepartments(deptRes.data));
           fetchedDepartments = deptRes.data;
           console.log(
-            `[Report] Fetched ${deptRes.data.length} departments from API`
+            `[Report] Fetched ${deptRes.data.length} departments from API`,
           );
         }
       } catch (err) {
@@ -1250,13 +1250,13 @@ const Dashboard = () => {
       console.log("[Report] Fetching systems...");
       try {
         const sysRes = await dispatch(
-          getSystemsByPlantId(Number(plantId))
+          getSystemsByPlantId(Number(plantId)),
         ).unwrap();
         if (sysRes.success && sysRes.data) {
           dispatch(setSystems(sysRes.data));
           fetchedSystems = sysRes.data;
           console.log(
-            `[Report] Fetched ${sysRes.data.length} systems from API`
+            `[Report] Fetched ${sysRes.data.length} systems from API`,
           );
         }
       } catch (err) {
@@ -1267,7 +1267,7 @@ const Dashboard = () => {
     if (plantId) {
       try {
         const deptRes = await dispatch(
-          getDepartmentsByPlantId(Number(plantId))
+          getDepartmentsByPlantId(Number(plantId)),
         ).unwrap();
         if (deptRes.success && deptRes.data) {
           dispatch(setDepartments(deptRes.data));
@@ -1279,7 +1279,7 @@ const Dashboard = () => {
 
       try {
         const sysRes = await dispatch(
-          getSystemsByPlantId(Number(plantId))
+          getSystemsByPlantId(Number(plantId)),
         ).unwrap();
         if (sysRes.success && sysRes.data) {
           dispatch(setSystems(sysRes.data));
@@ -1298,20 +1298,20 @@ const Dashboard = () => {
       fetchedSystems.length > 0 ? fetchedSystems : systems || [];
 
     let departmentsToCapture = allDepartments.filter(
-      (d: DepartmentResult) => Number(d.plant_id) === plantIdNum
+      (d: DepartmentResult) => Number(d.plant_id) === plantIdNum,
     );
     let systemsToCapture = allSystems.filter(
-      (s: SystemResult) => Number(s.plant_id) === plantIdNum
+      (s: SystemResult) => Number(s.plant_id) === plantIdNum,
     );
 
     if (selectedSections.department && selectedDepartmentIds.size > 0) {
       departmentsToCapture = departmentsToCapture.filter((d) =>
-        selectedDepartmentIds.has(Number(d.department_id))
+        selectedDepartmentIds.has(Number(d.department_id)),
       );
     }
     if (selectedSections.system && selectedSystemIds.size > 0) {
       systemsToCapture = systemsToCapture.filter((s) =>
-        selectedSystemIds.has(Number(s.system_id))
+        selectedSystemIds.has(Number(s.system_id)),
       );
     }
 
@@ -1329,7 +1329,7 @@ const Dashboard = () => {
       const updateProgress = (step: number, status: string) => {
         const percentage = Math.min(
           95,
-          Math.round((step / totalScreenshots) * 90)
+          Math.round((step / totalScreenshots) * 90),
         );
         setReportProgress((prev) => ({
           percentage,
@@ -1344,7 +1344,7 @@ const Dashboard = () => {
         ? await (async () => {
             updateProgress(1, "Capturing dashboard screenshot...");
             return await captureDashboardScreenshot(
-              dashboardRef as React.RefObject<HTMLDivElement>
+              dashboardRef as React.RefObject<HTMLDivElement>,
             )
               .catch((error) => {
                 console.error("Failed to capture dashboard screenshot:", error);
@@ -1362,12 +1362,12 @@ const Dashboard = () => {
         ? await (async () => {
             updateProgress(
               selectedSections.dashboard ? 2 : 1,
-              "Capturing plant diagram..."
+              "Capturing plant diagram...",
             );
             return await capturePlantDiagramScreenshot().catch((error) => {
               console.error(
                 "Failed to capture plant diagram screenshot:",
-                error
+                error,
               );
               return null;
             });
@@ -1392,23 +1392,23 @@ const Dashboard = () => {
                     baseStep + deptIndex,
                     `Capturing depart ${deptIndex + 1}/${
                       departmentsToCapture.length
-                    } (${dept.department_name || dept.department_id})...`
+                    } (${dept.department_name || dept.department_id})...`,
                   );
 
                   console.log(
                     `[Report] Capturing department ${dept.department_id} (${
                       dept.department_name
-                    }) - ${deptIndex + 1}/${departmentsToCapture.length}`
+                    }) - ${deptIndex + 1}/${departmentsToCapture.length}`,
                   );
 
                   const screenshot = await captureDepartmentScreenshot(
-                    dept.department_id
+                    dept.department_id,
                   );
 
                   console.log(
                     `[Report] Department ${dept.department_id} screenshot ${
                       screenshot ? "captured successfully" : "failed (null)"
-                    }`
+                    }`,
                   );
 
                   results.push({
@@ -1423,7 +1423,7 @@ const Dashboard = () => {
                 } catch (error) {
                   console.error(
                     `[Report] Failed to capture department ${dept.department_id} (${dept.department_name}) screenshot:`,
-                    error
+                    error,
                   );
                   results.push({
                     id: dept.department_id,
@@ -1442,7 +1442,7 @@ const Dashboard = () => {
                   results.length
                 } total, ${
                   results.filter((r) => r.screenshot).length
-                } successful`
+                } successful`,
               );
               return results;
             })()
@@ -1469,23 +1469,23 @@ const Dashboard = () => {
                     baseStep + sysIndex,
                     `Capturing system ${sysIndex + 1}/${
                       systemsToCapture.length
-                    } (${sys.system_name || sys.system_id})...`
+                    } (${sys.system_name || sys.system_id})...`,
                   );
 
                   console.log(
                     `[Report] Capturing system ${sys.system_id} (${
                       sys.system_name
-                    }) - ${sysIndex + 1}/${systemsToCapture.length}`
+                    }) - ${sysIndex + 1}/${systemsToCapture.length}`,
                   );
 
                   const screenshot = await captureSystemScreenshot(
-                    sys.system_id
+                    sys.system_id,
                   );
 
                   console.log(
                     `[Report] System ${sys.system_id} screenshot ${
                       screenshot ? "captured successfully" : "failed (null)"
-                    }`
+                    }`,
                   );
 
                   results.push({
@@ -1498,7 +1498,7 @@ const Dashboard = () => {
                 } catch (error) {
                   console.error(
                     `[Report] Failed to capture system ${sys.system_id} (${sys.system_name}) screenshot:`,
-                    error
+                    error,
                   );
                   results.push({
                     id: sys.system_id,
@@ -1515,17 +1515,17 @@ const Dashboard = () => {
                   results.length
                 } total, ${
                   results.filter((r) => r.screenshot).length
-                } successful`
+                } successful`,
               );
               return results;
             })()
           : [];
 
       const failedDeptScreenshots = departmentScreenshots.filter(
-        (d) => !d.screenshot
+        (d) => !d.screenshot,
       );
       const failedSysScreenshots = systemScreenshots.filter(
-        (s) => !s.screenshot
+        (s) => !s.screenshot,
       );
 
       const successfulDeptScreenshots =
@@ -1534,7 +1534,7 @@ const Dashboard = () => {
         systemScreenshots.length - failedSysScreenshots.length;
 
       console.log(
-        `[Report] Screenshot summary - Departments: ${successfulDeptScreenshots}/${departmentScreenshots.length} successful, Systems: ${successfulSysScreenshots}/${systemScreenshots.length} successful`
+        `[Report] Screenshot summary - Departments: ${successfulDeptScreenshots}/${departmentScreenshots.length} successful, Systems: ${successfulSysScreenshots}/${systemScreenshots.length} successful`,
       );
 
       if (failedDeptScreenshots.length > 0) {
@@ -1542,7 +1542,7 @@ const Dashboard = () => {
           .map((d) => d.name || `ID ${d.id}`)
           .join(", ");
         console.warn(
-          `[Report] Failed to capture ${failedDeptScreenshots.length} department screenshot(s): ${failedNames}`
+          `[Report] Failed to capture ${failedDeptScreenshots.length} department screenshot(s): ${failedNames}`,
         );
       }
       if (failedSysScreenshots.length > 0) {
@@ -1550,7 +1550,7 @@ const Dashboard = () => {
           .map((s) => s.name || `ID ${s.id}`)
           .join(", ");
         console.warn(
-          `[Report] Failed to capture ${failedSysScreenshots.length} system screenshot(s): ${failedNames}`
+          `[Report] Failed to capture ${failedSysScreenshots.length} system screenshot(s): ${failedNames}`,
         );
       }
 
@@ -1641,7 +1641,7 @@ const Dashboard = () => {
         wrapper,
         reportData,
         waterNeutralityIndexData || [],
-        selectedSections
+        selectedSections,
       );
 
       setupWaterBalanceSection(wrapper, reportData, selectedSections);
@@ -1651,7 +1651,7 @@ const Dashboard = () => {
         waterNeutralityIndexData || [],
         waterNeutralityIndexValue,
         selectedSections,
-        devices?.[0]?.unit || "Ltr."
+        devices?.[0]?.unit || "Ltr.",
       );
 
       setupStorageSection(wrapper, reportData, selectedSections);
@@ -1660,7 +1660,7 @@ const Dashboard = () => {
         wrapper,
         reportData,
         waterNeutralityIndexValue,
-        selectedSections
+        selectedSections,
       );
 
       const imgs = Array.from(wrapper.querySelectorAll("img"));

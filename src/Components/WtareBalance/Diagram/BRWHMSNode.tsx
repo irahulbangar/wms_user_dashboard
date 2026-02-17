@@ -38,15 +38,13 @@ const BRWHMSNode = ({ data }: BRWHMSNodeProps) => {
   const borderColor = recordTimeOld
     ? "border-status-danger"
     : isActive
-    ? "border-status-success"
-    : "border-border-primary";
+      ? "border-status-success"
+      : "border-border-primary";
 
   const connectionInfo = [
     `System Name: ${systemName}`,
     `Device Name: ${data.label}`,
-    organizationConnection
-      ? `Org Conn. : ${organizationConnection}`
-      : null,
+    organizationConnection ? `Org Conn. : ${organizationConnection}` : null,
     plantConnection ? `Plant Conn. : ${plantConnection}` : null,
     departmentConnection ? `Dept Conn. : ${departmentConnection}` : null,
     systemConnection ? `System Conn. : ${systemConnection}` : null,
@@ -76,8 +74,8 @@ const BRWHMSNode = ({ data }: BRWHMSNodeProps) => {
           recordTimeOld
             ? "bg-status-danger animate-pulse"
             : isActive
-            ? "bg-status-success animate-pulse"
-            : "bg-status-danger"
+              ? "bg-status-success animate-pulse"
+              : "bg-status-danger"
         }`}
       />
 

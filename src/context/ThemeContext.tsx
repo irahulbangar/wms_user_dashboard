@@ -1,50 +1,19 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  type ReactNode,
-} from "react";
-
-type Theme = "light" | "dark";
-
-interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
-  setTheme: (theme: Theme) => void;
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
-  }
-  return context;
-};
+import { useState, useEffect, type ReactNode } from "react";
+import { ThemeContext, type Theme } from "./useTheme";
 
 interface ThemeProviderProps {
   children: ReactNode;
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+export default function ThemeProvider({ children }: ThemeProviderProps) {
   const getInitialTheme = (): Theme => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("wms-theme") as Theme;
       if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
         return savedTheme;
       }
-
-      // const systemPrefersDark = window.matchMedia(
-      //   "(prefers-color-scheme: dark)"
-      // ).matches;
-      // return systemPrefersDark ? "dark" : "light";
-
-      // Default to light theme when no saved preference is found
       return "light";
     }
-
     return "light";
   };
 
@@ -73,7 +42,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   }, [theme]);
 
   const toggleTheme = () => {
-    setThemeState((prev) => (prev === "light" ? "dark" : "light"));
+    setThemeState((prev: Theme) => (prev === "light" ? "dark" : "light"));
   };
 
   const setTheme = (newTheme: Theme) => {
@@ -89,4 +58,4 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
-};
+}

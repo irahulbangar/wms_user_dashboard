@@ -36,7 +36,7 @@ export const enhanceNodeData = ({
     const matchingDevice = devices.find(
       (device: any) =>
         device.device_family_type === "tank" &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
 
     if (matchingDevice) {
@@ -44,7 +44,7 @@ export const enhanceNodeData = ({
         node.id,
         devices as any[],
         nodesArray,
-        edgesArray
+        edgesArray,
       );
 
       enhancedData = {
@@ -77,7 +77,7 @@ export const enhanceNodeData = ({
     const matchingDevice = devices.find(
       (device: any) =>
         device.device_family_type === "fm" &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
 
     if (matchingDevice) {
@@ -106,7 +106,7 @@ export const enhanceNodeData = ({
     const matchingDevice = devices.find(
       (device: any) =>
         device.device_family_type === "brwhms" &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
 
     if (matchingDevice) {
@@ -133,7 +133,7 @@ export const enhanceNodeData = ({
     const matchingDevice = devices.find(
       (device: any) =>
         device.device_family_type === "BDWFMS" &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
 
     if (matchingDevice) {
@@ -160,7 +160,7 @@ export const enhanceNodeData = ({
     const matchingDevice = devices.find(
       (device: any) =>
         device.device_family_type === "phmc" &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
 
     if (matchingDevice) {
@@ -197,7 +197,7 @@ export const enhanceNodeData = ({
     const matchingDevice = devices.find(
       (device: any) =>
         device.device_family_type === "arg" &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
 
     if (matchingDevice) {
@@ -228,7 +228,7 @@ export const enhanceNodeData = ({
     const matchingDevice = devices.find(
       (device: any) =>
         device.device_family_type === "virtual" &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
 
     if (matchingDevice) {
@@ -256,7 +256,7 @@ export const enhanceNodeData = ({
     const matchingDevice = devices.find(
       (device: any) =>
         device.device_family_type === "dwlr" &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
 
     if (matchingDevice) {
@@ -335,9 +335,9 @@ export const enhanceNodeData = ({
       (device: any) =>
         (device.device_family_type === "smart" ||
           device.device_family === "Smart Device") &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
-    
+
     if (matchingDevice) {
       enhancedData = {
         ...enhancedData,
@@ -364,7 +364,7 @@ export const enhanceNodeData = ({
       (device: any) =>
         device.device_family_type === "virtual" &&
         device.device_type === "Resultant Reporting" &&
-        device.device_name === node.data.label
+        device.device_name === node.data.label,
     );
 
     if (matchingDevice) {
@@ -373,8 +373,8 @@ export const enhanceNodeData = ({
         typeof reportValue === "number"
           ? reportValue
           : typeof reportValue === "string"
-          ? parseFloat(reportValue) || 0
-          : reportValue ?? 0;
+            ? parseFloat(reportValue) || 0
+            : (reportValue ?? 0);
 
       enhancedData = {
         ...enhancedData,
@@ -442,7 +442,7 @@ export const enhanceNodeData = ({
       const deptTotals = calculateDepartmentTotals(devices, departmentId);
 
       const departmentDevices = devices.filter(
-        (device: any) => device.department_id.toString() === departmentId
+        (device: any) => device.department_id.toString() === departmentId,
       );
 
       const plantTotals = calculatePlantTotals(devices, plantId || "");
@@ -494,7 +494,7 @@ export const enhanceNodeData = ({
       const plantTotals = calculatePlantTotals(devices, plantId || "");
 
       const systemDevices = devices.filter(
-        (device: any) => device.system_id.toString() === systemId
+        (device: any) => device.system_id.toString() === systemId,
       );
 
       const actualSystemName =

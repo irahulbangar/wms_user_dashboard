@@ -52,7 +52,7 @@ const Organization = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(now.getDate()).padStart(2, "0")}`;
   });
   const [yearlyDate, setYearlyDate] = useState(() => {
@@ -63,14 +63,14 @@ const Organization = () => {
     date.setDate(date.getDate() - 6);
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(date.getDate()).padStart(2, "0")}`;
   });
   const [customEndDate, setCustomEndDate] = useState(() => {
     const date = new Date();
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(date.getDate()).padStart(2, "0")}`;
   });
   const [durationType, setDurationType] = useState<
@@ -368,7 +368,7 @@ const Organization = () => {
           console.warn(
             "Error processing date entry for daywise data:",
             dateKey,
-            error
+            error,
           );
         }
       });
@@ -386,7 +386,7 @@ const Organization = () => {
     const hasData =
       Object.keys(daywiseData).length > 0 &&
       Object.values(daywiseData).some((dayData) =>
-        Object.values(dayData).some((value) => value > 0)
+        Object.values(dayData).some((value) => value > 0),
       );
 
     return hasData ? daywiseData : null;
@@ -430,7 +430,7 @@ const Organization = () => {
   const organizationPlants = useMemo(() => {
     if (!organizationId || !plants || plants.length === 0) return [];
     return plants.filter(
-      (plant) => plant.organization_id === Number(organizationId)
+      (plant) => plant.organization_id === Number(organizationId),
     );
   }, [plants, organizationId]);
 
@@ -451,7 +451,7 @@ const Organization = () => {
       monthYear,
       yearlyDate,
       customStartDate,
-      customEndDate
+      customEndDate,
     );
 
     try {
@@ -464,8 +464,8 @@ const Organization = () => {
             from_date: fromDate,
             to_date: toDate,
             duration: durationType,
-          })
-        ).unwrap()
+          }),
+        ).unwrap(),
       );
 
       const results = await Promise.all(plantPromises);
@@ -525,7 +525,7 @@ const Organization = () => {
       devices,
       calculatePlantWaterBalance,
       organizationId,
-      !!(devices && devices.length > 0 && plantId)
+      !!(devices && devices.length > 0 && plantId),
     );
   }, [aggregatedReportNameWise, devices, plantId, organizationId]);
 
@@ -533,12 +533,12 @@ const Organization = () => {
 
   const storageBalanceData = useMemo(
     () => calculateOrganizationStorageBalance(devices, organizationId || 0),
-    [devices, organizationId]
+    [devices, organizationId],
   );
 
   const storageBalanceColors = useMemo(
     () => getOrganizationStorageBalanceColors(),
-    []
+    [],
   );
 
   const waterNeutralityIndexColors = useMemo(() => {
@@ -739,7 +739,7 @@ const Organization = () => {
             console.warn(
               "Error processing plant balance date entry:",
               dateKey,
-              error
+              error,
             );
           }
         });
@@ -851,7 +851,7 @@ const Organization = () => {
         getDeviceByOrganizationIdAndPlantId({
           organizationId: Number(organizationId),
           plantId: Number(plantId),
-        })
+        }),
       )
         .unwrap()
         .then((res) => {
@@ -917,7 +917,7 @@ const Organization = () => {
             onClick={() => {
               if (!organizationId || organizationPlants.length === 0) {
                 Warning(
-                  "Please select an organization with plants to fetch data"
+                  "Please select an organization with plants to fetch data",
                 );
                 return;
               }

@@ -18,8 +18,8 @@ const ResultantNode: React.FC<ResultantNodeProps> = ({ data }) => {
     typeof data.report_value === "number"
       ? data.report_value
       : typeof data.report_value === "string"
-      ? parseFloat(data.report_value) || 0
-      : 0;
+        ? parseFloat(data.report_value) || 0
+        : 0;
 
   const formattedValue = isNaN(reportValue) ? 0 : reportValue.toFixed(2);
 

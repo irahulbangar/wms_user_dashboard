@@ -2,7 +2,7 @@ import type { DepartmentTotals } from "../types/diagram.types";
 
 export const calculateDepartmentTotals = (
   devices: any[],
-  targetDepartmentId: string
+  targetDepartmentId: string,
 ): DepartmentTotals => {
   const deptTotals: DepartmentTotals = {
     totalStock: 0,
@@ -53,7 +53,7 @@ export const calculateDepartmentTotals = (
 
 export const calculatePlantTotals = (
   devices: any[],
-  targetPlantId: string
+  targetPlantId: string,
 ): DepartmentTotals => {
   const plantTotals: DepartmentTotals = {
     totalStock: 0,

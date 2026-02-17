@@ -11,11 +11,11 @@ import type { PlantResult } from "../../model/plant.interface";
 export const getInitialExpandedMenus = (
   pathname: string,
   systemsFromStore: SystemResult[],
-  plants: PlantResult[]
+  plants: PlantResult[],
 ): string[] => {
   const expanded: string[] = [];
   const manuallyCollapsed = new Set(
-    JSON.parse(localStorage.getItem("manuallyCollapsedMenus") || "[]")
+    JSON.parse(localStorage.getItem("manuallyCollapsedMenus") || "[]"),
   );
 
   if (pathname.startsWith("/department/device/")) {
@@ -44,7 +44,7 @@ export const getInitialExpandedMenus = (
       const plantId = pathParts[3];
       const systemId = pathParts[4];
       const system = systemsFromStore.find(
-        (s) => s.system_id.toString() === systemId
+        (s) => s.system_id.toString() === systemId,
       );
       if (system) {
         const orgMenuId = `org-${orgId}`;
@@ -100,7 +100,7 @@ export const getExpandedMenusFromPathname = (
   plants: PlantResult[],
   systemsFromStore: SystemResult[],
   manuallyCollapsedRef: React.MutableRefObject<Set<string>>,
-  isInitialMountRef: React.MutableRefObject<boolean>
+  isInitialMountRef: React.MutableRefObject<boolean>,
 ): string[] => {
   const newExpandedMenus: string[] = [];
 
@@ -144,7 +144,7 @@ export const getExpandedMenusFromPathname = (
   } else if (pathname.startsWith("/department/device/")) {
     const pathParts = pathname.split("/").filter(Boolean);
     const isDeviceDetailRoute = pathParts.some(
-      (part) => part.includes("-device") && part !== "device"
+      (part) => part.includes("-device") && part !== "device",
     );
 
     if (isDeviceDetailRoute || pathParts.length === 5) {
@@ -183,7 +183,7 @@ export const getExpandedMenusFromPathname = (
   } else if (pathname.startsWith("/system/device/")) {
     const pathParts = pathname.split("/").filter(Boolean);
     const isDeviceDetailRoute = pathParts.some(
-      (part) => part.includes("-device") && part !== "device"
+      (part) => part.includes("-device") && part !== "device",
     );
 
     if (isDeviceDetailRoute || pathParts.length === 5) {
@@ -194,7 +194,7 @@ export const getExpandedMenusFromPathname = (
         if (urlSystemId) {
           localStorage.setItem("systemId", urlSystemId);
           const system = systemsFromStore.find(
-            (s) => s.system_id.toString() === urlSystemId
+            (s) => s.system_id.toString() === urlSystemId,
           );
           if (system && orgId && plantId) {
             const orgMenuId = `org-${orgId}`;
@@ -222,7 +222,7 @@ export const getExpandedMenusFromPathname = (
 
             localStorage.setItem(
               "departmentId",
-              system.department_id.toString()
+              system.department_id.toString(),
             );
           }
         }

@@ -21,7 +21,7 @@ interface WaterBalanceDataItem {
 
 type CalculateWaterBalanceFn = (
   devices: DevicesResult[],
-  id: number
+  id: number,
 ) => WaterBalanceDataItem[];
 
 /**
@@ -33,7 +33,7 @@ export const calculateWaterBalanceData = (
   devices: DevicesResult[] | null | undefined,
   calculateFn: CalculateWaterBalanceFn,
   id: number | string | null | undefined,
-  shouldReturnEmptyData: boolean = false
+  shouldReturnEmptyData: boolean = false,
 ): WaterBalanceDataItem[] => {
   if (reportNameWise) {
     const hasData =

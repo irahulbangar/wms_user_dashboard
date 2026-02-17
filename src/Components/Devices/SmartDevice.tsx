@@ -48,21 +48,21 @@ const SmartDevice = () => {
   const defaultCustomFrom = sevenDaysAgo.toISOString().split("T")[0];
   const defaultCustomTo = now.toISOString().split("T")[0];
   const [activeTab, setActiveTab] = useState<"panel" | "reports">(
-    (searchParams.get("tab") as "panel" | "reports") || "panel"
+    (searchParams.get("tab") as "panel" | "reports") || "panel",
   );
   const [selectedReport, setSelectedReport] = useState<
     "none" | "runTime" | "customReport"
   >(
     (searchParams.get("report") as "none" | "runTime" | "customReport") ||
-      "none"
+      "none",
   );
 
   const [deviceData, setDeviceData] = useState<SingleDeviceResult>(
-    {} as SingleDeviceResult
+    {} as SingleDeviceResult,
   );
 
   const [runTimeDate, setRunTimeDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [runTimeData, setRunTimeData] = useState<SmartDeviceResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -83,7 +83,7 @@ const SmartDevice = () => {
   const systemId = localStorage.getItem("systemId");
   const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(getCurrentPlantId())
+    (plant) => plant.plant_id === Number(getCurrentPlantId()),
   )?.role;
   const { sendMessage, isConnected } = useWebSocketConnection();
   const hwidAuthSentRef = useRef(false);
@@ -107,7 +107,7 @@ const SmartDevice = () => {
 
     const paginatedData = currentData.slice(
       (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
+      currentPage * rowsPerPage,
     );
     return paginatedData.length;
   }, [runTimeData, customReportData, selectedReport, currentPage, rowsPerPage]);
@@ -123,7 +123,7 @@ const SmartDevice = () => {
   const handlePaginatedData = (data: SmartDeviceResultItem[]) => {
     return data.slice(
       (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
+      currentPage * rowsPerPage,
     );
   };
 
@@ -204,7 +204,7 @@ const SmartDevice = () => {
         plantId: Number(deviceData?.plant_id) || 0,
         deviceId: Number(device_id) || 0,
         date: runTimeDate,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -240,7 +240,7 @@ const SmartDevice = () => {
         from_date: fromDateWithTime,
         to_date: toDateWithTime,
         duration: customReportDuration,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -297,7 +297,7 @@ const SmartDevice = () => {
   };
 
   const updateSelectedReport = (
-    report: "none" | "runTime" | "customReport"
+    report: "none" | "runTime" | "customReport",
   ) => {
     setSelectedReport(report);
     setSearchParams((prev) => {
@@ -325,7 +325,7 @@ const SmartDevice = () => {
 
     const visibleParams =
       deviceData?.params?.display_params?.filter(
-        (param) => param.report_visible !== 0
+        (param) => param.report_visible !== 0,
       ) || [];
 
     const useArray = customReportData.map((data, index) => {
@@ -349,7 +349,7 @@ const SmartDevice = () => {
 
     downloadCSV(
       useArray,
-      `Smart Device Custom Report_${customReportFromDate}_to_${customReportToDate}`
+      `Smart Device Custom Report_${customReportFromDate}_to_${customReportToDate}`,
     );
   };
 
@@ -361,7 +361,7 @@ const SmartDevice = () => {
 
     const visibleParams =
       deviceData?.params?.display_params?.filter(
-        (param) => param.report_visible !== 0
+        (param) => param.report_visible !== 0,
       ) || [];
 
     const useArray = runTimeData.map((data, index) => {
@@ -385,7 +385,7 @@ const SmartDevice = () => {
 
     downloadCSV(
       useArray,
-      `Smart Device Run Time Report_${runTimeDate || "data"}`
+      `Smart Device Run Time Report_${runTimeDate || "data"}`,
     );
   };
 
@@ -432,7 +432,7 @@ const SmartDevice = () => {
               navigate(
                 location.pathname.startsWith("/system/device/")
                   ? `/system/device/${organizationId}/${getCurrentPlantId()}/${systemId}`
-                  : "/devices"
+                  : "/devices",
               )
             }
             className="text-text-secondary hover:text-text-primary hover:bg-overlay/20 px-2 py-1 rounded transition-all duration-200 cursor-pointer font-roboto"
@@ -658,7 +658,7 @@ const SmartDevice = () => {
                                     </td>
                                     {deviceData?.params?.display_params
                                       ?.filter(
-                                        (param) => param.report_visible !== 0
+                                        (param) => param.report_visible !== 0,
                                       )
                                       .map((param) => {
                                         const lastRecord = data.last_record;
@@ -681,7 +681,7 @@ const SmartDevice = () => {
                                         );
                                       })}
                                   </tr>
-                                )
+                                ),
                               )}
                           </tbody>
                         </table>
@@ -723,7 +723,7 @@ const SmartDevice = () => {
                         value={customReportDuration}
                         onChange={(e) =>
                           setCustomReportDuration(
-                            e.target.value as "15min" | "1hour" | "1day"
+                            e.target.value as "15min" | "1hour" | "1day",
                           )
                         }
                         className="w-42 px-3 py-1.5 border border-border-primary bg-primary text-text-primary rounded-md focus:outline-none focus:ring-1 focus:ring-status-info"
@@ -857,7 +857,7 @@ const SmartDevice = () => {
                                     </td>
                                     {deviceData?.params?.display_params
                                       ?.filter(
-                                        (param) => param.report_visible !== 0
+                                        (param) => param.report_visible !== 0,
                                       )
                                       .map((param) => {
                                         const lastRecord = data.last_record;
@@ -880,7 +880,7 @@ const SmartDevice = () => {
                                         );
                                       })}
                                   </tr>
-                                )
+                                ),
                               )}
                           </tbody>
                         </table>

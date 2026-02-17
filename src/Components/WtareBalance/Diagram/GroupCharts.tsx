@@ -8,7 +8,6 @@ interface GroupChartsProps {
   totalStock: number;
   totalCapacity: number;
   groupType: "system" | "department" | "plant";
-  groupName: string;
   unit: string;
 }
 
@@ -16,7 +15,6 @@ export const FlowChart: React.FC<GroupChartsProps> = ({
   totalIn,
   totalOut,
   groupType,
-  groupName: _groupName,
   unit,
 }) => {
   const totalBalance = totalIn - totalOut;
@@ -173,7 +171,6 @@ export const StorageChart: React.FC<GroupChartsProps> = ({
   totalStock,
   totalCapacity,
   groupType,
-  groupName: _groupName,
   unit,
 }) => {
   const capacityData = [

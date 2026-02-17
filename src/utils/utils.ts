@@ -53,7 +53,7 @@ export const formatDateForCSV = (dateString: string): string => {
  */
 export const convertDeviceDateTime = (
   dateString: string,
-  timeString: string
+  timeString: string,
 ): string => {
   try {
     if (!dateString || !timeString) {
@@ -107,7 +107,7 @@ export const handleStatus = (status: string) => {
 
 export const downloadCSV = (
   data: Record<string, string | number>[],
-  fileName: string
+  fileName: string,
 ) => {
   const config = mkConfig({
     fieldSeparator: ",",
@@ -146,7 +146,7 @@ export const formatDateWithTime = (dateString: string | number): string => {
  * @returns true if the record time is older than 24 hours, false otherwise
  */
 export const isRecordTimeOld = (
-  lastRecordTime: string | undefined | null
+  lastRecordTime: string | undefined | null,
 ): boolean => {
   if (!lastRecordTime || lastRecordTime === "N/A") return false;
   try {
@@ -176,7 +176,7 @@ export const getDateRange = (
   monthYear: string,
   yearlyDate: string,
   customStartDate: string,
-  customEndDate: string
+  customEndDate: string,
 ): { fromDate: string; toDate: string } => {
   let fromDate = "";
   let toDate = "";
@@ -185,7 +185,7 @@ export const getDateRange = (
     case "daily": {
       const today = new Date();
       const todayStr = `${today.getFullYear()}-${String(
-        today.getMonth() + 1
+        today.getMonth() + 1,
       ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
       fromDate = `${dailyDate} 00:00:00`;
@@ -193,9 +193,9 @@ export const getDateRange = (
       if (dailyDate === todayStr) {
         const currentTime = `${String(today.getHours()).padStart(
           2,
-          "0"
+          "0",
         )}:${String(today.getMinutes()).padStart(2, "0")}:${String(
-          today.getSeconds()
+          today.getSeconds(),
         ).padStart(2, "0")}`;
         toDate = `${dailyDate} ${currentTime}`;
       } else {
@@ -213,13 +213,13 @@ export const getDateRange = (
 
       if (year === currentYear && month === currentMonth) {
         const todayStr = `${today.getFullYear()}-${String(
-          today.getMonth() + 1
+          today.getMonth() + 1,
         ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
         toDate = `${todayStr} 23:59:59`;
       } else {
         const lastDay = new Date(Number(year), Number(month), 0);
         const lastDayStr = `${year}-${String(month).padStart(2, "0")}-${String(
-          lastDay.getDate()
+          lastDay.getDate(),
         ).padStart(2, "0")}`;
         toDate = `${lastDayStr} 23:59:59`;
       }
@@ -236,7 +236,7 @@ export const getDateRange = (
 
       if (year === currentYear) {
         const todayStr = `${today.getFullYear()}-${String(
-          today.getMonth() + 1
+          today.getMonth() + 1,
         ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
         toDate = `${todayStr} 23:59:59`;
       } else {
@@ -258,7 +258,7 @@ export const getDateRange = (
       fromDate = `${year}-${month}-01 00:00:00`;
       toDate = `${year}-${month}-${String(lastDay.getDate()).padStart(
         2,
-        "0"
+        "0",
       )} 23:59:59`;
       break;
     }
@@ -270,7 +270,7 @@ export const getDateRange = (
 export const flowUnit = (
   selectedReport: string,
   customReportDuration: string,
-  deviceData: SingleDeviceResult | null | undefined
+  deviceData: SingleDeviceResult | null | undefined,
 ): string => {
   const unit = deviceData?.unit;
   if (selectedReport === "customReport") {

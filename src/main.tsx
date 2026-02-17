@@ -11,5 +11,5 @@ if (!rootElement) {
 ReactDOM.createRoot(rootElement).render(
   <Fragment>
     <App />
-  </Fragment>
+  </Fragment>,
 );

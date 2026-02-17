@@ -4,7 +4,7 @@ export const useGlobalWheelHandler = () => {
   useEffect(() => {
     const handleGlobalWheel = (event: WheelEvent) => {
       const reactFlowElement = document.querySelector(
-        ".react-flow"
+        ".react-flow",
       ) as HTMLElement;
       if (
         !reactFlowElement ||
@@ -18,13 +18,13 @@ export const useGlobalWheelHandler = () => {
         event.stopPropagation();
 
         const viewport = reactFlowElement.querySelector(
-          ".react-flow__viewport"
+          ".react-flow__viewport",
         ) as HTMLElement;
         if (viewport) {
           const currentTransform =
             viewport.style.transform || "translate(0px, 0px) scale(1)";
           const translateMatch = currentTransform.match(
-            /translate\(([^,]+),\s*([^)]+)\)/
+            /translate\(([^,]+),\s*([^)]+)\)/,
           );
 
           let currentX = 0;

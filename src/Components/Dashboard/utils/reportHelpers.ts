@@ -62,14 +62,14 @@ export const updateDateElement = (wrapper: HTMLElement, date: Date): void => {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
-      }
+      },
     )}`;
   }
 };
 
 export const updateOrganizationInfo = (
   wrapper: HTMLElement,
-  orgInfo: OrganizationInfo
+  orgInfo: OrganizationInfo,
 ): void => {
   const orgNameElement = wrapper.querySelector(".header-content h1");
   if (orgNameElement && orgInfo.organizationName) {
@@ -77,7 +77,7 @@ export const updateOrganizationInfo = (
   }
 
   const logoElement = wrapper.querySelector(
-    ".header-content .logo"
+    ".header-content .logo",
   ) as HTMLImageElement;
   if (logoElement && orgInfo.organizationLogo) {
     logoElement.src = orgInfo.organizationLogo;
@@ -129,7 +129,7 @@ export const updateOrganizationInfo = (
 
 export const setElementVisibility = (
   element: HTMLElement | null,
-  visible: boolean
+  visible: boolean,
 ): void => {
   if (element) {
     element.style.display = visible ? "" : "none";
@@ -148,7 +148,7 @@ export const updateTableRow = (row: Element, value: number): void => {
 export const createChartScript = (
   id: string,
   labels: string[],
-  values: number[]
+  values: number[],
 ): string => {
   return `createPieChart(
           "${id}",
@@ -159,7 +159,7 @@ export const createChartScript = (
 
 export const getChartData = (
   data: ReportData,
-  type: "flow" | "storage" | "waterBalance"
+  type: "flow" | "storage" | "waterBalance",
 ): { labels: string[]; values: number[]; colors: string[] } => {
   const labels: string[] = [];
   const values: number[] = [];

@@ -48,7 +48,6 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
   onClose,
   selectedNode,
   devices,
-  plantTotals: _plantTotals,
   aggregatedWaterBalanceData,
   totalNetBalance,
   isLoadingReport,
@@ -75,7 +74,7 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
         devices,
         calculatePlantWaterBalance,
         groupId,
-        false
+        false,
       );
     } else if (isDepartmentGroup) {
       return calculateWaterBalanceData(
@@ -83,7 +82,7 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
         devices,
         calculateDepartmentWaterBalance,
         groupId,
-        false
+        false,
       );
     } else if (isSystemGroup) {
       return calculateWaterBalanceData(
@@ -91,7 +90,7 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
         devices,
         calculateSystemWaterBalance,
         groupId,
-        false
+        false,
       );
     }
     return [];
@@ -116,7 +115,7 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
       getReportTypeColor("Re-use"),
       getReportTypeColor("Rainfall"),
     ],
-    []
+    [],
   );
 
   const waterNeutralityIndexData = useMemo(() => {
@@ -240,15 +239,15 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
                   isSystemGroup
                     ? selectedNode.data.systemTotalIn || 0
                     : isDepartmentGroup
-                    ? selectedNode.data.totalIn || 0
-                    : selectedNode.data.plantTotalIn || 0
+                      ? selectedNode.data.totalIn || 0
+                      : selectedNode.data.plantTotalIn || 0
                 }
                 totalOut={
                   isSystemGroup
                     ? selectedNode.data.systemTotalOut || 0
                     : isDepartmentGroup
-                    ? selectedNode.data.totalOut || 0
-                    : selectedNode.data.plantTotalOut || 0
+                      ? selectedNode.data.totalOut || 0
+                      : selectedNode.data.plantTotalOut || 0
                 }
                 totalStock={selectedNode.data.totalStock || 0}
                 totalCapacity={selectedNode.data.totalCapacity || 0}
@@ -257,10 +256,9 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
                   isSystemGroup
                     ? "system"
                     : isDepartmentGroup
-                    ? "department"
-                    : "plant"
+                      ? "department"
+                      : "plant"
                 }
-                groupName={selectedNode.data.label}
               />
 
               {hasWaterNeutralityDataArray ? (
@@ -273,7 +271,7 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
                       title={`${getGroupTypeLabel()} Water Neutrality Index`}
                       data={waterNeutralityIndexData}
                       colors={waterNeutralityIndexData.map(
-                        (item) => item.color
+                        (item) => item.color,
                       )}
                       isLoading={isLoadingReport}
                       neutralityIndexValue={waterNeutralityIndexValue}
@@ -281,8 +279,8 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
                         isPlantGroup
                           ? undefined
                           : isDepartmentGroup
-                          ? "department"
-                          : "system"
+                            ? "department"
+                            : "system"
                       }
                     />
                   </div>
@@ -318,8 +316,8 @@ const DiagramSidebar: React.FC<DiagramSidebarProps> = ({
                           isPlantGroup
                             ? undefined
                             : isDepartmentGroup
-                            ? "department"
-                            : "system"
+                              ? "department"
+                              : "system"
                         }
                       />
                     ) : isLoadingReport ? (

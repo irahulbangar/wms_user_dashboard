@@ -15,7 +15,7 @@ export const handleOrgMenuClick = (
   item: MenuItem,
   navigate: NavigateFunction,
   userRole?: string,
-  setIsOpen?: (open: boolean) => void
+  setIsOpen?: (open: boolean) => void,
 ) => {
   if (!item.href) return;
   const orgId = item.id.replace("org-", "");
@@ -45,7 +45,7 @@ export const handleOrgMenuClick = (
 export const handlePlantMenuClick = (
   item: MenuItem,
   navigate: NavigateFunction,
-  _setIsOpen?: (open: boolean) => void
+  _setIsOpen?: (open: boolean) => void,
 ) => {
   if (!item.href) return;
   const plantId = item.id.replace("plant-", "");
@@ -66,7 +66,7 @@ export const handleDeptMenuClick = (
   sidebarMenu: SidebarMenuResult[],
   toggleMenu: (menuId: string) => void,
   collapseMenuIfExpanded: (menuId: string) => void,
-  _setIsOpen?: (open: boolean) => void
+  // setIsOpen?: (open: boolean) => void,
 ) => {
   if (!item.href) return;
   const deptId = item.id.replace("dept-", "");
@@ -74,7 +74,7 @@ export const handleDeptMenuClick = (
   const isOnSystemRoute = location.pathname.startsWith("/system/device/");
   const pathParts = location.pathname.split("/").filter(Boolean);
   const isDeviceDetailRoute = pathParts.some(
-    (part) => part.includes("-device") && part !== "device"
+    (part) => part.includes("-device") && part !== "device",
   );
   const isOnCurrentDeptRoute =
     isOnDeptRoute &&
@@ -90,7 +90,7 @@ export const handleDeptMenuClick = (
     } else if (isOnSystemRoute && pathParts.length >= 5) {
       const urlSystemId = pathParts[4];
       const menuItem = sidebarMenu.find(
-        (item) => item.system_id?.toString() === urlSystemId
+        (item) => item.system_id?.toString() === urlSystemId,
       );
       if (menuItem) {
         currentDeptMenuId = `dept-${menuItem.department_id}`;
@@ -112,7 +112,7 @@ export const handleDeptMenuClick = (
 export const handleSystemMenuClick = (
   item: MenuItem,
   navigate: NavigateFunction,
-  setIsOpen?: (open: boolean) => void
+  setIsOpen?: (open: boolean) => void,
 ) => {
   if (item.id) {
     localStorage.setItem("systemId", item.id);
@@ -136,7 +136,7 @@ export const handleSimpleMenuClick = (
   item: MenuItem,
   navigate: NavigateFunction,
   onPageChange: (page: string) => void,
-  setIsOpen?: (open: boolean) => void
+  setIsOpen?: (open: boolean) => void,
 ) => {
   navigate(item.href || "");
   onPageChange(item.id);
@@ -150,7 +150,7 @@ export const handleSimpleMenuClick = (
  */
 export const getCurrentDeptMenuId = (
   location: { pathname: string },
-  systemsFromStore: SystemResult[]
+  systemsFromStore: SystemResult[],
 ): string | null => {
   const isOnDeptRoute = location.pathname.startsWith("/department/device/");
   const isOnSystemRoute = location.pathname.startsWith("/system/device/");
@@ -161,7 +161,7 @@ export const getCurrentDeptMenuId = (
   } else if (isOnSystemRoute && pathParts.length >= 5) {
     const urlSystemId = pathParts[4];
     const system = systemsFromStore.find(
-      (s) => s.system_id.toString() === urlSystemId
+      (s) => s.system_id.toString() === urlSystemId,
     );
     if (system) {
       return `dept-${system.department_id}`;

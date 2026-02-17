@@ -11,9 +11,16 @@ export interface MenuHandlers {
   handleToggleMenu: (menuId: string) => void;
   handleOrgClick: (item: MenuItem, userRole?: string) => void;
   handlePlantClick: (item: MenuItem) => void;
-  handleDeptClick: (item: MenuItem, pathInfo: any, systems: SystemResult[]) => void;
+  handleDeptClick: (
+    item: MenuItem,
+    pathInfo: any,
+    systems: SystemResult[],
+  ) => void;
   handleSystemClick: (item: MenuItem) => void;
-  handleSimpleClick: (item: MenuItem, onPageChange: (page: string) => void) => void;
+  handleSimpleClick: (
+    item: MenuItem,
+    onPageChange: (page: string) => void,
+  ) => void;
   closeMobileMenu: () => void;
 }
 
@@ -22,12 +29,11 @@ export const createMenuHandlers = (
   setExpandedMenus: React.Dispatch<React.SetStateAction<string[]>>,
   manuallyCollapsedRef: React.MutableRefObject<Set<string>>,
   location: { pathname: string },
-  _systemsFromStore: SystemResult[]
 ): MenuHandlers => {
   const saveCollapsedMenus = () => {
     localStorage.setItem(
       "manuallyCollapsedMenus",
-      JSON.stringify(Array.from(manuallyCollapsedRef.current))
+      JSON.stringify(Array.from(manuallyCollapsedRef.current)),
     );
   };
 
@@ -74,7 +80,7 @@ export const createMenuHandlers = (
   const handleDeptClick = (
     item: MenuItem,
     pathInfo: { pathParts: string[]; isDeviceDetailRoute: boolean },
-    systems: SystemResult[]
+    systems: SystemResult[],
   ) => {
     if (!item.href) return;
     const deptId = item.id.replace("dept-", "");
@@ -93,7 +99,9 @@ export const createMenuHandlers = (
         currentDeptMenuId = `dept-${pathInfo.pathParts[4]}`;
       } else if (isOnSystemRoute && pathInfo.pathParts.length >= 5) {
         const urlSystemId = pathInfo.pathParts[4];
-        const system = systems.find((s) => s.system_id.toString() === urlSystemId);
+        const system = systems.find(
+          (s) => s.system_id.toString() === urlSystemId,
+        );
         if (system) {
           currentDeptMenuId = `dept-${system.department_id}`;
         }
@@ -122,15 +130,17 @@ export const createMenuHandlers = (
     }
   };
 
-  const handleSimpleClick = (item: MenuItem, onPageChange: (page: string) => void) => {
+  const handleSimpleClick = (
+    item: MenuItem,
+    onPageChange: (page: string) => void,
+  ) => {
     navigate(item.href || "");
     onPageChange(item.id);
   };
 
   const closeMobileMenu = () => {
     if (window.innerWidth < 1024) {
-      setTimeout(() => {
-      }, 100);
+      setTimeout(() => {}, 100);
     }
   };
 
@@ -144,4 +154,3 @@ export const createMenuHandlers = (
     closeMobileMenu,
   };
 };
-

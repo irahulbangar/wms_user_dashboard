@@ -47,21 +47,21 @@ const TankDevice = () => {
   const defaultCustomFrom = sevenDaysAgo.toISOString().split("T")[0];
   const defaultCustomTo = now.toISOString().split("T")[0];
   const [activeTab, setActiveTab] = useState<"panel" | "reports">(
-    (searchParams.get("tab") as "panel" | "reports") || "panel"
+    (searchParams.get("tab") as "panel" | "reports") || "panel",
   );
   const [selectedReport, setSelectedReport] = useState<
     "none" | "customReport" | "runTime"
   >(
     (searchParams.get("report") as "none" | "customReport" | "runTime") ||
-      "none"
+      "none",
   );
 
   const [deviceData, setDeviceData] = useState<SingleDeviceResult>(
-    {} as SingleDeviceResult
+    {} as SingleDeviceResult,
   );
 
   const [runTimeDate, setRunTimeDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [runTimeData, setRunTimeData] = useState<TankDeviceResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -79,7 +79,7 @@ const TankDevice = () => {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated } = useAppSelector((state) => state.user);
   const userRole = user?.plantsList.find(
-    (plant) => plant.plant_id === Number(getCurrentPlantId())
+    (plant) => plant.plant_id === Number(getCurrentPlantId()),
   )?.role;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -104,7 +104,7 @@ const TankDevice = () => {
 
     const paginatedData = currentData.slice(
       (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
+      currentPage * rowsPerPage,
     );
     return paginatedData.length;
   }, [runTimeData, customReportData, selectedReport, currentPage, rowsPerPage]);
@@ -120,7 +120,7 @@ const TankDevice = () => {
   const handlePaginatedData = (data: TankDeviceResultItem[]) => {
     return data.slice(
       (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
+      currentPage * rowsPerPage,
     );
   };
 
@@ -177,7 +177,7 @@ const TankDevice = () => {
         plantId: Number(deviceData?.plant_id) || 0,
         deviceId: Number(device_id) || 0,
         date: runTimeDate,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -213,7 +213,7 @@ const TankDevice = () => {
         from_date: fromDateWithTime,
         to_date: toDateWithTime,
         duration: customReportDuration,
-      })
+      }),
     )
       .unwrap()
       .then((res) => {
@@ -280,7 +280,7 @@ const TankDevice = () => {
   };
 
   const updateSelectedReport = (
-    report: "none" | "customReport" | "runTime"
+    report: "none" | "customReport" | "runTime",
   ) => {
     setSelectedReport(report);
     setSearchParams((prev) => {
@@ -333,7 +333,7 @@ const TankDevice = () => {
 
     downloadCSV(
       useArray,
-      `Tank_Custom_Report_${customReportFromDate || "data"}`
+      `Tank_Custom_Report_${customReportFromDate || "data"}`,
     );
   };
 
@@ -380,7 +380,7 @@ const TankDevice = () => {
               navigate(
                 location.pathname.startsWith("/system/device/")
                   ? `/system/device/${organizationId}/${getCurrentPlantId()}/${systemId}`
-                  : "/devices"
+                  : "/devices",
               )
             }
             className="text-text-secondary hover:text-text-primary hover:bg-overlay/20 px-2 py-1 rounded transition-all duration-200 cursor-pointer font-roboto"
@@ -637,7 +637,7 @@ const TankDevice = () => {
                                       : data?.last_level || 0}
                                   </td>
                                 </tr>
-                              )
+                              ),
                             )}
                         </tbody>
                       </table>
@@ -677,7 +677,7 @@ const TankDevice = () => {
                         value={customReportDuration}
                         onChange={(e) =>
                           setCustomReportDuration(
-                            e.target.value as "15min" | "1hour" | "1day"
+                            e.target.value as "15min" | "1hour" | "1day",
                           )
                         }
                         className="w-42 px-3 py-1.5 border border-border-primary bg-primary text-text-primary rounded-md focus:outline-none focus:ring-1 focus:ring-status-info"
@@ -828,7 +828,7 @@ const TankDevice = () => {
                                       : data?.last_level || 0}
                                   </td>
                                 </tr>
-                              )
+                              ),
                             )}
                         </tbody>
                       </table>

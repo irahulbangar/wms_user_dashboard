@@ -11,7 +11,6 @@ interface ReportTypeChartProps {
   title: string;
   devices: DevicesResult[];
   groupType: "system" | "department" | "plant";
-  groupName: string;
   defaultExpanded?: boolean;
   groupId: number;
 }
@@ -21,7 +20,6 @@ const ReportTypeChart: React.FC<ReportTypeChartProps> = ({
   devices,
   groupType,
   groupId,
-  groupName: _groupName,
   defaultExpanded = false,
 }) => {
   const allReportTypes = [
@@ -144,20 +142,20 @@ const ReportTypeChart: React.FC<ReportTypeChartProps> = ({
                 return inReportType.includes(reportType)
                   ? device.in_system_id === groupId
                   : outReportType.includes(reportType)
-                  ? device.out_system_id === groupId
-                  : false;
+                    ? device.out_system_id === groupId
+                    : false;
               case "department":
                 return inReportType.includes(reportType)
                   ? device.in_department_id === groupId
                   : outReportType.includes(reportType)
-                  ? device.out_department_id === groupId
-                  : false;
+                    ? device.out_department_id === groupId
+                    : false;
               case "plant":
                 return inReportType.includes(reportType)
                   ? device.in_plant_id === groupId
                   : outReportType.includes(reportType)
-                  ? device.out_plant_id === groupId
-                  : false;
+                    ? device.out_plant_id === groupId
+                    : false;
             }
           }
           return false;
@@ -248,7 +246,7 @@ const ReportTypeChart: React.FC<ReportTypeChartProps> = ({
                   if (item.reportType === "Net Balance") {
                     const hasOtherData = reportTypeTotals.some(
                       (other) =>
-                        other.reportType !== "Net Balance" && other.total > 0
+                        other.reportType !== "Net Balance" && other.total > 0,
                     );
                     return hasOtherData;
                   }
@@ -265,7 +263,7 @@ const ReportTypeChart: React.FC<ReportTypeChartProps> = ({
                           className="w-3 h-3 rounded-full"
                           style={{
                             backgroundColor: getReportTypeColor(
-                              item.reportType
+                              item.reportType,
                             ),
                           }}
                         ></div>

@@ -51,7 +51,7 @@ export const Info = (message: string) => {
 // Custom toast with custom styling
 export const Custom = (
   message: string,
-  type: "success" | "error" | "warning" | "info" = "info"
+  type: "success" | "error" | "warning" | "info" = "info",
 ) => {
   toast[type](message, {
     position: "top-right",

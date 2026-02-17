@@ -39,7 +39,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   const handleRowsPerPageChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
+    event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     if (disabled) return;
     const newRowsPerPage = parseInt(event.target.value);

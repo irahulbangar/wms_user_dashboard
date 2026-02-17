@@ -69,7 +69,7 @@ export const useDiagramInteractions = ({
         }
       }
     },
-    [navigate, isSidebarOpen, handleSidebarToggle, setSelectedNode]
+    [navigate, isSidebarOpen, handleSidebarToggle, setSelectedNode],
   );
 
   const handleDoubleClick = useCallback(
@@ -99,7 +99,7 @@ export const useDiagramInteractions = ({
         }
       }
     },
-    [zoomToGroup, closeSidebar, openSidebar, isSidebarOpen]
+    [zoomToGroup, closeSidebar, openSidebar, isSidebarOpen],
   );
 
   const handlePaneClick = useCallback(() => {
@@ -199,7 +199,7 @@ export const useDiagramInteractions = ({
           } catch (error) {
             console.warn(
               "Failed to convert screen to flow coordinates:",
-              error
+              error,
             );
           }
         }
@@ -212,7 +212,7 @@ export const useDiagramInteractions = ({
       closeSidebar,
       openSidebar,
       isSidebarOpen,
-    ]
+    ],
   );
 
   const handleWheel = useCallback((event: React.WheelEvent) => {
@@ -225,14 +225,14 @@ export const useDiagramInteractions = ({
 
       const reactFlowElement = event.currentTarget as HTMLElement;
       const viewport = reactFlowElement.querySelector(
-        ".react-flow__viewport"
+        ".react-flow__viewport",
       ) as HTMLElement;
 
       if (viewport) {
         const currentTransform =
           viewport.style.transform || "translate(0px, 0px) scale(1)";
         const translateMatch = currentTransform.match(
-          /translate\(([^,]+),\s*([^)]+)\)/
+          /translate\(([^,]+),\s*([^)]+)\)/,
         );
 
         let currentX = 0;

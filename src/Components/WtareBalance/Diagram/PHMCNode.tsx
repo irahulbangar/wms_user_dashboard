@@ -45,8 +45,8 @@ const PHMCNode = ({ data }: PHMCNodeProps) => {
   const borderColor = recordTimeOld
     ? "border-status-danger"
     : isActive
-    ? "border-status-success"
-    : "border-border-primary";
+      ? "border-status-success"
+      : "border-border-primary";
 
   const connectionInfo = [
     `System Name : ${systemName}`,
@@ -85,8 +85,8 @@ const PHMCNode = ({ data }: PHMCNodeProps) => {
           recordTimeOld
             ? "bg-status-danger animate-pulse"
             : isActive
-            ? "bg-status-success animate-pulse"
-            : "bg-status-danger"
+              ? "bg-status-success animate-pulse"
+              : "bg-status-danger"
         }`}
       />
 

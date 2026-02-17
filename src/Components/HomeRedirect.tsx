@@ -4,7 +4,7 @@ import { useAppSelector } from "../../store/store";
 
 const HomeRedirect = () => {
   const { user, isAuthenticated, isLoading } = useAppSelector(
-    (state) => state.user
+    (state) => state.user,
   );
   const navigate = useNavigate();
 

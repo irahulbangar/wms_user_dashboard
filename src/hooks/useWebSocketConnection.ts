@@ -24,12 +24,12 @@ export const useWebSocketConnection = () => {
       onOpen: () => console.log("WebSocket connection established."),
       onClose: () => console.log("WebSocket connection closed."),
       onError: (event) => console.error("WebSocket error:", event),
-      shouldReconnect: (_closeEvent) => {
+      shouldReconnect: () => {
         return isAuthenticated;
       },
       reconnectAttempts: 10,
       reconnectInterval: 3000,
-    }
+    },
   );
 
   useEffect(() => {
@@ -37,7 +37,10 @@ export const useWebSocketConnection = () => {
     if (ws && readyState === ReadyState.OPEN) {
       const handleMessage = (event: Event) => {
         const messageEvent = event as MessageEvent;
-        console.log("WebSocket message received:", JSON.parse(messageEvent.data));
+        console.log(
+          "WebSocket message received:",
+          JSON.parse(messageEvent.data),
+        );
 
         if (!authSentRef.current) {
           const jwtToken = token || localStorage.getItem("accessToken");

@@ -54,7 +54,7 @@ const ZoomControls = ({ onDownload }: ZoomControlsProps) => {
           maxX: -Infinity,
           minY: Infinity,
           maxY: -Infinity,
-        }
+        },
       );
 
       const centerX = (bounds.minX + bounds.maxX) / 2;
@@ -199,4 +199,3 @@ const ZoomControls = ({ onDownload }: ZoomControlsProps) => {
 };
 
 export default ZoomControls;
-

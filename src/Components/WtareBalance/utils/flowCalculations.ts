@@ -7,7 +7,7 @@ export const calculateTankFlowTotals = (
   tankNodeId: string,
   devices: any[],
   nodesArray: any[],
-  edges: any[]
+  edges: any[],
 ): FlowTotals => {
   let totalIn = 0;
   let totalOut = 0;
@@ -20,14 +20,14 @@ export const calculateTankFlowTotals = (
   });
 
   const fmDevices = devices.filter(
-    (device) => device.device_family_type === "fm"
+    (device) => device.device_family_type === "fm",
   );
 
   const incomingEdges = edges.filter((edge: any) => edge.target === tankNodeId);
   incomingEdges.forEach((edge: any) => {
     const sourceDeviceName = nodeIdToDeviceName.get(edge.source);
     const sourceFM = fmDevices.find(
-      (device) => device.device_name === sourceDeviceName
+      (device) => device.device_name === sourceDeviceName,
     );
 
     if (sourceFM) {
@@ -40,7 +40,7 @@ export const calculateTankFlowTotals = (
   outgoingEdges.forEach((edge: any) => {
     const targetDeviceName = nodeIdToDeviceName.get(edge.target);
     const targetFM = fmDevices.find(
-      (device) => device.device_name === targetDeviceName
+      (device) => device.device_name === targetDeviceName,
     );
 
     if (targetFM) {
@@ -61,7 +61,7 @@ export const calculateDepartmentTotals = (
   departmentDevices: any[],
   plantEdges: any[],
   nodesArray: any[],
-  allDevices: any[]
+  allDevices: any[],
 ): DepartmentTotals => {
   const deptTotals: DepartmentTotals = {
     totalStock: 0,
@@ -81,10 +81,10 @@ export const calculateDepartmentTotals = (
   });
 
   const departmentTanks = departmentDevices.filter(
-    (device) => device.device_family_type === "tank"
+    (device) => device.device_family_type === "tank",
   );
   const departmentFMs = departmentDevices.filter(
-    (device) => device.device_family_type === "fm"
+    (device) => device.device_family_type === "fm",
   );
 
   let totalIn = 0;
@@ -100,18 +100,18 @@ export const calculateDepartmentTotals = (
   departmentTanks.forEach((tank: any) => {
     const tankDeviceName = tank.device_name;
     const tankNodeId = Array.from(nodeIdToDeviceName.entries()).find(
-      ([_, deviceName]) => deviceName === tankDeviceName
+      ([, deviceName]) => deviceName === tankDeviceName,
     )?.[0];
 
     if (tankNodeId) {
       const incomingEdges = plantEdges.filter(
-        (edge: any) => edge.target === tankNodeId
+        (edge: any) => edge.target === tankNodeId,
       );
 
       incomingEdges.forEach((edge: any) => {
         const sourceDeviceName = nodeIdToDeviceName.get(edge.source);
         const sourceFM = departmentFMs.find(
-          (fm: any) => fm.device_name === sourceDeviceName
+          (fm: any) => fm.device_name === sourceDeviceName,
         );
 
         if (sourceFM) {
@@ -125,12 +125,12 @@ export const calculateDepartmentTotals = (
   departmentTanks.forEach((tank: any) => {
     const tankDeviceName = tank.device_name;
     const tankNodeId = Array.from(nodeIdToDeviceName.entries()).find(
-      ([_, deviceName]) => deviceName === tankDeviceName
+      ([, deviceName]) => deviceName === tankDeviceName,
     )?.[0];
 
     if (tankNodeId) {
       const outgoingEdges = plantEdges.filter(
-        (edge: any) => edge.source === tankNodeId
+        (edge: any) => edge.source === tankNodeId,
       );
 
       outgoingEdges.forEach((edge: any) => {
@@ -138,7 +138,7 @@ export const calculateDepartmentTotals = (
         const targetFM = allDevices.find(
           (device: any) =>
             device.device_family_type === "fm" &&
-            device.device_name === targetDeviceName
+            device.device_name === targetDeviceName,
         );
 
         if (targetFM) {
@@ -161,7 +161,7 @@ export const calculateDepartmentTotals = (
  */
 export const calculateSystemTotals = (
   systemDevices: any[],
-  targetSystemId: string
+  targetSystemId: string,
 ): DepartmentTotals => {
   const systemTotals: DepartmentTotals = {
     totalStock: 0,
