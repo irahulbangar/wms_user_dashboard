@@ -55,7 +55,7 @@ const Login: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const { isLoading, isAuthenticated, user } = useAppSelector(
-    (state) => state.user
+    (state) => state.user,
   );
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const Login: React.FC = () => {
           } else {
             console.warn(
               "Logo is missing in API response. Available keys:",
-              Object.keys(data)
+              Object.keys(data),
             );
           }
 
@@ -88,7 +88,7 @@ const Login: React.FC = () => {
           } else {
             console.warn(
               "Organization name is missing in API response. Available keys:",
-              Object.keys(data)
+              Object.keys(data),
             );
           }
         } else {
@@ -145,7 +145,7 @@ const Login: React.FC = () => {
           decodedToken.status === "inactive"
         ) {
           Error(
-            "Access denied. Your account is inactive. Please contact your administrator."
+            "Access denied. Your account is inactive. Please contact your administrator.",
           );
           searchParams.delete("token");
           setSearchParams(searchParams);
@@ -186,7 +186,7 @@ const Login: React.FC = () => {
         if (userPayload.organization_id) {
           localStorage.setItem(
             "organizationId",
-            userPayload.organization_id.toString()
+            userPayload.organization_id.toString(),
           );
         }
 
@@ -206,7 +206,7 @@ const Login: React.FC = () => {
         dispatch(setLoading(false));
       }
     },
-    [dispatch, searchParams, setSearchParams]
+    [dispatch, searchParams, setSearchParams],
   );
 
   useEffect(() => {
@@ -233,7 +233,7 @@ const Login: React.FC = () => {
       } else {
         console.error(
           "Invalid token format from URL. Token parts:",
-          tokenFromUrl?.split(".").length
+          tokenFromUrl?.split(".").length,
         );
         Error("Invalid token format. Please login again.");
         searchParams.delete("token");
@@ -285,24 +285,31 @@ const Login: React.FC = () => {
     }
 
     try {
-      await dispatch(loginUser({ client_email, client_password }))
-        .unwrap()
-        .then((res) => {
-          if (res.success || res.status === 200) {
-            Success(res.message || "You are logged in successfully..!!");
-          } else {
-            Error(res.message || "Login failed. Please try again.");
-          }
-        })
-        .catch((err) => {
-          Error(err || "Login failed. Please try again.");
-        });
+      const result = await dispatch(
+        loginUser({ client_email, client_password }),
+      ).unwrap();
+
+      if (result.success || result.status === 200) {
+        Success(result.message || "You are logged in successfully..!!");
+      } else {
+        Error(result.message || "Login failed. Please try again.");
+      }
     } catch (error) {
-      Error(
-        error instanceof ApiError
-          ? error.message
-          : "Login failed. Please try again."
-      );
+      // Handle different error types
+      let errorMessage = "Login failed. Please try again.";
+
+      if (error instanceof ApiError) {
+        errorMessage = error.message;
+      } else if (typeof error === "string") {
+        errorMessage = error;
+      } else if (error && typeof error === "object" && "message" in error) {
+        errorMessage =
+          typeof error.message === "string"
+            ? error.message
+            : "Login failed. Please try again.";
+      }
+
+      Error(errorMessage);
     }
   };
 

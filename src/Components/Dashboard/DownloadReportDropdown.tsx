@@ -88,7 +88,7 @@ export const DownloadReportDropdown = ({
 
             if (hasFlexWrap) {
               const children = Array.from(
-                parentContainer.children
+                parentContainer.children,
               ) as HTMLElement[];
 
               if (children.length < 2) {
@@ -99,7 +99,7 @@ export const DownloadReportDropdown = ({
               const firstChildTop = children[0].offsetTop;
 
               const hasWrapping = children.some(
-                (child) => Math.abs(child.offsetTop - firstChildTop) > 10
+                (child) => Math.abs(child.offsetTop - firstChildTop) > 10,
               );
 
               setIsWrapping(hasWrapping);
@@ -173,8 +173,80 @@ export const DownloadReportDropdown = ({
             }`}
           >
             <div className="p-2 pb-4">
-              <div className="text-sm border-b border-border-secondary font-normal text-text-secondary mb-2 px-2 py-1">
-                Select Sections
+              <div className="flex items-center justify-between border-b border-border-secondary mb-2 px-2 py-1">
+                <div className="text-sm font-normal text-text-secondary">
+                  Select Sections
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Select all sections
+                      const allSelected: SectionVisibility = {
+                        dashboard: true,
+                        plantDiagram: true,
+                        department: true,
+                        system: true,
+                        waterBalance: true,
+                        waterNeutralityIndex: true,
+                        storageAnalysis: true,
+                        detailedReport: true,
+                      };
+                      setSelectedSections(allSelected);
+
+                      // Select all departments if available
+                      if (departments) {
+                        const plantDepartments = departments.filter(
+                          (d) => d.plant_id === plantIdNum,
+                        );
+                        setSelectedDepartmentIds(
+                          new Set(plantDepartments.map((d) => d.department_id)),
+                        );
+                      }
+
+                      // Select all systems if available
+                      if (systems) {
+                        const plantSystems = systems.filter(
+                          (s) => s.plant_id === plantIdNum,
+                        );
+                        setSelectedSystemIds(
+                          new Set(plantSystems.map((s) => s.system_id)),
+                        );
+                      }
+                    }}
+                    className="flex items-center gap-1 text-xs text-status-info hover:text-status-info/80 font-roboto font-normal cursor-pointer transition-colors"
+                  >
+                    {/* <CheckSquare2 className="w-3 h-3" /> */}
+                    All
+                  </button>
+                  <span className="text-text-secondary">|</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Clear all sections
+                      const allCleared: SectionVisibility = {
+                        dashboard: false,
+                        plantDiagram: false,
+                        department: false,
+                        system: false,
+                        waterBalance: false,
+                        waterNeutralityIndex: false,
+                        storageAnalysis: false,
+                        detailedReport: false,
+                      };
+                      setSelectedSections(allCleared);
+
+                      // Clear all departments
+                      setSelectedDepartmentIds(new Set());
+
+                      // Clear all systems
+                      setSelectedSystemIds(new Set());
+                    }}
+                    className="flex items-center gap-1 text-xs text-status-danger hover:text-status-danger/80 font-roboto font-normal cursor-pointer transition-colors"
+                  >
+                    Clear
+                  </button>
+                </div>
               </div>
               <div className="space-y-1 max-h-[350px] overflow-y-auto">
                 {sectionOptions.map((section) => (
@@ -198,14 +270,14 @@ export const DownloadReportDropdown = ({
                               if (section.key === "department" && departments) {
                                 if (isChecked) {
                                   const plantDepartments = departments.filter(
-                                    (d) => d.plant_id === plantIdNum
+                                    (d) => d.plant_id === plantIdNum,
                                   );
                                   setSelectedDepartmentIds(
                                     new Set(
                                       plantDepartments.map(
-                                        (d) => d.department_id
-                                      )
-                                    )
+                                        (d) => d.department_id,
+                                      ),
+                                    ),
                                   );
                                 } else {
                                   setSelectedDepartmentIds(new Set());
@@ -213,12 +285,12 @@ export const DownloadReportDropdown = ({
                               } else if (section.key === "system" && systems) {
                                 if (isChecked) {
                                   const plantSystems = systems.filter(
-                                    (s) => s.plant_id === plantIdNum
+                                    (s) => s.plant_id === plantIdNum,
                                   );
                                   setSelectedSystemIds(
                                     new Set(
-                                      plantSystems.map((s) => s.system_id)
-                                    )
+                                      plantSystems.map((s) => s.system_id),
+                                    ),
                                   );
                                 } else {
                                   setSelectedSystemIds(new Set());
@@ -259,7 +331,7 @@ export const DownloadReportDropdown = ({
                             e.preventDefault();
                             e.stopPropagation();
                             setIsDepartmentDropdownOpen(
-                              !isDepartmentDropdownOpen
+                              !isDepartmentDropdownOpen,
                             );
                           }}
                           className="p-1 hover:bg-secondary rounded"
@@ -295,7 +367,7 @@ export const DownloadReportDropdown = ({
                       isDepartmentDropdownOpen && (
                         <SelectionDropdown
                           items={departments.filter(
-                            (d) => d.plant_id === plantIdNum
+                            (d) => d.plant_id === plantIdNum,
                           )}
                           selectedIds={selectedDepartmentIds}
                           onSelectionChange={(newIds) => {
@@ -323,7 +395,7 @@ export const DownloadReportDropdown = ({
                       isSystemDropdownOpen && (
                         <SelectionDropdown
                           items={systems.filter(
-                            (s) => s.plant_id === plantIdNum
+                            (s) => s.plant_id === plantIdNum,
                           )}
                           selectedIds={selectedSystemIds}
                           onSelectionChange={(newIds) => {
