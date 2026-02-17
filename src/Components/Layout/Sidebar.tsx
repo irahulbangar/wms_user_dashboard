@@ -340,7 +340,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         sidebarMenuFromStore,
       );
     },
-    [location.pathname, currentPage, sidebarMenuFromStore],
+    [location, currentPage, sidebarMenuFromStore],
   );
 
   const isMenuExpanded = (itemId: string) => {
@@ -624,7 +624,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                         sidebarMenuFromStore || [],
                                         expandMenu,
                                         collapseMenuIfExpanded,
-                                        setIsOpen,
+                                        // setIsOpen,
                                       );
                                     }
                                   } else {
@@ -791,7 +791,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                               handlePlantMenuClick(
                                                 subSubItem,
                                                 navigate,
-                                                setIsOpen,
+                                                // setIsOpen,
                                               );
                                             } else if (
                                               subSubItem.id.startsWith("dept-")
@@ -856,7 +856,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                                 sidebarMenuFromStore || [],
                                                 expandMenu,
                                                 collapseMenuIfExpanded,
-                                                setIsOpen,
+                                                // setIsOpen,
                                               );
                                             } else {
                                               toggleMenu(subSubItem.id);
