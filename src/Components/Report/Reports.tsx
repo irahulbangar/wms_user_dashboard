@@ -1,10 +1,22 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import {
+  Fragment,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { ChevronDown, DownloadIcon, FileTextIcon, Loader2 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "../../../store/store";
 import DateSelection from "../Dashboard/DateSelection";
 import { getDepartmentsByPlantId } from "../../../store/departmentSlice";
 import { getSystemsByPlantId } from "../../../store/systemSlice";
 import type { PlantReportData } from "../../../model/plant-report.interface";
+import type {
+  AllDevice,
+  Logs,
+  LogItemData,
+} from "../../../model/report.interface";
 import {
   getPlantReport,
   getPlantsByUserId,
@@ -100,6 +112,14 @@ const Reports = () => {
   const systemDropdownRef = useRef<HTMLDivElement>(null);
   const systemButtonRef = useRef<HTMLButtonElement>(null);
   const [plantReport, setPlantReport] = useState<PlantReportData | null>(null);
+  /** Device list and logs for drill-down; set from API when available */
+  const [reportAllDevices, setReportAllDevices] = useState<AllDevice[]>([]);
+  const [reportLogs, setReportLogs] = useState<Logs | null>(null);
+  /** Which cell is expanded: row date + column report key */
+  const [expandedCell, setExpandedCell] = useState<{
+    dateKey: string;
+    reportKey: string;
+  } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [isLoading, setIsLoading] = useState(false);
@@ -166,7 +186,15 @@ const Reports = () => {
       .unwrap()
       .then((res) => {
         if (res.success) {
-          setPlantReport(res.data.report);
+          const data = res.data as {
+            report: PlantReportData;
+            allDevices?: AllDevice[];
+            logs?: Logs;
+          };
+          setPlantReport(data.report);
+          setReportAllDevices(data.allDevices ?? []);
+          setReportLogs(data.logs ?? null);
+          setExpandedCell(null);
           setCurrentPage(1);
         }
       })
@@ -344,6 +372,157 @@ const Reports = () => {
     );
   };
 
+  /** Map report column key to report_type_name style for matching logs (e.g. Flow_in -> "Flow In") */
+  const reportKeyToTypeName = (reportKey: string) =>
+    reportKey.replace(/_/g, " ").trim();
+
+  /** Normalize report column key for flow detection: "Flow Out" / "Flow_out" -> "flow_out", "Flow In" / "Flow_in" -> "flow_in". */
+  const normalizedFlowKey = (reportKey: string) =>
+    reportKey.toLowerCase().replace(/\s+/g, "_").trim();
+
+  /**
+   * Check if device/log matches current plant/department/system filters.
+   * Flow_in: plant_id wise → in_plant_id; department_id wise → in_department_id; system_id wise → in_system_id (and report_type_name = "Flow").
+   * Flow_out: plant_id wise → out_plant_id; department_id wise → out_department_id; system_id wise → out_system_id (and report_type_name = "Flow").
+   * Other columns: filter by in_* with fallback to device.plant_id/department_id/system_id.
+   */
+  const matchesSelection = useCallback(
+    (device: AllDevice, reportKey: string): boolean => {
+      const key = normalizedFlowKey(reportKey);
+      const isFlowIn = key === "flow_in";
+      const isFlowOut = key === "flow_out";
+
+      let plantId: number | null | undefined;
+      let deptId: number | null | undefined;
+      let sysId: number | null | undefined;
+
+      if (isFlowIn) {
+        plantId = device.in_plant_id;
+        deptId = device.in_department_id;
+        sysId = device.in_system_id;
+        // Flow_in: exclude null in_plant_id only when filtering by plant and NOT by department/system (e.g. device 164: in_department_id=33, in_plant_id=null — show when department 33 is selected).
+        if (
+          selectedPlantId != null &&
+          plantId == null &&
+          selectedDepartmentId == null &&
+          selectedSystemId == null
+        )
+          return false;
+      } else if (isFlowOut) {
+        plantId = device.out_plant_id;
+        deptId = device.out_department_id;
+        sysId = device.out_system_id;
+      } else {
+        plantId = device.in_plant_id ?? device.plant_id;
+        deptId = device.in_department_id ?? device.department_id;
+        sysId = device.in_system_id ?? device.system_id;
+      }
+
+      // Compare as numbers so string "5" from API matches selected 5.
+      // Department/system: require device to have that level set AND match.
+      const numPlant = plantId != null ? Number(plantId) : undefined;
+      const numDept = deptId != null ? Number(deptId) : undefined;
+      const numSys = sysId != null ? Number(sysId) : undefined;
+      if (
+        selectedPlantId != null &&
+        numPlant !== undefined &&
+        numPlant !== selectedPlantId
+      )
+        return false;
+      // When filtering by system (flow_in/flow_out), allow devices with null department if system matches (e.g. device 8: out_system_id=4, out_department_id=null should show when system 4 is selected).
+      const allowNullDeptWhenSystemSelected =
+        (isFlowIn || isFlowOut) &&
+        selectedSystemId != null &&
+        numSys !== undefined &&
+        numSys === selectedSystemId &&
+        numDept === undefined;
+      if (
+        selectedDepartmentId != null &&
+        (numDept === undefined || numDept !== selectedDepartmentId) &&
+        !allowNullDeptWhenSystemSelected
+      )
+        return false;
+      if (
+        selectedSystemId != null &&
+        (numSys === undefined || numSys !== selectedSystemId)
+      )
+        return false;
+      return true;
+    },
+    [selectedPlantId, selectedDepartmentId, selectedSystemId],
+  );
+
+  /** Get devices and their log values for a given date and report column (for expanded drill-down). Filters by selected plant/department/system: Flow_in uses in_*, Flow_out uses out_*. */
+  const getFilteredDeviceLogs = useCallback(
+    (dateKey: string, reportKey: string) => {
+      const dateLogs = reportLogs?.[dateKey];
+      if (!dateLogs || typeof dateLogs !== "object") return [];
+
+      const entries: { device: AllDevice; log: LogItemData }[] = [];
+      for (const deviceIdStr of Object.keys(dateLogs)) {
+        const logEntry = (dateLogs as Record<string, LogItemData>)[deviceIdStr];
+        if (!logEntry || typeof logEntry !== "object") continue;
+        const logTypeName = (logEntry.report_type_name ?? "").trim();
+        let typeMatch: boolean;
+        const flowKey = normalizedFlowKey(reportKey);
+        if (flowKey === "flow_in" || flowKey === "flow_out") {
+          // Flow_in: in_plant_id / in_department_id / in_system_id + report_type_name = "Flow"
+          // Flow_out: out_plant_id / out_department_id / out_system_id + report_type_name = "Flow"
+          typeMatch = logTypeName === "Flow";
+          // Flow_in with null in_plant_id is allowed when filtering by department/system; matchesSelection excludes only when plant is selected.
+        } else {
+          const typeName = reportKeyToTypeName(reportKey);
+          typeMatch =
+            logTypeName === typeName ||
+            logTypeName.replace(/\s+/g, " ") === typeName;
+        }
+        if (!typeMatch) continue;
+
+        const device = reportAllDevices.find(
+          (d) => d.device_id === Number(deviceIdStr),
+        );
+        const resolvedDevice: AllDevice = device
+          ? device
+          : ({
+              device_id: logEntry.device_id,
+              device_name: `Device ${logEntry.device_id}`,
+              report_type_name: logEntry.report_type_name,
+              in_plant_id: logEntry.plant_connection?.in_plant_id,
+              out_plant_id: logEntry.plant_connection?.out_plant_id,
+              in_department_id:
+                logEntry.department_connection?.in_department_id,
+              out_department_id:
+                logEntry.department_connection?.out_department_id,
+              in_system_id: logEntry.system_connection?.in_system_id,
+              out_system_id: logEntry.system_connection?.out_system_id,
+              plant_id:
+                logEntry.plant_connection?.in_plant_id ??
+                logEntry.plant_connection?.plant_id,
+              department_id:
+                logEntry.department_connection?.in_department_id ??
+                logEntry.department_connection?.department_id,
+              system_id:
+                logEntry.system_connection?.in_system_id ??
+                logEntry.system_connection?.system_id,
+            } as AllDevice);
+
+        if (matchesSelection(resolvedDevice, reportKey)) {
+          entries.push({ device: resolvedDevice, log: logEntry });
+        }
+      }
+      return entries;
+    },
+    [reportLogs, reportAllDevices, matchesSelection],
+  );
+
+  const handleCellClick = (dateKey: string, reportKey: string) => {
+    setExpandedCell((prev) =>
+      prev?.dateKey === dateKey && prev?.reportKey === reportKey
+        ? null
+        : { dateKey, reportKey },
+    );
+  };
+
   const formatNumber = (value: number | null | undefined) => {
     if (value === null || value === undefined) return "-";
     return value.toLocaleString("en-US", {
@@ -361,7 +540,10 @@ const Reports = () => {
   };
 
   const reportKeys = getReportKeys();
-  const allReportEntries = plantReport ? Object.entries(plantReport) : [];
+  const allReportEntries = useMemo(
+    () => (plantReport ? Object.entries(plantReport) : []),
+    [plantReport],
+  );
 
   const reportEntries = useMemo(() => {
     const startIndex = (currentPage - 1) * rowsPerPage;
@@ -647,30 +829,150 @@ const Reports = () => {
                 className={`${reportEntries.length > 0 ? "h-auto" : "h-full"}`}
               >
                 {reportEntries.length > 0 ? (
-                  reportEntries.map(([dateKey, data], index) => (
-                    <tr
-                      key={dateKey}
-                      className={`border-b border-border-primary ${
-                        index % 2 === 0 ? "bg-primary" : "bg-secondary/30"
-                      } hover:bg-input-bg transition-colors`}
-                    >
-                      <td className="px-4 py-3 text-sm text-text-primary font-roboto sticky left-0 bg-inherit z-10 border-r border-border-primary whitespace-nowrap">
-                        {formatDateForCSV(dateKey)}
-                      </td>
-                      {reportKeys.map((key) => (
-                        <td
-                          key={key}
-                          className="px-4 py-3 text-sm text-text-secondary font-roboto whitespace-nowrap"
+                  reportEntries.map(([dateKey, data], index) => {
+                    const isExpanded =
+                      expandedCell?.dateKey === dateKey && expandedCell != null;
+                    const filteredLogs = isExpanded
+                      ? getFilteredDeviceLogs(
+                          dateKey,
+                          expandedCell?.reportKey ?? "",
+                        )
+                      : [];
+                    return (
+                      <Fragment key={dateKey}>
+                        <tr
+                          className={`border-b border-border-primary ${
+                            index % 2 === 0 ? "bg-primary" : "bg-secondary/30"
+                          } hover:bg-input-bg transition-colors`}
                         >
-                          {formatNumber(
-                            (data as unknown as Record<string, number | null>)[
-                              key
-                            ],
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))
+                          <td className="px-4 py-3 text-sm text-text-primary font-roboto sticky left-0 bg-inherit z-10 border-r border-border-primary whitespace-nowrap">
+                            {formatDateForCSV(dateKey)}
+                          </td>
+                          {reportKeys.map((key) => (
+                            <td
+                              key={key}
+                              role="button"
+                              tabIndex={0}
+                              onClick={() => handleCellClick(dateKey, key)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  handleCellClick(dateKey, key);
+                                }
+                              }}
+                              className="px-4 py-3 text-sm text-text-secondary font-roboto whitespace-nowrap cursor-pointer hover:bg-status-info/10 focus:outline-none focus:ring-1 focus:ring-status-info rounded"
+                            >
+                              {formatNumber(
+                                (
+                                  data as unknown as Record<
+                                    string,
+                                    number | null
+                                  >
+                                )[key],
+                              )}
+                            </td>
+                          ))}
+                        </tr>
+                        {isExpanded && (
+                          <tr
+                            key={`${dateKey}-expand`}
+                            className="bg-secondary/50 border-b border-border-primary"
+                          >
+                            <td
+                              colSpan={reportKeys.length + 1}
+                              className="px-4 py-3 align-top"
+                            >
+                              <div className="rounded border border-border-primary bg-primary overflow-hidden">
+                                <div className="px-3 py-2 text-xs font-medium text-text-primary font-roboto border-b border-border-primary bg-secondary/50">
+                                  Device breakdown for{" "}
+                                  {formatHeaderName(
+                                    expandedCell?.reportKey ?? "",
+                                  )}{" "}
+                                  on {formatDateForCSV(dateKey)}
+                                </div>
+                                {filteredLogs.length > 0 ? (
+                                  <div className="overflow-x-auto max-h-48 overflow-y-auto">
+                                    <table className="w-full text-sm font-roboto border-collapse">
+                                      <thead>
+                                        <tr className="bg-secondary/70 text-left text-text-primary">
+                                          <th className="px-3 py-2 border-b border-border-primary whitespace-nowrap">
+                                            Sr No.
+                                          </th>
+                                          <th className="px-3 py-2 border-b border-border-primary whitespace-nowrap">
+                                            Device
+                                          </th>
+                                          <th className="px-3 py-2 border-b border-border-primary whitespace-nowrap">
+                                            Report type
+                                          </th>
+                                          <th className="px-3 py-2 border-b border-border-primary whitespace-nowrap">
+                                            Flow
+                                          </th>
+                                          <th className="px-3 py-2 border-b border-border-primary whitespace-nowrap">
+                                            Avg
+                                          </th>
+                                          <th className="px-3 py-2 border-b border-border-primary whitespace-nowrap">
+                                            Min / Max
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {filteredLogs.map(
+                                          ({ device, log }, index) => (
+                                            <tr
+                                              key={`${device.device_id}-${dateKey}`}
+                                              className="border-b border-border-primary/50 text-text-secondary"
+                                            >
+                                              <td className="px-3 py-2 whitespace-nowrap">
+                                                {index +
+                                                  1 +
+                                                  (currentPage - 1) *
+                                                    rowsPerPage}
+                                              </td>
+                                              <td className="px-3 py-2 whitespace-nowrap border-b border-border-primary/50">
+                                                {device.device_name}
+                                              </td>
+                                              <td className="px-3 py-2 whitespace-nowrap">
+                                                {log.report_type_name}
+                                              </td>
+                                              <td className="px-3 py-2 whitespace-nowrap">
+                                                {formatNumber(
+                                                  Number(log.flow) || null,
+                                                )}
+                                              </td>
+                                              <td className="px-3 py-2 whitespace-nowrap">
+                                                {formatNumber(
+                                                  Number(log.avg) || null,
+                                                )}
+                                              </td>
+                                              <td className="px-3 py-2 whitespace-nowrap">
+                                                {formatNumber(
+                                                  Number(log.min) || null,
+                                                )}{" "}
+                                                /{" "}
+                                                {formatNumber(
+                                                  Number(log.max) || null,
+                                                )}
+                                              </td>
+                                            </tr>
+                                          ),
+                                        )}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                ) : (
+                                  <div className="px-3 py-4 text-sm text-text-secondary font-roboto">
+                                    No device-level data available for this
+                                    cell. Ensure the report API returns
+                                    allDevices and logs for drill-down.
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </Fragment>
+                    );
+                  })
                 ) : (
                   <tr className="h-full">
                     <td
